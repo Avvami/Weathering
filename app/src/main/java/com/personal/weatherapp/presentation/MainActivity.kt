@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.personal.weatherapp.presentation
 
 import android.Manifest
@@ -8,20 +10,42 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.personal.weatherapp.presentation.ui.screens.WeatherScreen
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+import com.personal.weatherapp.R
+import com.personal.weatherapp.presentation.ui.screens.aq.AQScreen
+import com.personal.weatherapp.presentation.ui.screens.weather.WeatherScreen
 import com.personal.weatherapp.presentation.ui.theme.WeatherAppTheme
 import com.personal.weatherapp.presentation.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +58,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
@@ -48,20 +74,76 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(colorSurfaceWeather)
                 ) {
-                    WeatherScreen(state = viewModel.state)
+                    val pageCount = 2
+                    val pagerState = rememberPagerState(initialPage = 0)
+                    var surfaceColor by remember { mutableStateOf(colorSurfaceWeather) }
+                    var onSurfaceColor by remember { mutableStateOf(colorOnSurfaceWeather) }
+                    var plainTextColor by remember { mutableStateOf(colorPlainTextWeather) }
+                    CompositionLocalProvider(
+                        LocalOverscrollConfiguration provides null
+                    ) {
+                        HorizontalPager(
+                            pageCount = pageCount,
+                            state = pagerState,
+                            modifier = Modifier.fillMaxSize()
+                        ) { page ->
+                            when (page) {
+                                0 -> {
+                                    WeatherScreen(
+                                        state = viewModel.state,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(colorSurfaceWeather)
+                                            .safeDrawingPadding()
+                                    )
+                                    surfaceColor = colorSurfaceWeather
+                                    onSurfaceColor = colorOnSurfaceWeather
+                                    plainTextColor = colorPlainTextWeather
+                                }
+                                1 -> {
+                                    AQScreen(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(colorSurfaceAQ)
+                                            .safeDrawingPadding()
+                                    )
+                                    surfaceColor = colorSurfaceAQ
+                                    onSurfaceColor = colorOnSurfaceAQ
+                                    plainTextColor = colorPlainTextAQ
+                                }
+                            }
+                        }
+                    }
+                    HorizontalPagerIndicator(
+                        pageCount = pageCount,
+                        pagerState = pagerState,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 8.dp),
+                        color = onSurfaceColor
+                    )
                     if (viewModel.state.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center)
+                        LoadingBox(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp)
+                                .clip(shape = MaterialTheme.shapes.medium)
+                                .background(onSurfaceColor),
+                            surfaceColor = surfaceColor
                         )
                     }
                     viewModel.state.error?.let { error ->
-                        Text(
-                            text = error,
-                            color = colorOnSurfaceWeather,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.Center)
+                        ErrorBox(
+                            error = error,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp)
+                                .clip(shape = MaterialTheme.shapes.medium)
+                                .background(onSurfaceColor),
+                            surfaceColor = surfaceColor,
+                            plainTextColor = plainTextColor,
+                            viewModel = viewModel
                         )
                         Log.i("Error to API request", error)
                     }
@@ -71,3 +153,65 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun HorizontalPagerIndicator(
+    pageCount: Int,
+    pagerState: PagerState,
+    modifier: Modifier,
+    color: Color
+) {
+    Row(horizontalArrangement = Arrangement.Center, modifier = modifier) {
+        repeat(pageCount) { page ->
+            val iconId = if (pagerState.currentPage == page) R.drawable.ic_fiber_manual_record_fill1 else R.drawable.ic_fiber_manual_record_fill0
+            Icon(
+                painter = painterResource(id = iconId),
+                contentDescription = "Horizontal pager indicator",
+                modifier = Modifier.size(18.dp),
+                tint = color
+            )
+        }
+    }
+}
+
+@Composable
+fun ErrorBox(
+    error: String,
+    modifier: Modifier,
+    surfaceColor: Color,
+    plainTextColor: Color,
+    viewModel: WeatherViewModel
+) {
+    Box(
+        modifier = modifier
+            .padding(24.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(painter = painterResource(id = R.drawable.ic_running_with_errors_fill1), contentDescription = "Error", tint = surfaceColor)
+                Text(text = "Oops", style = MaterialTheme.typography.titleLarge, color = surfaceColor)
+            }
+            Text(text = "I think maybe it’s an error. You should check it out:", style = MaterialTheme.typography.titleMedium, color = plainTextColor)
+            Text(text = error, style = MaterialTheme.typography.bodyMedium, color = plainTextColor)
+            TextButton(onClick = { viewModel.loadWeatherInfo() }, modifier = Modifier.align(Alignment.End)) {
+                Text(text = "Reload", color = surfaceColor)
+            }
+        }
+    }
+}
+
+@Composable
+fun LoadingBox(
+    modifier: Modifier,
+    surfaceColor: Color
+) {
+    Box(modifier = modifier
+        .padding(24.dp)
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            CircularProgressIndicator(
+                color = surfaceColor
+            )
+            Text(text = "Fetching data", style = MaterialTheme.typography.titleLarge, color = surfaceColor)
+        }
+    }
+}

@@ -3,7 +3,7 @@ package com.personal.weatherapp.data.mappers
 import com.personal.weatherapp.data.remote.WeatherDailyDto
 import com.personal.weatherapp.data.remote.WeatherDataDto
 import com.personal.weatherapp.data.remote.WeatherDto
-import com.personal.weatherapp.domain.weather.WeatherDaily
+import com.personal.weatherapp.domain.weather.SunriseSunset
 import com.personal.weatherapp.domain.weather.WeatherData
 import com.personal.weatherapp.domain.weather.WeatherInfo
 import com.personal.weatherapp.domain.weather.WeatherType
@@ -18,7 +18,7 @@ private data class IndexedWeatherData(
 
 private data class IndexedWeatherDaily(
     val index: Int,
-    val data: WeatherDaily
+    val data: SunriseSunset
 )
 
 private fun Int.toBoolean() = this == 1
@@ -49,13 +49,13 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
     }
 }
 
-fun WeatherDailyDto.toWeatherDailyMap(): Map<Int, List<WeatherDaily>> {
+fun WeatherDailyDto.toWeatherDailyMap(): Map<Int, List<SunriseSunset>> {
     return time.mapIndexed { index, time ->
         val sunrise = sunrise[index]
         val sunset = sunset[index]
         IndexedWeatherDaily(
             index = index,
-            data = WeatherDaily(
+            data = SunriseSunset(
                 time = LocalDate.parse(time, DateTimeFormatter.ISO_DATE),
                 sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
                 sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
@@ -71,25 +71,25 @@ fun WeatherDailyDto.toWeatherDailyMap(): Map<Int, List<WeatherDaily>> {
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
     val weatherDataMap = weatherData.toWeatherDataMap()
     val now = LocalDateTime.now()
-    val currentWeatherData = weatherDataMap[0]?.find {
-        it.time.hour == when {
-            now.minute < 30 -> now.hour
-            now.hour == 23 -> 12.00
-            else -> now.hour + 1
+    val currentWeatherData = if (now.hour == 23 && now.minute > 30) {
+        weatherDataMap[1]?.find { tomorrow ->
+            tomorrow.time.hour == 0
+        }
+    } else {
+        weatherDataMap[0]?.find { today ->
+            today.time.hour == when {
+                now.minute < 30 -> now.hour
+                else -> now.hour + 1
+            }
         }
     }
-    val weatherDataPerWeek = mutableMapOf<Int, List<WeatherData>>()
-    for (i in 0 until 7) {
-        val dayWeatherData = weatherDataMap[i]
-        if (dayWeatherData != null) {
-            weatherDataPerWeek[i] = dayWeatherData
-        }
-    }
-    val weatherDaily = weatherDaily.toWeatherDailyMap()[0]?.get(0)
+
+    val dailyWeatherData: List<List<WeatherData>> = weatherDataMap.values.toList()
+    val sunriseSunset = weatherDaily.toWeatherDailyMap()[0]?.get(0)
     return WeatherInfo(
         weatherDataPerDay = weatherDataMap,
-        weatherDataPerWeek = weatherDataPerWeek,
+        dailyWeatherData = dailyWeatherData,
         currentWeatherData = currentWeatherData,
-        weatherDaily = weatherDaily
+        sunriseSunset = sunriseSunset
     )
 }
