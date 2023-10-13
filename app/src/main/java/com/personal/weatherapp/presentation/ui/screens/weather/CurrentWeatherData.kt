@@ -40,7 +40,6 @@ fun CurrentWeatherData(
         Column(modifier = modifier) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-//                text = "Krasnoyarsk ${data.time.format(DateTimeFormatter.ofPattern("dd HH:mm"))}",
                 text = "Krasnoyarsk",
                 color = colorOnSurfaceWeather,
                 fontSize = 28.sp,
@@ -100,7 +99,7 @@ fun CurrentWeatherData(
                             modifier = Modifier.size(54.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = "${data.windSpeed.roundToInt()}km/h", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
+                        Text(text = "${(data.windSpeed / 3.6).roundToInt()}m/s", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Wind", fontSize = 12.sp, color = colorSurfaceWeather)
                     }
@@ -112,7 +111,7 @@ fun CurrentWeatherData(
                             modifier = Modifier.size(54.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = "${data.pressure.roundToInt()}hPa", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
+                        Text(text = "${(data.pressure * 0.75).roundToInt()}mmHg", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Pressure", fontSize = 12.sp, color = colorSurfaceWeather)
                     }

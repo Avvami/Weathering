@@ -3,6 +3,7 @@ package com.personal.weatherapp.di
 import android.app.Application
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.personal.weatherapp.data.remote.AQApi
 import com.personal.weatherapp.data.remote.WeatherApi
 import dagger.Module
 import dagger.Provides
@@ -22,6 +23,16 @@ object AppModule {
     fun provideWeatherApi(): WeatherApi {
         return Retrofit.Builder()
             .baseUrl("https://api.open-meteo.com/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAQApi(): AQApi {
+        return Retrofit.Builder()
+            .baseUrl("https://air-quality-api.open-meteo.com/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create()

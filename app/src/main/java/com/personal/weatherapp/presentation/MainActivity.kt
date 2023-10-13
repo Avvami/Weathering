@@ -15,10 +15,8 @@ import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
@@ -29,7 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -97,20 +94,53 @@ class MainActivity : ComponentActivity() {
                                             .background(colorSurfaceWeather)
                                             .safeDrawingPadding()
                                     )
+
                                     surfaceColor = colorSurfaceWeather
                                     onSurfaceColor = colorOnSurfaceWeather
                                     plainTextColor = colorPlainTextWeather
+
+                                    viewModel.state.weatherError?.let { error ->
+                                        ErrorBox(
+                                            error = error,
+                                            modifier = Modifier
+                                                .align(Alignment.Center)
+                                                .padding(32.dp)
+                                                .clip(shape = MaterialTheme.shapes.medium)
+                                                .background(onSurfaceColor),
+                                            surfaceColor = surfaceColor,
+                                            plainTextColor = plainTextColor,
+                                            viewModel = viewModel
+                                        )
+                                        Log.i("Error to API request", error)
+                                    }
                                 }
                                 1 -> {
                                     AQScreen(
+                                        state = viewModel.state,
                                         modifier = Modifier
                                             .fillMaxSize()
                                             .background(colorSurfaceAQ)
                                             .safeDrawingPadding()
                                     )
+
                                     surfaceColor = colorSurfaceAQ
                                     onSurfaceColor = colorOnSurfaceAQ
                                     plainTextColor = colorPlainTextAQ
+
+                                    viewModel.state.aqError?.let { error ->
+                                        ErrorBox(
+                                            error = error,
+                                            modifier = Modifier
+                                                .align(Alignment.Center)
+                                                .padding(32.dp)
+                                                .clip(shape = MaterialTheme.shapes.medium)
+                                                .background(onSurfaceColor),
+                                            surfaceColor = surfaceColor,
+                                            plainTextColor = plainTextColor,
+                                            viewModel = viewModel
+                                        )
+                                        Log.i("Error to API request", error)
+                                    }
                                 }
                             }
                         }
@@ -121,6 +151,8 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .padding(bottom = 8.dp),
+//                            .clip(shape = MaterialTheme.shapes.large)
+//                            .background(surfaceColor),
                         color = onSurfaceColor
                     )
                     if (viewModel.state.isLoading) {
@@ -129,23 +161,10 @@ class MainActivity : ComponentActivity() {
                                 .align(Alignment.Center)
                                 .padding(32.dp)
                                 .clip(shape = MaterialTheme.shapes.medium)
-                                .background(onSurfaceColor),
+                                .background(onSurfaceColor)
+                                .padding(8.dp),
                             surfaceColor = surfaceColor
                         )
-                    }
-                    viewModel.state.error?.let { error ->
-                        ErrorBox(
-                            error = error,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(32.dp)
-                                .clip(shape = MaterialTheme.shapes.medium)
-                                .background(onSurfaceColor),
-                            surfaceColor = surfaceColor,
-                            plainTextColor = plainTextColor,
-                            viewModel = viewModel
-                        )
-                        Log.i("Error to API request", error)
                     }
                 }
             }
@@ -169,32 +188,6 @@ fun HorizontalPagerIndicator(
                 modifier = Modifier.size(18.dp),
                 tint = color
             )
-        }
-    }
-}
-
-@Composable
-fun ErrorBox(
-    error: String,
-    modifier: Modifier,
-    surfaceColor: Color,
-    plainTextColor: Color,
-    viewModel: WeatherViewModel
-) {
-    Box(
-        modifier = modifier
-            .padding(24.dp)
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(painter = painterResource(id = R.drawable.ic_running_with_errors_fill1), contentDescription = "Error", tint = surfaceColor)
-                Text(text = "Oops", style = MaterialTheme.typography.titleLarge, color = surfaceColor)
-            }
-            Text(text = "I think maybe it’s an error. You should check it out:", style = MaterialTheme.typography.titleMedium, color = plainTextColor)
-            Text(text = error, style = MaterialTheme.typography.bodyMedium, color = plainTextColor)
-            TextButton(onClick = { viewModel.loadWeatherInfo() }, modifier = Modifier.align(Alignment.End)) {
-                Text(text = "Reload", color = surfaceColor)
-            }
         }
     }
 }
