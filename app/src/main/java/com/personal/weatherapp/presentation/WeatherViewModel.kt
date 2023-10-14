@@ -100,15 +100,16 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun openAlertDialog() {
-        state = state.copy(
-            openAlertDialog = true
-        )
-    }
-
-    fun closeAlertDialog() {
-        state = state.copy(
-            openAlertDialog = false
-        )
+    fun uiEvent(event: UIEvent) {
+        when(event) {
+            is UIEvent.OpenAlertDialog -> {
+                state = state.copy(
+                    openAlertDialog = event.isOpen
+                )
+            }
+            UIEvent.LoadWeatherInfo -> {
+                loadWeatherInfo()
+            }
+        }
     }
 }

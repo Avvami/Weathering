@@ -27,12 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weatherapp.R
 import com.personal.weatherapp.presentation.WeatherState
+import com.personal.weatherapp.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
 import com.personal.weatherapp.presentation.ui.theme.*
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @Composable
 fun CurrentWeatherData(
+    navigator: DestinationsNavigator,
     state: WeatherState,
     modifier: Modifier
 ) {
@@ -99,7 +102,7 @@ fun CurrentWeatherData(
                             modifier = Modifier.size(54.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = "${(data.windSpeed / 3.6).roundToInt()}m/s", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
+                        Text(text = "${data.windSpeed.roundToInt()}m/s", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Wind", fontSize = 12.sp, color = colorSurfaceWeather)
                     }
@@ -111,19 +114,14 @@ fun CurrentWeatherData(
                             modifier = Modifier.size(54.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = "${(data.pressure * 0.75).roundToInt()}mmHg", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
+                        Text(text = "${data.pressure.roundToInt()}mmHg", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Pressure", fontSize = 12.sp, color = colorSurfaceWeather)
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            painter = painterResource(id = when (data.humidity) {
-                                in 0 until 21 -> R.drawable.ic_humidity_low_fill1
-                                in 21 until 81 -> R.drawable.ic_humidity_mid_fill1
-                                in 81 until 101-> R.drawable.ic_humidity_high_fill1
-                                else -> R.drawable.ic_humidity_mid_fill1
-                            }),
-                            contentDescription = "Humidity",
+                            painter = painterResource(id = data.humidityType.iconRes),
+                            contentDescription = data.humidityType.humidityDesc,
                             tint = colorSurfaceWeather,
                             modifier = Modifier.size(54.dp)
                         )
@@ -134,7 +132,7 @@ fun CurrentWeatherData(
                     }
                 }
             }
-            TextButton(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.End), contentPadding = PaddingValues(0.dp)) {
+            TextButton(onClick = { navigator.navigate(CurrentWeatherDetailsScreenDestination) }, modifier = Modifier.align(Alignment.End), contentPadding = PaddingValues(0.dp)) {
                 Text(
                     text = "More",
                     style = MaterialTheme.typography.titleSmall,

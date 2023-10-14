@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weatherapp.R
+import com.personal.weatherapp.presentation.UIEvent
 import com.personal.weatherapp.presentation.WeatherState
 import com.personal.weatherapp.presentation.ui.theme.*
 import java.time.format.DateTimeFormatter
@@ -43,8 +44,7 @@ import kotlin.math.roundToInt
 fun CurrentAQData(
     state: WeatherState,
     modifier: Modifier,
-    openAlertDialog: () -> Unit,
-    closeAlertDialog: () -> Unit
+    uiEvent: (UIEvent) -> Unit
 ) {
     state.aqInfo?.currentAQData?.let { data ->
         Column(modifier = modifier) {
@@ -132,7 +132,7 @@ fun CurrentAQData(
                 }
             }
             IconButton(
-                onClick = { openAlertDialog() },
+                onClick = { uiEvent(UIEvent.OpenAlertDialog(true)) },
                 modifier = Modifier.align(Alignment.End)
             ) {
                 Icon(
@@ -144,8 +144,8 @@ fun CurrentAQData(
             state.openAlertDialog.let {
                 if (it) {
                     InfoAlertDialog(
-                        onDismissRequest = { closeAlertDialog() },
-                        onConfirmation = { closeAlertDialog() },
+                        onDismissRequest = { uiEvent(UIEvent.OpenAlertDialog(false)) },
+                        onConfirmation = { uiEvent(UIEvent.OpenAlertDialog(false)) },
                         dialogTitle = "Info",
                         dialogTextResId = R.string.info_dialog_text
                     )

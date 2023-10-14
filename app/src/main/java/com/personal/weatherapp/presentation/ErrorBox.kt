@@ -24,7 +24,7 @@ fun ErrorBox(
     modifier: Modifier,
     surfaceColor: Color,
     plainTextColor: Color,
-    viewModel: WeatherViewModel
+    uiEvent: (UIEvent) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -37,7 +37,7 @@ fun ErrorBox(
             }
             Text(text = "I think maybe it’s an error. You should check it out:", style = MaterialTheme.typography.titleMedium, color = plainTextColor)
             Text(text = error, style = MaterialTheme.typography.bodyMedium, color = plainTextColor)
-            TextButton(onClick = { viewModel.loadWeatherInfo() }, modifier = Modifier.align(
+            TextButton(onClick = { uiEvent(UIEvent.LoadWeatherInfo) }, modifier = Modifier.align(
                 Alignment.End)) {
                 Text(text = "Reload", color = surfaceColor)
             }

@@ -5,8 +5,10 @@ import com.personal.weatherapp.data.remote.WeatherDataDto
 import com.personal.weatherapp.data.remote.WeatherDto
 import com.personal.weatherapp.domain.weather.SunriseSunset
 import com.personal.weatherapp.domain.weather.WeatherData
+import com.personal.weatherapp.domain.weather.WeatherHumidity
 import com.personal.weatherapp.domain.weather.WeatherInfo
 import com.personal.weatherapp.domain.weather.WeatherType
+import com.personal.weatherapp.domain.weather.WeatherWindDirection
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -28,6 +30,7 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
         val temperature = temperatures[index]
         val weatherCode = weatherCodes[index]
         val windSpeed = windSpeeds[index]
+        val windDirection = windDirections[index]
         val pressure = pressures[index]
         val humidity = humidities[index]
         val isDay = isDay[index]
@@ -36,9 +39,11 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
             data = WeatherData(
                 time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
                 temperatureCelsius = temperature,
-                pressure = pressure,
-                windSpeed = windSpeed,
+                pressure = pressure  * 0.75, // mmHg
+                windSpeed = windSpeed / 3.6, // m/s
+                windDirection = WeatherWindDirection.fromDegree(windDirection),
                 humidity = humidity,
+                humidityType = WeatherHumidity.fromPercentage(humidity),
                 weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean())
             )
         )
