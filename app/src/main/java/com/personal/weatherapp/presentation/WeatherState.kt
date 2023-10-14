@@ -8,5 +8,6 @@ data class WeatherState(
     val aqInfo: AQInfo? = null,
     val isLoading: Boolean = false,
     val weatherError: String? = null,
-    val aqError: String? = null
+    val aqError: String? = null,
+    val openAlertDialog: Boolean = false
 )

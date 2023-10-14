@@ -120,7 +120,13 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .fillMaxSize()
                                             .background(colorSurfaceAQ)
-                                            .safeDrawingPadding()
+                                            .safeDrawingPadding(),
+                                        openAlertDialog = {
+                                            viewModel.openAlertDialog()
+                                        },
+                                        closeAlertDialog = {
+                                            viewModel.closeAlertDialog()
+                                        }
                                     )
 
                                     surfaceColor = colorSurfaceAQ

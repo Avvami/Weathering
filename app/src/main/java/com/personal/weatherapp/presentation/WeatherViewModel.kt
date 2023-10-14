@@ -66,38 +66,6 @@ class WeatherViewModel @Inject constructor(
                     weatherError = weatherError,
                     aqError = aqError
                 )
-                /*when(val result = repository.getWeatherData(location.latitude, location.longitude)) {
-                    is Resource.Success -> {
-                        state = state.copy(
-                            weatherInfo = result.data,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
-                    is Resource.Error -> {
-                        state = state.copy(
-                            weatherInfo = null,
-                            isLoading = false,
-                            error = result.message
-                        )
-                    }
-                }
-                when (val result = repository.getAQData(location.latitude, location.longitude)) {
-                    is Resource.Success -> {
-                        state = state.copy(
-                            aqInfo = result.data,
-                            isLoading = false,
-                            error = null
-                        )
-                    }
-                    is Resource.Error -> {
-                        state = state.copy(
-                            aqInfo = null,
-                            isLoading = false,
-                            error = result.message
-                        )
-                    }
-                }*/
             } ?: kotlin.run {
                 repository.getWeatherData(56.0184, 92.8672).let { result ->
                     when (result) {
@@ -130,5 +98,17 @@ class WeatherViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun openAlertDialog() {
+        state = state.copy(
+            openAlertDialog = true
+        )
+    }
+
+    fun closeAlertDialog() {
+        state = state.copy(
+            openAlertDialog = false
+        )
     }
 }

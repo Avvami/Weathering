@@ -14,7 +14,9 @@ import com.personal.weatherapp.presentation.WeatherState
 @Composable
 fun AQScreen(
     state: WeatherState,
-    modifier: Modifier
+    modifier: Modifier,
+    openAlertDialog: () -> Unit,
+    closeAlertDialog: () -> Unit
 ) {
     Box(modifier = modifier) {
         Column(modifier = Modifier
@@ -25,7 +27,9 @@ fun AQScreen(
                 state = state,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
+                    .padding(horizontal = 32.dp),
+                openAlertDialog = openAlertDialog,
+                closeAlertDialog = closeAlertDialog
             )
         }
     }

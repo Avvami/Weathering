@@ -117,10 +117,10 @@ fun CurrentWeatherData(
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            painter = painterResource(id = when {
-                                data.humidity < 33 -> R.drawable.ic_humidity_low_fill1
-                                data.humidity > 33 && data.humidity < 66 -> R.drawable.ic_humidity_mid_fill1
-                                data.humidity > 66 -> R.drawable.ic_humidity_high_fill1
+                            painter = painterResource(id = when (data.humidity) {
+                                in 0 until 21 -> R.drawable.ic_humidity_low_fill1
+                                in 21 until 81 -> R.drawable.ic_humidity_mid_fill1
+                                in 81 until 101-> R.drawable.ic_humidity_high_fill1
                                 else -> R.drawable.ic_humidity_mid_fill1
                             }),
                             contentDescription = "Humidity",
@@ -128,7 +128,7 @@ fun CurrentWeatherData(
                             modifier = Modifier.size(54.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text(text = "${data.humidity.roundToInt()}%", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
+                        Text(text = "${data.humidity}%", fontSize = 20.sp, fontWeight = FontWeight.Medium, color = colorSurfaceWeather)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(text = "Humidity", fontSize = 12.sp, color = colorSurfaceWeather)
                     }

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="info_dialog_title">Info</string>
+    <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.
+        \n\nParticles with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects.
+        \n\nFine particulate matter is defined as particles that are 2.5 microns or less in diameter (PM2.5).
+        \n\nCarbon monoxide (CO) is a colorless, odorless gas.
+        \n\nNitrogen Dioxide (NO2) is a pungent gas that, along with fine airborne particulate matter, contributes to the reddish-brown haze characteristic of smoggy air.
+        \n\nSulfur dioxide (SO2) is comprised of one atom of sulfur and two atoms of oxygen, and is a gas at ambient temperatures. It has a pungent, irritating odor.</string>
 </resources>
