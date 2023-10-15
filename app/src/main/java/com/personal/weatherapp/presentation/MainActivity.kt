@@ -15,7 +15,9 @@ import com.personal.weatherapp.presentation.ui.screens.HomeScreen
 import com.personal.weatherapp.presentation.ui.screens.NavGraphs
 import com.personal.weatherapp.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
 import com.personal.weatherapp.presentation.ui.screens.destinations.HomeScreenDestination
+import com.personal.weatherapp.presentation.ui.screens.destinations.WeeklyForecastDetailsScreenDestination
 import com.personal.weatherapp.presentation.ui.screens.weather.CurrentWeatherDetailsScreen
+import com.personal.weatherapp.presentation.ui.screens.weather.WeeklyForecastDetailsScreen
 import com.personal.weatherapp.presentation.ui.theme.WeatherAppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
@@ -55,6 +57,13 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(CurrentWeatherDetailsScreenDestination) {
                         CurrentWeatherDetailsScreen(
+                            navigator = destinationsNavigator,
+                            state = viewModel.state,
+                            uiEvent = viewModel::uiEvent
+                        )
+                    }
+                    composable(WeeklyForecastDetailsScreenDestination) {
+                        WeeklyForecastDetailsScreen(
                             navigator = destinationsNavigator,
                             state = viewModel.state,
                             uiEvent = viewModel::uiEvent

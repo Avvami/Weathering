@@ -48,7 +48,7 @@ fun CurrentAQData(
 ) {
     state.aqInfo?.currentAQData?.let { data ->
         Column(modifier = modifier) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Krasnoyarsk",
                 color = colorOnSurfaceAQ,

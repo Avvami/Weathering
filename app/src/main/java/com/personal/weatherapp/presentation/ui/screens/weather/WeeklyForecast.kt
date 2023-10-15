@@ -30,13 +30,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weatherapp.R
 import com.personal.weatherapp.presentation.WeatherState
+import com.personal.weatherapp.presentation.ui.screens.destinations.WeeklyForecastDetailsScreenDestination
 import com.personal.weatherapp.presentation.ui.theme.*
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeeklyForecast(
+    navigator: DestinationsNavigator,
     state: WeatherState
 ) {
     state.weatherInfo?.dailyWeatherData?.let { day ->
@@ -48,7 +51,7 @@ fun WeeklyForecast(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Weekly forecast", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = colorOnSurfaceWeather)
-            IconButton(modifier = Modifier.then(Modifier.size(26.dp)), onClick = { /*TODO*/ }) {
+            IconButton(modifier = Modifier.then(Modifier.size(26.dp)), onClick = { navigator.navigate(WeeklyForecastDetailsScreenDestination) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_forward_fill0),
                     contentDescription = "View weekly forecast",

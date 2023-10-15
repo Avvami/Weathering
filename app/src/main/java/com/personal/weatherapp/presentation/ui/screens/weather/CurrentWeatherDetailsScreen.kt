@@ -34,8 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.personal.weatherapp.R
 import com.personal.weatherapp.domain.util.timeFormat
-import com.personal.weatherapp.domain.weather.WeatherHumidity
-import com.personal.weatherapp.domain.weather.WeatherType
+import com.personal.weatherapp.domain.weather.WeatherData
 import com.personal.weatherapp.presentation.ErrorBox
 import com.personal.weatherapp.presentation.UIEvent
 import com.personal.weatherapp.presentation.WeatherState
@@ -64,7 +63,7 @@ fun CurrentWeatherDetailsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
             ) {
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 weatherInfo.currentWeatherData?.let { data ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -91,7 +90,7 @@ fun CurrentWeatherDetailsScreen(
                                 .padding(12.dp, 4.dp)
                         ) {
                             Text(
-                                text = data.time.format(DateTimeFormatter.ofPattern("EEEE dd, MM")),
+                                text = data.time.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM")),
                                 color = colorSurfaceWeather,
                                 style = MaterialTheme.typography.titleSmall
                             )
@@ -107,38 +106,28 @@ fun CurrentWeatherDetailsScreen(
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 weatherInfo.weatherDataPerDay[0]?.let { weatherData ->
-                    CompositionLocalProvider(
-                        LocalOverscrollConfiguration provides null
-                    ) {
-                        LazyColumn(contentPadding = PaddingValues(bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            val startIndex = weatherData.indexOfFirst { it.time.hour == LocalDateTime.now().hour }
-                            item {
-                                CurrentDayWeatherPerHour(
-                                    time = timeFormat(time = weatherData[startIndex].time),
-                                    weatherType = weatherData[startIndex].weatherType,
-                                    temperature = weatherData[startIndex].temperatureCelsius,
-                                    windSpeed = weatherData[startIndex].windSpeed,
-                                    windDirection = weatherData[startIndex].windDirection.direction,
-                                    pressure = weatherData[startIndex].pressure,
-                                    humidity = weatherData[startIndex].humidity,
-                                    humidityType = weatherData[startIndex].humidityType,
-                                    textColor = colorSurfaceWeather,
-                                    modifier = Modifier.clip(shape = MaterialTheme.shapes.medium).background(colorOnSurfaceWeather)
-                                )
-                            }
-                            items(weatherData.subList(startIndex + 1, weatherData.lastIndex)) { weatherData ->
-                                CurrentDayWeatherPerHour(
-                                    time = timeFormat(time = weatherData.time),
-                                    weatherType = weatherData.weatherType,
-                                    temperature = weatherData.temperatureCelsius,
-                                    windSpeed = weatherData.windSpeed,
-                                    windDirection = weatherData.windDirection.direction,
-                                    pressure = weatherData.pressure,
-                                    humidity = weatherData.humidity,
-                                    humidityType = weatherData.humidityType,
-                                    textColor = colorOnSurfaceWeather,
-                                    modifier = Modifier.border(width = 2.dp, shape = MaterialTheme.shapes.medium, color = colorOnSurfaceWeather)
-                                )
+                    if (weatherData.size == 24) {
+                        CompositionLocalProvider(
+                            LocalOverscrollConfiguration provides null
+                        ) {
+                            LazyColumn(contentPadding = PaddingValues(bottom = 32.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                val startIndex = weatherData.indexOfFirst { it.time.hour == LocalDateTime.now().hour }
+                                item {
+                                    CurrentDayWeatherPerHour(
+                                        weatherData = weatherData[startIndex],
+                                        contentColor = colorSurfaceWeather,
+                                        modifier = Modifier
+                                            .clip(shape = MaterialTheme.shapes.medium)
+                                            .background(colorOnSurfaceWeather)
+                                    )
+                                }
+                                items(weatherData.subList(startIndex + 1, weatherData.size)) { weatherData ->
+                                    CurrentDayWeatherPerHour(
+                                        weatherData = weatherData,
+                                        contentColor = colorOnSurfaceWeather,
+                                        modifier = Modifier.border(width = 2.dp, shape = MaterialTheme.shapes.medium, color = colorOnSurfaceWeather)
+                                    )
+                                }
                             }
                         }
                     }
@@ -191,15 +180,8 @@ fun SunData(
 
 @Composable
 fun CurrentDayWeatherPerHour(
-    time: String,
-    weatherType: WeatherType,
-    temperature: Double,
-    windSpeed: Double,
-    windDirection: String,
-    pressure: Double,
-    humidity: Int,
-    humidityType: WeatherHumidity,
-    textColor: Color,
+    weatherData: WeatherData,
+    contentColor: Color,
     modifier: Modifier
 ) {
     Box(modifier = modifier
@@ -207,56 +189,56 @@ fun CurrentDayWeatherPerHour(
         .padding(24.dp)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(text = time, style = MaterialTheme.typography.titleLarge, color = textColor)
+            Text(text = timeFormat(time = weatherData.time), style = MaterialTheme.typography.titleLarge, color = contentColor)
             Spacer(modifier = Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        painter = painterResource(id = weatherType.iconRes),
-                        contentDescription = weatherType.weatherDesc,
-                        tint = textColor,
+                        painter = painterResource(id = weatherData.weatherType.iconRes),
+                        contentDescription = weatherData.weatherType.weatherDesc,
+                        tint = contentColor,
                         modifier = Modifier.size(40.dp)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "${temperature.roundToInt()}°", style = MaterialTheme.typography.headlineMedium, color = textColor)
+                    Text(text = "${weatherData.temperatureCelsius.roundToInt()}°", style = MaterialTheme.typography.headlineMedium, color = contentColor)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_air_fill1),
                         contentDescription = "Wind Speed",
-                        tint = textColor
+                        tint = contentColor
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "${windSpeed.roundToInt()}m/s", style = MaterialTheme.typography.titleMedium, color = textColor)
+                    Text(text = "${weatherData.windSpeed.roundToInt()}m/s", style = MaterialTheme.typography.titleMedium, color = contentColor)
                     Spacer(modifier = Modifier.height(2.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_near_me_fill1),
-                            contentDescription = "Direction",
-                            tint = textColor,
+                            contentDescription = weatherData.windDirection.direction,
+                            tint = contentColor,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(2.dp))
-                        Text(text = windDirection, style = MaterialTheme.typography.labelMedium, color = textColor)
+                        Text(text = weatherData.windDirection.direction, style = MaterialTheme.typography.labelMedium, color = contentColor)
                     }
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_thermostat_fill1),
                         contentDescription = "Pressure",
-                        tint = textColor
+                        tint = contentColor
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "${pressure.roundToInt()}mmHg", style = MaterialTheme.typography.titleMedium, color = textColor)
+                    Text(text = "${weatherData.pressure.roundToInt()}mmHg", style = MaterialTheme.typography.titleMedium, color = contentColor)
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        painter = painterResource(id = humidityType.iconRes),
-                        contentDescription = humidityType.humidityDesc,
-                        tint = textColor
+                        painter = painterResource(id = weatherData.humidityType.iconRes),
+                        contentDescription = weatherData.humidityType.humidityDesc,
+                        tint = contentColor
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text(text = "$humidity%", style = MaterialTheme.typography.titleMedium, color = textColor)
+                    Text(text = "${weatherData.humidity}%", style = MaterialTheme.typography.titleMedium, color = contentColor)
                 }
             }
         }

@@ -41,7 +41,7 @@ fun CurrentWeatherData(
 ) {
     state.weatherInfo?.currentWeatherData?.let { data ->
         Column(modifier = modifier) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Krasnoyarsk",
                 color = colorOnSurfaceWeather,
@@ -58,7 +58,7 @@ fun CurrentWeatherData(
                 .align(Alignment.CenterHorizontally)
             ) {
                 Text(
-                    text = data.time.format(DateTimeFormatter.ofPattern("EEEE dd, MM")),
+                    text = data.time.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM")),
                     color = colorSurfaceWeather,
                     style = MaterialTheme.typography.titleSmall
                 )

@@ -32,7 +32,7 @@ fun WeatherScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
             )
-            WeeklyForecast(state = state)
+            WeeklyForecast(navigator = navigator,state = state)
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
