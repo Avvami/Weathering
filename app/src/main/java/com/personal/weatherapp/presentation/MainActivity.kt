@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.personal.weatherapp.presentation.ui.screens.HomeScreen
@@ -19,6 +21,7 @@ import com.personal.weatherapp.presentation.ui.screens.destinations.WeeklyForeca
 import com.personal.weatherapp.presentation.ui.screens.weather.CurrentWeatherDetailsScreen
 import com.personal.weatherapp.presentation.ui.screens.weather.WeeklyForecastDetailsScreen
 import com.personal.weatherapp.presentation.ui.theme.WeatherAppTheme
+import com.personal.weatherapp.presentation.ui.theme.colorSurfaceWeather
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,30 +47,34 @@ class MainActivity : ComponentActivity() {
         ))
         setContent {
             WeatherAppTheme {
-                DestinationsNavHost(navGraph = NavGraphs.root) {
-                    composable(HomeScreenDestination) {
-                        HomeScreen(
-                            navigator = destinationsNavigator,
-                            state = viewModel.state,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .navigationBarsPadding(),
-                            uiEvent = viewModel::uiEvent
-                        )
-                    }
-                    composable(CurrentWeatherDetailsScreenDestination) {
-                        CurrentWeatherDetailsScreen(
-                            navigator = destinationsNavigator,
-                            state = viewModel.state,
-                            uiEvent = viewModel::uiEvent
-                        )
-                    }
-                    composable(WeeklyForecastDetailsScreenDestination) {
-                        WeeklyForecastDetailsScreen(
-                            navigator = destinationsNavigator,
-                            state = viewModel.state,
-                            uiEvent = viewModel::uiEvent
-                        )
+                Surface(
+                    modifier = Modifier.fillMaxSize().background(colorSurfaceWeather)
+                ) {
+                    DestinationsNavHost(navGraph = NavGraphs.root) {
+                        composable(HomeScreenDestination) {
+                            HomeScreen(
+                                navigator = destinationsNavigator,
+                                state = viewModel.state,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .navigationBarsPadding(),
+                                uiEvent = viewModel::uiEvent
+                            )
+                        }
+                        composable(CurrentWeatherDetailsScreenDestination) {
+                            CurrentWeatherDetailsScreen(
+                                navigator = destinationsNavigator,
+                                state = viewModel.state,
+                                uiEvent = viewModel::uiEvent
+                            )
+                        }
+                        composable(WeeklyForecastDetailsScreenDestination) {
+                            WeeklyForecastDetailsScreen(
+                                navigator = destinationsNavigator,
+                                state = viewModel.state,
+                                uiEvent = viewModel::uiEvent
+                            )
+                        }
                     }
                 }
             }

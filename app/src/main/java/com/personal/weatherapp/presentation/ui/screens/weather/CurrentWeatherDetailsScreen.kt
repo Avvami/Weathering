@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.personal.weatherapp.R
 import com.personal.weatherapp.domain.util.timeFormat
 import com.personal.weatherapp.domain.weather.WeatherData
+import com.personal.weatherapp.presentation.CurrentDateBox
 import com.personal.weatherapp.presentation.ErrorBox
 import com.personal.weatherapp.presentation.UIEvent
 import com.personal.weatherapp.presentation.WeatherState
@@ -42,7 +43,6 @@ import com.personal.weatherapp.presentation.ui.theme.*
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -83,18 +83,12 @@ fun CurrentWeatherDetailsScreen(
                                 tint = colorSurfaceWeather
                             )
                         }
-                        Box(
-                            modifier = Modifier
-                                .clip(shape = MaterialTheme.shapes.extraLarge)
-                                .background(colorOnSurfaceWeather)
-                                .padding(12.dp, 4.dp)
-                        ) {
-                            Text(
-                                text = data.time.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM")),
-                                color = colorSurfaceWeather,
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                        }
+                        CurrentDateBox(
+                            time = data.time,
+                            modifier = Modifier,
+                            surfaceColor = colorSurfaceWeather,
+                            onSurfaceColor = colorOnSurfaceWeather
+                        )
                     }
                 }
                 Spacer(modifier = Modifier.height(24.dp))

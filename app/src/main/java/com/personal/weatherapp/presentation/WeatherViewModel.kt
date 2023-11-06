@@ -110,6 +110,13 @@ class WeatherViewModel @Inject constructor(
             UIEvent.LoadWeatherInfo -> {
                 loadWeatherInfo()
             }
+            is UIEvent.ChangeAccentColors -> {
+                state = state.copy(
+                    surfaceColor = event.surfaceColor,
+                    onSurfaceColor = event.onSurfaceColor,
+                    plainTextColor = event.plainTextColor
+                )
+            }
         }
     }
 }

@@ -22,10 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,9 +56,6 @@ fun HomeScreen(
     Box(modifier = modifier) {
         val pageCount = 2
         val pagerState = rememberPagerState(initialPage = 0)
-        var surfaceColor by remember { mutableStateOf(colorSurfaceWeather) }
-        var onSurfaceColor by remember { mutableStateOf(colorOnSurfaceWeather) }
-        var plainTextColor by remember { mutableStateOf(colorPlainTextWeather) }
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
         ) {
@@ -82,10 +75,6 @@ fun HomeScreen(
                                 .safeDrawingPadding()
                         )
 
-                        surfaceColor = colorSurfaceWeather
-                        onSurfaceColor = colorOnSurfaceWeather
-                        plainTextColor = colorPlainTextWeather
-
                         state.weatherError?.let { error ->
                             ErrorBox(
                                 error = error,
@@ -93,9 +82,9 @@ fun HomeScreen(
                                     .align(Alignment.Center)
                                     .padding(32.dp)
                                     .clip(shape = MaterialTheme.shapes.medium)
-                                    .background(onSurfaceColor),
-                                surfaceColor = surfaceColor,
-                                plainTextColor = plainTextColor,
+                                    .background(state.onSurfaceColor),
+                                surfaceColor = state.surfaceColor,
+                                plainTextColor = state.plainTextColor,
                                 uiEvent = uiEvent
                             )
                             Log.i("Error to API request", error)
@@ -111,10 +100,6 @@ fun HomeScreen(
                             uiEvent = uiEvent
                         )
 
-                        surfaceColor = colorSurfaceAQ
-                        onSurfaceColor = colorOnSurfaceAQ
-                        plainTextColor = colorPlainTextAQ
-
                         state.aqError?.let { error ->
                             ErrorBox(
                                 error = error,
@@ -122,9 +107,9 @@ fun HomeScreen(
                                     .align(Alignment.Center)
                                     .padding(32.dp)
                                     .clip(shape = MaterialTheme.shapes.medium)
-                                    .background(onSurfaceColor),
-                                surfaceColor = surfaceColor,
-                                plainTextColor = plainTextColor,
+                                    .background(state.onSurfaceColor),
+                                surfaceColor = state.surfaceColor,
+                                plainTextColor = state.plainTextColor,
                                 uiEvent = uiEvent
                             )
                             Log.i("Error to API request", error)
@@ -133,6 +118,19 @@ fun HomeScreen(
                 }
             }
         }
+        if (pagerState.currentPage == 0) {
+            uiEvent(UIEvent.ChangeAccentColors(
+                surfaceColor = colorSurfaceWeather,
+                onSurfaceColor = colorOnSurfaceWeather,
+                plainTextColor = colorPlainTextWeather
+            ))
+        } else if (pagerState.currentPage == 1) {
+            uiEvent(UIEvent.ChangeAccentColors(
+                surfaceColor = colorSurfaceAQ,
+                onSurfaceColor = colorOnSurfaceAQ,
+                plainTextColor = colorPlainTextAQ
+            ))
+        }
         HorizontalPagerIndicator(
             pageCount = pageCount,
             pagerState = pagerState,
@@ -140,8 +138,8 @@ fun HomeScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 8.dp)
                 .clip(shape = MaterialTheme.shapes.large)
-                .background(surfaceColor),
-            color = onSurfaceColor
+                .background(state.surfaceColor),
+            color = state.onSurfaceColor
         )
         if (state.isLoading) {
             LoadingBox(
@@ -149,9 +147,9 @@ fun HomeScreen(
                     .align(Alignment.Center)
                     .padding(32.dp)
                     .clip(shape = MaterialTheme.shapes.medium)
-                    .background(onSurfaceColor)
+                    .background(state.onSurfaceColor)
                     .padding(8.dp),
-                surfaceColor = surfaceColor
+                surfaceColor = state.surfaceColor
             )
         }
     }

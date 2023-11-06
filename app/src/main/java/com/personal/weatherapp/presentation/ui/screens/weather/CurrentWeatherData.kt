@@ -26,11 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weatherapp.R
+import com.personal.weatherapp.presentation.CurrentDateBox
 import com.personal.weatherapp.presentation.WeatherState
 import com.personal.weatherapp.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
 import com.personal.weatherapp.presentation.ui.theme.*
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @Composable
@@ -51,18 +51,12 @@ fun CurrentWeatherData(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Box(modifier = Modifier
-                .clip(shape = MaterialTheme.shapes.extraLarge)
-                .background(colorOnSurfaceWeather)
-                .padding(12.dp, 4.dp)
-                .align(Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    text = data.time.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM")),
-                    color = colorSurfaceWeather,
-                    style = MaterialTheme.typography.titleSmall
-                )
-            }
+            CurrentDateBox(
+                time = data.time,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                surfaceColor = colorSurfaceWeather,
+                onSurfaceColor = colorOnSurfaceWeather
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Row(modifier = Modifier.align(Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically) {
                 Text(
