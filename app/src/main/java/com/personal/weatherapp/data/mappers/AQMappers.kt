@@ -44,8 +44,20 @@ fun AQDto.toAQInfo(): AQInfo {
     val aqDataMap = aqData.toAQDataMap()
     val now = LocalDateTime.now()
     val currentAQData = if (now.hour == 23 && now.minute > 30) {
-        aqDataMap[1]?.find { tomorrow ->
-            tomorrow.time.hour == 0
+        val tomorrowData = aqDataMap[1]?.find { it.time.hour == 0 }
+        val todayData = aqDataMap[0]?.find { it.time.hour == now.hour }
+        tomorrowData?.let { tomorrow ->
+            todayData?.let { today ->
+                AQData(
+                    time = today.time,
+                    particulateMatter10 = tomorrow.particulateMatter10,
+                    particulateMatter25 = tomorrow.particulateMatter25,
+                    carbonMonoxide = tomorrow.carbonMonoxide,
+                    nitrogenDioxide = tomorrow.nitrogenDioxide,
+                    sulphurDioxide = tomorrow.sulphurDioxide,
+                    aqType = tomorrow.aqType
+                )
+            }
         }
     } else {
         aqDataMap[0]?.find { today ->

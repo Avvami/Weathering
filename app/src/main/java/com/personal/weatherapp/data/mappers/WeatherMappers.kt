@@ -77,8 +77,21 @@ fun WeatherDto.toWeatherInfo(): WeatherInfo {
     val weatherDataMap = weatherData.toWeatherDataMap()
     val now = LocalDateTime.now()
     val currentWeatherData = if (now.hour == 23 && now.minute > 30) {
-        weatherDataMap[1]?.find { tomorrow ->
-            tomorrow.time.hour == 0
+        val tomorrowData = weatherDataMap[1]?.find { it.time.hour == 0 }
+        val todayData = weatherDataMap[0]?.find { it.time.hour == now.hour }
+        tomorrowData?.let { tomorrow ->
+            todayData?.let { today ->
+                WeatherData(
+                    time = today.time,
+                    temperatureCelsius = tomorrow.temperatureCelsius,
+                    pressure = tomorrow.pressure,
+                    windSpeed = tomorrow.windSpeed,
+                    windDirection = tomorrow.windDirection,
+                    humidity = tomorrow.humidity,
+                    humidityType = tomorrow.humidityType,
+                    weatherType = tomorrow.weatherType
+                )
+            }
         }
     } else {
         weatherDataMap[0]?.find { today ->
