@@ -55,12 +55,11 @@ fun HomeScreen(
 ) {
     Box(modifier = modifier) {
         val pageCount = 2
-        val pagerState = rememberPagerState(initialPage = 0)
+        val pagerState = rememberPagerState(initialPage = 0, pageCount = { pageCount })
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
         ) {
             HorizontalPager(
-                pageCount = pageCount,
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->

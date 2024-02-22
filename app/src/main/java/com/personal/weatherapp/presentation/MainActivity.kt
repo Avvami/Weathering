@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import com.personal.weatherapp.WeatherApp
 import com.personal.weatherapp.presentation.ui.screens.HomeScreen
 import com.personal.weatherapp.presentation.ui.screens.NavGraphs
 import com.personal.weatherapp.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
@@ -24,12 +25,18 @@ import com.personal.weatherapp.presentation.ui.theme.WeatherAppTheme
 import com.personal.weatherapp.presentation.ui.theme.colorSurfaceWeather
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: WeatherViewModel by viewModels()
+    private val viewModel: WeatherViewModel by viewModels {
+        viewModelFactory {
+            WeatherViewModel(
+                weatherRepository = WeatherApp.appModule.weatherRepository,
+                aqRepository = WeatherApp.appModule.aqRepository,
+                locationTracker = WeatherApp.appModule.locationTracker
+            )
+        }
+    }
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {

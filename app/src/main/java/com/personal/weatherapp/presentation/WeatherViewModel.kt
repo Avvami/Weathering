@@ -7,16 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.personal.weatherapp.domain.airquality.AQInfo
 import com.personal.weatherapp.domain.location.LocationTracker
+import com.personal.weatherapp.domain.repository.AqRepository
 import com.personal.weatherapp.domain.repository.WeatherRepository
 import com.personal.weatherapp.domain.util.Resource
 import com.personal.weatherapp.domain.weather.WeatherInfo
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class WeatherViewModel @Inject constructor(
-    private val repository: WeatherRepository,
+class WeatherViewModel(
+    private val weatherRepository: WeatherRepository,
+    private val aqRepository: AqRepository,
     private val locationTracker: LocationTracker
 ): ViewModel() {
 
@@ -37,7 +36,7 @@ class WeatherViewModel @Inject constructor(
             var aqError: String? = null
 
             locationTracker.getCurrentLocation()?.let { location ->
-                repository.getWeatherData(location.latitude, location.longitude).let { result ->
+                weatherRepository.getWeatherData(location.latitude, location.longitude).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             weatherError = result.message
@@ -48,7 +47,7 @@ class WeatherViewModel @Inject constructor(
                     }
                 }
 
-                repository.getAQData(location.latitude, location.longitude).let { result ->
+                aqRepository.getAQData(location.latitude, location.longitude).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             aqError = result.message
@@ -67,7 +66,7 @@ class WeatherViewModel @Inject constructor(
                     aqError = aqError
                 )
             } ?: kotlin.run {
-                repository.getWeatherData(56.0184, 92.8672).let { result ->
+                weatherRepository.getWeatherData(56.0184, 92.8672).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             weatherError = result.message
@@ -78,7 +77,7 @@ class WeatherViewModel @Inject constructor(
                     }
                 }
 
-                repository.getAQData(56.0184, 92.8672).let { result ->
+                aqRepository.getAQData(56.0184, 92.8672).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             aqError = result.message
