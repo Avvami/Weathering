@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.personal.weatherapp'
+    namespace 'com.personal.weathering'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.personal.weatherapp"
+        applicationId "com.personal.weathering"
         minSdk 26
         targetSdk 34
         versionCode 1
