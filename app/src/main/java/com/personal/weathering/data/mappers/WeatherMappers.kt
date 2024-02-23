@@ -1,50 +1,69 @@
 package com.personal.weathering.data.mappers
 
-import com.personal.weathering.data.remote.WeatherDailyDto
-import com.personal.weathering.data.remote.WeatherDataDto
-import com.personal.weathering.data.remote.WeatherDto
-import com.personal.weathering.domain.weather.SunriseSunset
-import com.personal.weathering.domain.weather.WeatherData
-import com.personal.weathering.domain.weather.WeatherHumidity
-import com.personal.weathering.domain.weather.WeatherInfo
-import com.personal.weathering.domain.weather.WeatherType
-import com.personal.weathering.domain.weather.WeatherWindDirection
+import com.personal.weathering.data.models.CurrentWeatherDto
+import com.personal.weathering.data.models.DailyWeatherDto
+import com.personal.weathering.data.models.HourlyWeatherDto
+import com.personal.weathering.data.models.WeatherDto
+import com.personal.weathering.domain.models.weather.CurrentWeatherData
+import com.personal.weathering.domain.models.weather.DailyWeatherData
+import com.personal.weathering.domain.models.weather.HourlyWeatherData
+import com.personal.weathering.domain.models.weather.HumidityType
+import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.models.weather.WeatherType
+import com.personal.weathering.domain.models.weather.WindDirectionType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-private data class IndexedWeatherData(
+private data class IndexedHourlyWeather(
     val index: Int,
-    val data: WeatherData
+    val data: HourlyWeatherData
 )
 
-private data class IndexedWeatherDaily(
+private data class IndexedDailyWeather(
     val index: Int,
-    val data: SunriseSunset
+    val data: DailyWeatherData
 )
 
 private fun Int.toBoolean() = this == 1
 
-fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
+fun CurrentWeatherDto.toCurrentWeatherData(): CurrentWeatherData {
+    return CurrentWeatherData(
+        time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+        temperature = temperature,
+        apparentTemperature = apparentTemperature,
+        humidity = humidity,
+        humidityType = HumidityType.fromPercentage(humidity),
+        weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean()),
+        pressure = pressure,
+        windSpeed = windSpeed,
+        windDirection = windDirection.toFloat(),
+        windDirectionType = WindDirectionType.fromDegree(windDirection)
+    )
+}
+fun HourlyWeatherDto.toHourlyWeatherData(): Map<Int, List<HourlyWeatherData>> {
     return time.mapIndexed { index, time ->
         val temperature = temperatures[index]
+        val apparentTemperature = apparentTemperatures[index]
         val weatherCode = weatherCodes[index]
+        val pressure = pressures[index]
         val windSpeed = windSpeeds[index]
         val windDirection = windDirections[index]
-        val pressure = pressures[index]
         val humidity = humidities[index]
         val isDay = isDay[index]
-        IndexedWeatherData(
+        IndexedHourlyWeather(
             index = index,
-            data = WeatherData(
+            data = HourlyWeatherData(
                 time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-                temperatureCelsius = temperature,
-                pressure = pressure  * 0.75, // mmHg
-                windSpeed = windSpeed / 3.6, // m/s
-                windDirection = WeatherWindDirection.fromDegree(windDirection),
+                temperature = temperature,
+                apparentTemperature = apparentTemperature,
                 humidity = humidity,
-                humidityType = WeatherHumidity.fromPercentage(humidity),
-                weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean())
+                humidityType = HumidityType.fromPercentage(humidity),
+                weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean()),
+                pressure = pressure,
+                windSpeed = windSpeed,
+                windDirection = windDirection.toFloat(),
+                windDirectionType = WindDirectionType.fromDegree(windDirection)
             )
         )
     }.groupBy { indexedData ->
@@ -54,14 +73,20 @@ fun WeatherDataDto.toWeatherDataMap(): Map<Int, List<WeatherData>> {
     }
 }
 
-fun WeatherDailyDto.toWeatherDailyMap(): Map<Int, List<SunriseSunset>> {
+fun DailyWeatherDto.toDailyWeatherData(): Map<Int, List<DailyWeatherData>> {
     return time.mapIndexed { index, time ->
-        val sunrise = sunrise[index]
-        val sunset = sunset[index]
-        IndexedWeatherDaily(
+        val temperatureMax = temperaturesMax[index]
+        val temperatureMin = temperaturesMin[index]
+        val weatherCode = weatherCodes[index]
+        val sunrise = sunrises[index]
+        val sunset = sunsets[index]
+        IndexedDailyWeather(
             index = index,
-            data = SunriseSunset(
+            data = DailyWeatherData(
                 time = LocalDate.parse(time, DateTimeFormatter.ISO_DATE),
+                temperatureMax = temperatureMax,
+                temperatureMin = temperatureMin,
+                weatherType = WeatherType.fromWMO(weatherCode, true),
                 sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
                 sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
             )
@@ -74,40 +99,9 @@ fun WeatherDailyDto.toWeatherDailyMap(): Map<Int, List<SunriseSunset>> {
 }
 
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
-    val weatherDataMap = weatherData.toWeatherDataMap()
-    val now = LocalDateTime.now()
-    val currentWeatherData = if (now.hour == 23 && now.minute > 30) {
-        val tomorrowData = weatherDataMap[1]?.find { it.time.hour == 0 }
-        val todayData = weatherDataMap[0]?.find { it.time.hour == now.hour }
-        tomorrowData?.let { tomorrow ->
-            todayData?.let { today ->
-                WeatherData(
-                    time = today.time,
-                    temperatureCelsius = tomorrow.temperatureCelsius,
-                    pressure = tomorrow.pressure,
-                    windSpeed = tomorrow.windSpeed,
-                    windDirection = tomorrow.windDirection,
-                    humidity = tomorrow.humidity,
-                    humidityType = tomorrow.humidityType,
-                    weatherType = tomorrow.weatherType
-                )
-            }
-        }
-    } else {
-        weatherDataMap[0]?.find { today ->
-            today.time.hour == when {
-                now.minute < 30 -> now.hour
-                else -> now.hour + 1
-            }
-        }
-    }
-
-    val dailyWeatherData: List<List<WeatherData>> = weatherDataMap.values.toList()
-    val sunriseSunset = weatherDaily.toWeatherDailyMap()[0]?.get(0)
     return WeatherInfo(
-        weatherDataPerDay = weatherDataMap,
-        dailyWeatherData = dailyWeatherData,
-        currentWeatherData = currentWeatherData,
-        sunriseSunset = sunriseSunset
+        currentWeatherData = currentWeather.toCurrentWeatherData(),
+        hourlyWeatherData = hourlyWeather.toHourlyWeatherData(),
+        dailyWeatherData = dailyWeather.toDailyWeatherData()
     )
 }

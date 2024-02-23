@@ -30,16 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.WeatherState
-import com.personal.weathering.presentation.ui.screens.destinations.WeeklyForecastDetailsScreenDestination
-import com.personal.weathering.presentation.ui.theme.*
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.personal.weathering.presentation.ui.theme.colorOnSurfaceWeather
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeeklyForecast(
-    navigator: DestinationsNavigator,
     state: WeatherState
 ) {
     state.weatherInfo?.dailyWeatherData?.let { day ->
@@ -51,7 +48,7 @@ fun WeeklyForecast(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Weekly forecast", fontSize = 22.sp, fontWeight = FontWeight.Medium, color = colorOnSurfaceWeather)
-            IconButton(modifier = Modifier.then(Modifier.size(26.dp)), onClick = { navigator.navigate(WeeklyForecastDetailsScreenDestination) }) {
+            IconButton(modifier = Modifier.then(Modifier.size(26.dp)), onClick = {  }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_arrow_forward_fill0),
                     contentDescription = "View weekly forecast",
@@ -68,22 +65,22 @@ fun WeeklyForecast(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(horizontal = 32.dp),
                 content = {
-                    items(day) {weatherPerDay ->
-                        WeatherInDay(
-                            temperature = "${weatherPerDay.find { it.time.hour == 15 }?.temperatureCelsius?.roundToInt()}",
-                            imageId = weatherPerDay.find { it.time.hour == 15 }?.weatherType?.iconRes ?: R.drawable.ic_clear_day_fill1,
-                            imageDescription = weatherPerDay.find { it.time.hour == 15 }?.weatherType?.weatherDesc ?: "",
-                            date = weatherPerDay.find { it.time.hour == 15 }?.time?.format(DateTimeFormatter.ofPattern("dd EE")) ?: "",
-                            modifier = Modifier
-                                .width(96.dp)
-                                .border(
-                                    width = 2.dp,
-                                    color = colorOnSurfaceWeather,
-                                    shape = MaterialTheme.shapes.medium
-                                )
-                                .padding(horizontal = 24.dp, vertical = 16.dp)
-                        )
-                    }
+//                    items(day) {weatherPerDay ->
+//                        WeatherInDay(
+//                            temperature = "${weatherPerDay.find { it.time.hour == 15 }?.temperatureCelsius?.roundToInt()}",
+//                            imageId = weatherPerDay.find { it.time.hour == 15 }?.weatherType?.iconRes ?: R.drawable.ic_clear_day_fill1,
+//                            imageDescription = weatherPerDay.find { it.time.hour == 15 }?.weatherType?.weatherDesc ?: "",
+//                            date = weatherPerDay.find { it.time.hour == 15 }?.time?.format(DateTimeFormatter.ofPattern("dd EE")) ?: "",
+//                            modifier = Modifier
+//                                .width(96.dp)
+//                                .border(
+//                                    width = 2.dp,
+//                                    color = colorOnSurfaceWeather,
+//                                    shape = MaterialTheme.shapes.medium
+//                                )
+//                                .padding(horizontal = 24.dp, vertical = 16.dp)
+//                        )
+//                    }
                 }
             )
         }

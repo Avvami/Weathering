@@ -10,16 +10,20 @@ import com.personal.weathering.domain.location.LocationTracker
 import com.personal.weathering.domain.repository.AqRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
-import com.personal.weathering.domain.weather.WeatherInfo
+import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.presentation.state.MessageDialogState
 import kotlinx.coroutines.launch
 
-class WeatherViewModel(
+class MainViewModel(
     private val weatherRepository: WeatherRepository,
     private val aqRepository: AqRepository,
     private val locationTracker: LocationTracker
 ): ViewModel() {
 
     var state by mutableStateOf(WeatherState())
+        private set
+
+    var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
     fun loadWeatherInfo() {
@@ -99,23 +103,33 @@ class WeatherViewModel(
         }
     }
 
-    fun uiEvent(event: UIEvent) {
+    fun uiEvent(event: UiEvent) {
         when(event) {
-            is UIEvent.OpenAlertDialog -> {
-                state = state.copy(
-                    openAlertDialog = event.isOpen
-                )
-            }
-            UIEvent.LoadWeatherInfo -> {
+            UiEvent.LoadWeatherInfo -> {
                 loadWeatherInfo()
             }
-            is UIEvent.ChangeAccentColors -> {
+            is UiEvent.ChangeAccentColors -> {
                 state = state.copy(
                     surfaceColor = event.surfaceColor,
                     onSurfaceColor = event.onSurfaceColor,
                     plainTextColor = event.plainTextColor
                 )
             }
+            is UiEvent.ShowMessageDialog -> {
+                messageDialogState = messageDialogState.copy(
+                    isShown = true,
+                    iconRes = event.iconRes,
+                    titleRes = event.titleRes,
+                    messageRes = event.messageRes,
+                    messageString = event.messageString,
+                    dismissTextRes = event.dismissTextRes,
+                    onDismissRequest = { uiEvent(UiEvent.CloseMessageDialog) },
+                    onDismiss = event.onDismiss,
+                    confirmTextRes = event.confirmTextRes,
+                    onConfirm = event.onConfirm ?: { uiEvent(UiEvent.CloseMessageDialog) }
+                )
+            }
+            UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
         }
     }
 }

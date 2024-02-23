@@ -1,35 +1,36 @@
-package com.personal.weathering.domain.weather
+package com.personal.weathering.domain.models.weather
 
-sealed class WeatherWindDirection(
+sealed class WindDirectionType(
     val direction: String
 ) {
-    object N: WeatherWindDirection(
+    data object N: WindDirectionType(
         direction = "N"
     )
-    object NE: WeatherWindDirection(
+    data object NE: WindDirectionType(
         direction = "NE"
     )
-    object E: WeatherWindDirection(
+    data object E: WindDirectionType(
         direction = "E"
     )
-    object SE: WeatherWindDirection(
+    data object SE: WindDirectionType(
         direction = "SE"
     )
-    object S: WeatherWindDirection(
+    data object S: WindDirectionType(
         direction = "S"
     )
-    object SW: WeatherWindDirection(
+    data object SW: WindDirectionType(
         direction = "SW"
     )
-    object W: WeatherWindDirection(
+    data object W: WindDirectionType(
         direction = "W"
     )
-    object NW: WeatherWindDirection(
+
+    data object NW: WindDirectionType(
         direction = "NW"
     )
 
     companion object {
-        fun fromDegree(degree: Int): WeatherWindDirection {
+        fun fromDegree(degree: Int): WindDirectionType {
             return when(degree) {
                 in 0 until 23 -> N
                 in 23 until 67 -> NE

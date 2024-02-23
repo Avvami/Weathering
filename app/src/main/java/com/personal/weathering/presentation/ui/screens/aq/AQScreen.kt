@@ -11,14 +11,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.personal.weathering.presentation.UIEvent
+import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.WeatherState
 
 @Composable
 fun AQScreen(
     state: WeatherState,
     modifier: Modifier,
-    uiEvent: (UIEvent) -> Unit
+    uiEvent: (UiEvent) -> Unit
 ) {
     Box(modifier = modifier) {
         Column(modifier = Modifier

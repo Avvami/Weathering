@@ -12,13 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.presentation.WeatherState
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun WeatherScreen(
-    navigator: DestinationsNavigator,
     state: WeatherState,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
         Column(modifier = Modifier
@@ -26,13 +24,12 @@ fun WeatherScreen(
             .verticalScroll(rememberScrollState())
         ) {
             CurrentWeatherData(
-                navigator = navigator,
                 state = state,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
             )
-            WeeklyForecast(navigator = navigator,state = state)
+            WeeklyForecast(state = state)
             Spacer(modifier = Modifier.height(32.dp))
         }
     }

@@ -8,29 +8,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.personal.weathering.WeatheringApp
-import com.personal.weathering.presentation.ui.screens.HomeScreen
-import com.personal.weathering.presentation.ui.screens.NavGraphs
-import com.personal.weathering.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
-import com.personal.weathering.presentation.ui.screens.destinations.HomeScreenDestination
-import com.personal.weathering.presentation.ui.screens.destinations.WeeklyForecastDetailsScreenDestination
-import com.personal.weathering.presentation.ui.screens.weather.CurrentWeatherDetailsScreen
-import com.personal.weathering.presentation.ui.screens.weather.WeeklyForecastDetailsScreen
+import com.personal.weathering.presentation.navigation.RootNavigationGraph
+import com.personal.weathering.presentation.ui.components.CustomDialog
 import com.personal.weathering.presentation.ui.theme.WeatheringTheme
-import com.personal.weathering.presentation.ui.theme.colorSurfaceWeather
-import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.manualcomposablecalls.composable
+import com.personal.weathering.presentation.ui.theme.weatheringBlue
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: WeatherViewModel by viewModels {
+    private val mainViewModel: MainViewModel by viewModels {
         viewModelFactory {
-            WeatherViewModel(
+            MainViewModel(
                 weatherRepository = WeatheringApp.appModule.weatherRepository,
                 aqRepository = WeatheringApp.appModule.aqRepository,
                 locationTracker = WeatheringApp.appModule.locationTracker
@@ -46,7 +38,7 @@ class MainActivity : ComponentActivity() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
-            viewModel.loadWeatherInfo()
+            mainViewModel.loadWeatherInfo()
         }
         permissionLauncher.launch(arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -55,34 +47,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatheringTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize().background(colorSurfaceWeather)
+                    modifier = Modifier.fillMaxSize(),
+                    color = weatheringBlue
                 ) {
-                    DestinationsNavHost(navGraph = NavGraphs.root) {
-                        composable(HomeScreenDestination) {
-                            HomeScreen(
-                                navigator = destinationsNavigator,
-                                state = viewModel.state,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .navigationBarsPadding(),
-                                uiEvent = viewModel::uiEvent
-                            )
-                        }
-                        composable(CurrentWeatherDetailsScreenDestination) {
-                            CurrentWeatherDetailsScreen(
-                                navigator = destinationsNavigator,
-                                state = viewModel.state,
-                                uiEvent = viewModel::uiEvent
-                            )
-                        }
-                        composable(WeeklyForecastDetailsScreenDestination) {
-                            WeeklyForecastDetailsScreen(
-                                navigator = destinationsNavigator,
-                                state = viewModel.state,
-                                uiEvent = viewModel::uiEvent
-                            )
-                        }
-                    }
+                    RootNavigationGraph(
+                        navController = rememberNavController(),
+                        mainViewModel = mainViewModel
+                    )
+                    CustomDialog(
+                        iconRes = mainViewModel.messageDialogState.iconRes,
+                        titleRes = mainViewModel.messageDialogState.titleRes,
+                        messageRes = mainViewModel.messageDialogState.messageRes,
+                        messageString = mainViewModel.messageDialogState.messageString,
+                        onDismissRequest = { mainViewModel.uiEvent(UiEvent.CloseMessageDialog) },
+                        dismissTextRes = mainViewModel.messageDialogState.dismissTextRes,
+                        onDismiss = mainViewModel.messageDialogState.onDismiss,
+                        confirmTextRes = mainViewModel.messageDialogState.confirmTextRes,
+                        onConfirm = mainViewModel.messageDialogState.onConfirm,
+                        showDialog = mainViewModel.messageDialogState.isShown
+                    )
                 }
             }
         }

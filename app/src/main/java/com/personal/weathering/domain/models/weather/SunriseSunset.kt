@@ -1,4 +1,4 @@
-package com.personal.weathering.domain.weather
+package com.personal.weathering.domain.models.weather
 
 import java.time.LocalDate
 import java.time.LocalDateTime

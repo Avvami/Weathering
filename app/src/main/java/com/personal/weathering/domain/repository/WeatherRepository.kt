@@ -1,7 +1,7 @@
 package com.personal.weathering.domain.repository
 
 import com.personal.weathering.domain.util.Resource
-import com.personal.weathering.domain.weather.WeatherInfo
+import com.personal.weathering.domain.models.weather.WeatherInfo
 
 interface WeatherRepository {
     suspend fun getWeatherData(lat: Double, long: Double): Resource<WeatherInfo>

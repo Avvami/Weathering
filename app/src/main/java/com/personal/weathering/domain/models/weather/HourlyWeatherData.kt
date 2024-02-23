@@ -1,0 +1,16 @@
+package com.personal.weathering.domain.models.weather
+
+import java.time.LocalDateTime
+
+data class HourlyWeatherData(
+    val time: LocalDateTime,
+    val temperature: Double,
+    val apparentTemperature: Double,
+    val humidity: Int,
+    val humidityType: HumidityType,
+    val weatherType: WeatherType,
+    val pressure: Double,
+    val windSpeed: Double,
+    val windDirection: Float,
+    val windDirectionType: WindDirectionType
+)

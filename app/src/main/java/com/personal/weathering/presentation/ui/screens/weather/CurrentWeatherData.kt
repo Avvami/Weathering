@@ -28,14 +28,12 @@ import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.CurrentDateBox
 import com.personal.weathering.presentation.WeatherState
-import com.personal.weathering.presentation.ui.screens.destinations.CurrentWeatherDetailsScreenDestination
-import com.personal.weathering.presentation.ui.theme.*
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.personal.weathering.presentation.ui.theme.colorOnSurfaceWeather
+import com.personal.weathering.presentation.ui.theme.colorSurfaceWeather
 import kotlin.math.roundToInt
 
 @Composable
 fun CurrentWeatherData(
-    navigator: DestinationsNavigator,
     state: WeatherState,
     modifier: Modifier
 ) {
@@ -65,16 +63,16 @@ fun CurrentWeatherData(
                     color = colorOnSurfaceWeather
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Icon(
-                    painter = painterResource(id = data.weatherType.iconRes),
-                    contentDescription = data.weatherType.weatherDesc,
-                    tint = colorOnSurfaceWeather,
-                    modifier = Modifier.size(26.dp)
-                )
+//                Icon(
+//                    painter = painterResource(id = data.weatherType.iconRes),
+//                    contentDescription = data.weatherType.weatherDesc,
+//                    tint = colorOnSurfaceWeather,
+//                    modifier = Modifier.size(26.dp)
+//                )
             }
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "${data.temperatureCelsius.roundToInt()}°",
+                text = "°",
                 fontSize = 160.sp,
                 color = colorOnSurfaceWeather,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -115,7 +113,7 @@ fun CurrentWeatherData(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
                             painter = painterResource(id = data.humidityType.iconRes),
-                            contentDescription = data.humidityType.humidityDesc,
+                            contentDescription = data.humidityType.iconDesc,
                             tint = colorSurfaceWeather,
                             modifier = Modifier.size(54.dp)
                         )
@@ -126,7 +124,7 @@ fun CurrentWeatherData(
                     }
                 }
             }
-            TextButton(onClick = { navigator.navigate(CurrentWeatherDetailsScreenDestination) }, modifier = Modifier.align(Alignment.End), contentPadding = PaddingValues(0.dp)) {
+            TextButton(onClick = {  }, modifier = Modifier.align(Alignment.End), contentPadding = PaddingValues(0.dp)) {
                 Text(
                     text = "More",
                     style = MaterialTheme.typography.titleSmall,
