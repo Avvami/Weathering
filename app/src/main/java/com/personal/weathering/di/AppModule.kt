@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.android.gms.location.LocationServices
 import com.personal.weathering.data.location.DefaultLocationTracker
-import com.personal.weathering.data.remote.AQApi
+import com.personal.weathering.data.remote.AqApi
 import com.personal.weathering.data.remote.WeatherApi
 import com.personal.weathering.data.repository.AqRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
@@ -19,7 +19,7 @@ import retrofit2.create
 interface AppModule {
     val weatherApi: WeatherApi
     val weatherRepository: WeatherRepository
-    val aqApi: AQApi
+    val aqApi: AqApi
     val aqRepository: AqRepository
     val locationTracker: LocationTracker
 }
@@ -35,10 +35,10 @@ class AppModuleImpl(private val appContext: Context): AppModule {
     }
 
     override val weatherRepository: WeatherRepository by lazy {
-        WeatherRepositoryImpl(weatherApi)
+        WeatherRepositoryImpl(weatherApi, appContext)
     }
 
-    override val aqApi: AQApi by lazy {
+    override val aqApi: AqApi by lazy {
         Retrofit.Builder()
             .baseUrl(C.OM_AQ_BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
@@ -47,7 +47,7 @@ class AppModuleImpl(private val appContext: Context): AppModule {
     }
 
     override val aqRepository: AqRepository by lazy {
-        AqRepositoryImpl(aqApi)
+        AqRepositoryImpl(aqApi, appContext)
     }
 
     override val locationTracker: LocationTracker by lazy {

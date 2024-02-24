@@ -8,6 +8,7 @@ import com.personal.weathering.domain.models.weather.CurrentWeatherData
 import com.personal.weathering.domain.models.weather.DailyWeatherData
 import com.personal.weathering.domain.models.weather.HourlyWeatherData
 import com.personal.weathering.domain.models.weather.HumidityType
+import com.personal.weathering.domain.models.weather.TwentyFourHoursWeatherData
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.models.weather.WeatherType
 import com.personal.weathering.domain.models.weather.WindDirectionType
@@ -99,8 +100,23 @@ fun DailyWeatherDto.toDailyWeatherData(): Map<Int, List<DailyWeatherData>> {
 }
 
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
+    val now = LocalDateTime.now()
+    val flattenHourlyWeatherData = hourlyWeather.toHourlyWeatherData().values.flatten()
+    val twentyFourHoursWeatherData = flattenHourlyWeatherData.filter { hourlyData ->
+        hourlyData.time.isAfter(now) && hourlyData.time.isBefore(now.plusDays(1))
+    }.sortedBy { hourlyData ->
+        hourlyData.time
+    }.take(24).map { hourlyData ->
+        TwentyFourHoursWeatherData(
+            time = hourlyData.time,
+            temperature = hourlyData.temperature,
+            weatherType = hourlyData.weatherType
+        )
+    }
+
     return WeatherInfo(
         currentWeatherData = currentWeather.toCurrentWeatherData(),
+        twentyFourHoursWeatherData = twentyFourHoursWeatherData,
         hourlyWeatherData = hourlyWeather.toHourlyWeatherData(),
         dailyWeatherData = dailyWeather.toDailyWeatherData()
     )

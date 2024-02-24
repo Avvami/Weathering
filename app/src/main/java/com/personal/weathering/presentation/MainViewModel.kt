@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.personal.weathering.domain.airquality.AQInfo
+import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.location.LocationTracker
 import com.personal.weathering.domain.repository.AqRepository
 import com.personal.weathering.domain.repository.WeatherRepository
@@ -35,7 +35,7 @@ class MainViewModel(
             )
 
             var weatherInfo: WeatherInfo? = null
-            var aqInfo: AQInfo? = null
+            var aqInfo: AqInfo? = null
             var weatherError: String? = null
             var aqError: String? = null
 
@@ -51,7 +51,7 @@ class MainViewModel(
                     }
                 }
 
-                aqRepository.getAQData(location.latitude, location.longitude).let { result ->
+                aqRepository.getAqData(location.latitude, location.longitude).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             aqError = result.message
@@ -81,7 +81,7 @@ class MainViewModel(
                     }
                 }
 
-                aqRepository.getAQData(56.0184, 92.8672).let { result ->
+                aqRepository.getAqData(56.0184, 92.8672).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             aqError = result.message
