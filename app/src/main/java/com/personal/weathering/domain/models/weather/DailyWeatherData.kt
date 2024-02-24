@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 
 data class DailyWeatherData(
     val time: LocalDate,
-    val temperatureMax: Double,
-    val temperatureMin: Double,
+    val temperatureMax: Int,
+    val temperatureMin: Int,
     val weatherType: WeatherType,
     val sunrise: LocalDateTime,
     val sunset: LocalDateTime

@@ -2,12 +2,10 @@ package com.personal.weathering.presentation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.ui.graphics.Color
 import com.personal.weathering.R
 
 sealed interface UiEvent {
     data object LoadWeatherInfo: UiEvent
-    data class ChangeAccentColors(val surfaceColor: Color, val onSurfaceColor: Color, val plainTextColor: Color): UiEvent
     data class ShowMessageDialog(
         @DrawableRes val iconRes: Int? = null,
         @StringRes val titleRes: Int? = null,

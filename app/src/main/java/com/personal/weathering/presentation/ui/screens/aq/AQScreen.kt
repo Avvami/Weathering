@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.presentation.UiEvent
-import com.personal.weathering.presentation.WeatherState
+import com.personal.weathering.presentation.state.WeatherState
 
 @Composable
 fun AQScreen(

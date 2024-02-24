@@ -5,13 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.location.LocationTracker
+import com.personal.weathering.domain.models.airquality.AqInfo
+import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
-import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.MessageDialogState
+import com.personal.weathering.presentation.state.WeatherState
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -20,86 +22,72 @@ class MainViewModel(
     private val locationTracker: LocationTracker
 ): ViewModel() {
 
-    var state by mutableStateOf(WeatherState())
+    var weatherState by mutableStateOf(WeatherState())
+        private set
+
+    var aqState by mutableStateOf(AqState())
         private set
 
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
-    fun loadWeatherInfo() {
+    private fun loadWeatherInfo() {
         viewModelScope.launch {
-            state = state.copy(
+            weatherState = weatherState.copy(
                 isLoading = true,
-                weatherError = null,
-                aqError = null
+                error = null
             )
 
             var weatherInfo: WeatherInfo? = null
-            var aqInfo: AqInfo? = null
-            var weatherError: String? = null
-            var aqError: String? = null
+            var error: String? = null
 
-            locationTracker.getCurrentLocation()?.let { location ->
-                weatherRepository.getWeatherData(location.latitude, location.longitude).let { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            weatherError = result.message
-                        }
-                        is Resource.Success -> {
-                            weatherInfo = result.data
-                        }
+            weatherRepository.getWeatherData(56.0184, 92.8672).let { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        error = result.message
+                    }
+                    is Resource.Success -> {
+                        weatherInfo = result.data
                     }
                 }
-
-                aqRepository.getAqData(location.latitude, location.longitude).let { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            aqError = result.message
-                        }
-                        is Resource.Success -> {
-                            aqInfo = result.data
-                        }
-                    }
-                }
-
-                state = state.copy(
-                    weatherInfo = weatherInfo,
-                    aqInfo = aqInfo,
-                    isLoading = false,
-                    weatherError = weatherError,
-                    aqError = aqError
-                )
-            } ?: kotlin.run {
-                weatherRepository.getWeatherData(56.0184, 92.8672).let { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            weatherError = result.message
-                        }
-                        is Resource.Success -> {
-                            weatherInfo = result.data
-                        }
-                    }
-                }
-
-                aqRepository.getAqData(56.0184, 92.8672).let { result ->
-                    when (result) {
-                        is Resource.Error -> {
-                            aqError = result.message
-                        }
-                        is Resource.Success -> {
-                            aqInfo = result.data
-                        }
-                    }
-                }
-
-                state = state.copy(
-                    weatherInfo = weatherInfo,
-                    aqInfo = aqInfo,
-                    isLoading = false,
-                    weatherError = weatherError,
-                    aqError = aqError
-                )
             }
+
+            weatherState = weatherState.copy(
+                weatherInfo = weatherInfo,
+                isLoading = false,
+                error = error
+            )
+
+            locationTracker.getCurrentLocation()?.let {} ?: kotlin.run {}
+        }
+    }
+
+    private fun loadAqInfo() {
+        viewModelScope.launch {
+            aqState = aqState.copy(
+                isLoading = true,
+                error = null
+            )
+
+            var aqInfo: AqInfo? = null
+            var error: String? = null
+
+            aqRepository.getAqData(56.0184, 92.8672).let { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        error = result.message
+                    }
+                    is Resource.Success -> {
+                        aqInfo = result.data
+                    }
+                }
+            }
+
+            aqState = aqState.copy(
+                aqInfo = aqInfo,
+                isLoading = false,
+                error = error
+            )
         }
     }
 
@@ -107,13 +95,6 @@ class MainViewModel(
         when(event) {
             UiEvent.LoadWeatherInfo -> {
                 loadWeatherInfo()
-            }
-            is UiEvent.ChangeAccentColors -> {
-                state = state.copy(
-                    surfaceColor = event.surfaceColor,
-                    onSurfaceColor = event.onSurfaceColor,
-                    plainTextColor = event.plainTextColor
-                )
             }
             is UiEvent.ShowMessageDialog -> {
                 messageDialogState = messageDialogState.copy(

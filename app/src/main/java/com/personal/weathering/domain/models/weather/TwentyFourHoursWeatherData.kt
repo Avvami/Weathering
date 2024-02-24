@@ -4,6 +4,6 @@ import java.time.LocalDateTime
 
 data class TwentyFourHoursWeatherData(
     val time: LocalDateTime,
-    val temperature: Double,
+    val temperature: Int,
     val weatherType: WeatherType
 )

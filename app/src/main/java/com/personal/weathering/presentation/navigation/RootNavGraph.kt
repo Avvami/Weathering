@@ -21,7 +21,10 @@ fun RootNavigationGraph(
         composable(
             route = RootNavGraph.WEATHER
         ) {
-            WeatherScreen(state = mainViewModel.state)
+            WeatherScreen(
+                weatherState = mainViewModel::weatherState,
+                aqState = mainViewModel::aqState
+            )
         }
     }
 }

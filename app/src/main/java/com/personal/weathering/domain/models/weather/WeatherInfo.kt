@@ -4,5 +4,5 @@ data class WeatherInfo(
     val currentWeatherData: CurrentWeatherData,
     val twentyFourHoursWeatherData: List<TwentyFourHoursWeatherData>,
     val hourlyWeatherData: Map<Int, List<HourlyWeatherData>>,
-    val dailyWeatherData: Map<Int, List<DailyWeatherData>>
+    val dailyWeatherData: List<DailyWeatherData>
 )

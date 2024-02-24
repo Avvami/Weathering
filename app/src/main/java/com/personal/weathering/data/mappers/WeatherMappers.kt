@@ -15,15 +15,11 @@ import com.personal.weathering.domain.models.weather.WindDirectionType
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 private data class IndexedHourlyWeather(
     val index: Int,
     val data: HourlyWeatherData
-)
-
-private data class IndexedDailyWeather(
-    val index: Int,
-    val data: DailyWeatherData
 )
 
 private fun Int.toBoolean() = this == 1
@@ -31,8 +27,8 @@ private fun Int.toBoolean() = this == 1
 fun CurrentWeatherDto.toCurrentWeatherData(): CurrentWeatherData {
     return CurrentWeatherData(
         time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-        temperature = temperature,
-        apparentTemperature = apparentTemperature,
+        temperature = temperature.roundToInt(),
+        apparentTemperature = apparentTemperature.roundToInt(),
         humidity = humidity,
         humidityType = HumidityType.fromPercentage(humidity),
         weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean()),
@@ -74,28 +70,21 @@ fun HourlyWeatherDto.toHourlyWeatherData(): Map<Int, List<HourlyWeatherData>> {
     }
 }
 
-fun DailyWeatherDto.toDailyWeatherData(): Map<Int, List<DailyWeatherData>> {
+fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
     return time.mapIndexed { index, time ->
         val temperatureMax = temperaturesMax[index]
         val temperatureMin = temperaturesMin[index]
         val weatherCode = weatherCodes[index]
         val sunrise = sunrises[index]
         val sunset = sunsets[index]
-        IndexedDailyWeather(
-            index = index,
-            data = DailyWeatherData(
-                time = LocalDate.parse(time, DateTimeFormatter.ISO_DATE),
-                temperatureMax = temperatureMax,
-                temperatureMin = temperatureMin,
-                weatherType = WeatherType.fromWMO(weatherCode, true),
-                sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
-                sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
-            )
+        DailyWeatherData(
+            time = LocalDate.parse(time, DateTimeFormatter.ISO_DATE),
+            temperatureMax = temperatureMax.roundToInt(),
+            temperatureMin = temperatureMin.roundToInt(),
+            weatherType = WeatherType.fromWMO(weatherCode, true),
+            sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
+            sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
         )
-    }.groupBy { indexedData ->
-        indexedData.index
-    }.mapValues {
-        it.value.map { indexedData -> indexedData.data }
     }
 }
 
@@ -109,7 +98,7 @@ fun WeatherDto.toWeatherInfo(): WeatherInfo {
     }.take(24).map { hourlyData ->
         TwentyFourHoursWeatherData(
             time = hourlyData.time,
-            temperature = hourlyData.temperature,
+            temperature = hourlyData.temperature.roundToInt(),
             weatherType = hourlyData.weatherType
         )
     }

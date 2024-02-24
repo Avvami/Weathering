@@ -4,8 +4,8 @@ import java.time.LocalDateTime
 
 data class CurrentWeatherData(
     val time: LocalDateTime,
-    val temperature: Double,
-    val apparentTemperature: Double,
+    val temperature: Int,
+    val apparentTemperature: Int,
     val humidity: Int,
     val humidityType: HumidityType,
     val weatherType: WeatherType,

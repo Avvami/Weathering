@@ -1,7 +1,6 @@
 package com.personal.weathering.presentation.ui.screens.aq
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.presentation.UiEvent
-import com.personal.weathering.presentation.WeatherState
+import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.theme.colorOnSurfaceAQ
 import com.personal.weathering.presentation.ui.theme.colorPlainTextAQ
 import com.personal.weathering.presentation.ui.theme.colorSurfaceAQ
