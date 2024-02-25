@@ -16,13 +16,7 @@ class SearchViewModel: ViewModel() {
         when (event) {
             is SearchUiEvent.OnSearchQueryChange -> { searchQuery = event.query }
             is SearchUiEvent.SetSearchFieldActive -> { searchFieldActive = event.active }
-            SearchUiEvent.ClearSearchQuery -> {
-                if (searchQuery.isNotEmpty()) {
-                    searchQuery = ""
-                } else {
-                    searchFieldActive = false
-                }
-            }
+            SearchUiEvent.ClearSearchQuery -> { searchQuery = "" }
         }
     }
 }

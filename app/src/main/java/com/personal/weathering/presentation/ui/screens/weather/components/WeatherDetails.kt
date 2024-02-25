@@ -79,7 +79,7 @@ fun WeatherDetails(
                     tint = weatheringBlue,
                     modifier = Modifier
                         .size(12.dp)
-                        .rotate(weatherInfo().currentWeatherData.windDirection)
+                        .rotate(degrees = (weatherInfo().currentWeatherData.windDirection + 180) % 360)
                 )
                 Text(
                     text = weatherInfo().currentWeatherData.windDirectionType.direction,

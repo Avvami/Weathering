@@ -53,7 +53,7 @@ fun SearchScreen(
                 onQueryChange = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange(it)) },
                 onSearch = {},
                 active = searchViewModel.searchFieldActive,
-                onActiveChange = { searchViewModel.searchUiEvent(SearchUiEvent.SetSearchFieldActive(it)) },
+                onActiveChange = { if (!it) navigateBack() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = SearchBarDefaults.colors(
                     containerColor = weatheringDarkBlue3p,
@@ -80,7 +80,11 @@ fun SearchScreen(
                     }
                 },
                 trailingIcon = {
-                    AnimatedVisibility(visible = searchViewModel.searchFieldActive, enter = scaleIn() + fadeIn(), exit = scaleOut() + fadeOut()) {
+                    AnimatedVisibility(
+                        visible = searchViewModel.searchQuery.isNotEmpty(),
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut()
+                    ) {
                         IconButton(onClick = { searchViewModel.searchUiEvent(SearchUiEvent.ClearSearchQuery) }, modifier = Modifier.padding(horizontal = 8.dp)) {
                             Icon(
                                 imageVector = Icons.Rounded.Clear,

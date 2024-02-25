@@ -40,8 +40,8 @@ sealed class WeatherType(
     )
     data object Overcast : WeatherType(
         weatherDesc = "Overcast",
-        iconSmallRes = R.drawable.icon_cloud_fill0_wght200,
-        iconLargeRes = R.drawable.icon_cloud_fill1_wght400
+        iconSmallRes = R.drawable.icon_cloud_fill1_wght400,
+        iconLargeRes = R.drawable.icon_cloud_fill0_wght200
     )
     data object Foggy : WeatherType(
         weatherDesc = "Foggy",
