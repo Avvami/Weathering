@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.personal.weathering.presentation.MainViewModel
 import com.personal.weathering.presentation.ui.screens.aq.AqScreen
+import com.personal.weathering.presentation.ui.screens.search.SearchScreen
 import com.personal.weathering.presentation.ui.screens.weather.WeatherScreen
 
 @Composable
@@ -33,7 +34,8 @@ fun RootNavigationGraph(
             WeatherScreen(
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
-                navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) }
+                navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
+                navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) }
             )
         }
         composable(
@@ -46,6 +48,15 @@ fun RootNavigationGraph(
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() }
             )
         }
+        composable(
+            route = RootNavGraph.SEARCH,
+            enterTransition = { fadeIn() + scaleIn(initialScale = .8f) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
+        ) {
+            SearchScreen(
+                navigateBack = { if (navController.canGoBack) navController.popBackStack() }
+            )
+        }
     }
 }
 
@@ -54,6 +65,7 @@ object RootNavGraph {
 
     const val WEATHER = "weather_screen"
     const val AQ = "aq_screen"
+    const val SEARCH = "search_screen"
 }
 
 val NavHostController.canGoBack: Boolean
