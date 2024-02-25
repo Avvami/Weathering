@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -66,7 +68,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun WeatherScreen(
     weatherState: () -> WeatherState,
-    aqState: () -> AqState
+    aqState: () -> AqState,
+    navigateToAqScreen: () -> Unit
 ) {
     val weatherViewModel: WeatherViewModel = viewModel()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -258,7 +261,14 @@ fun WeatherScreen(
                                                 style = MaterialTheme.typography.bodySmall,
                                                 color = weatheringBlue
                                             )
-                                            /*TODO:Icon here*/
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
+                                                contentDescription = "Direction",
+                                                tint = weatheringBlue,
+                                                modifier = Modifier
+                                                    .size(12.dp)
+                                                    .rotate(weatherInfo.currentWeatherData.windDirection)
+                                            )
                                             Text(
                                                 text = weatherInfo.currentWeatherData.windDirectionType.direction,
                                                 style = MaterialTheme.typography.bodySmall,
@@ -321,6 +331,7 @@ fun WeatherScreen(
                                         .fillMaxWidth()
                                         .padding(horizontal = 24.dp)
                                         .clip(MaterialTheme.shapes.large)
+                                        .clickable { navigateToAqScreen() }
                                         .background(weatheringDarkBlue)
                                         .padding(
                                             start = 12.dp,
@@ -354,7 +365,10 @@ fun WeatherScreen(
                                                 color = weatheringBlue
                                             )
                                         }
-                                        IconButton(onClick = { /*TODO*/ }) {
+                                        Box(
+                                            modifier = Modifier.size(48.dp),
+                                            contentAlignment = Alignment.Center
+                                        ) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.icon_arrow_right_alt_fill0_wght400),
                                                 contentDescription = "Arrow right",
@@ -416,11 +430,13 @@ fun WeatherScreen(
                                                         tint = weatheringDarkBlue,
                                                         modifier = Modifier.size(28.dp)
                                                     )
-                                                    Column {
+                                                    Column(
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
                                                         if (index == 0) {
                                                             Text(
                                                                 text = stringResource(id = R.string.max),
-                                                                style = MaterialTheme.typography.titleMedium,
+                                                                style = MaterialTheme.typography.labelMedium,
                                                                 color = weatheringDarkBlue70p
                                                             )
                                                         }
@@ -431,11 +447,13 @@ fun WeatherScreen(
                                                             color = weatheringDarkBlue
                                                         )
                                                     }
-                                                    Column {
+                                                    Column(
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
                                                         if (index == 0) {
                                                             Text(
                                                                 text = stringResource(id = R.string.min),
-                                                                style = MaterialTheme.typography.titleMedium,
+                                                                style = MaterialTheme.typography.labelMedium,
                                                                 color = weatheringDarkBlue70p
                                                             )
                                                         }
@@ -443,7 +461,7 @@ fun WeatherScreen(
                                                             text = stringResource(id = R.string.temperature, weatherData.temperatureMin),
                                                             style = MaterialTheme.typography.titleLarge,
                                                             fontWeight = FontWeight.Medium,
-                                                            color = weatheringDarkBlue
+                                                            color = weatheringDarkBlue70p
                                                         )
                                                     }
                                                 }

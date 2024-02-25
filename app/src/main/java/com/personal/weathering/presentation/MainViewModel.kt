@@ -95,6 +95,7 @@ class MainViewModel(
         when(event) {
             UiEvent.LoadWeatherInfo -> {
                 loadWeatherInfo()
+                loadAqInfo()
             }
             is UiEvent.ShowMessageDialog -> {
                 messageDialogState = messageDialogState.copy(

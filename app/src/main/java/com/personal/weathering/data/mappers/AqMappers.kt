@@ -30,7 +30,9 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
             index = index,
             data = HourlyAqData(
                 time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+                europeanAqi = europeanAqi,
                 europeanAqiType = EuropeanAqType.fromAQI(europeanAqi),
+                usAqi = usAqi,
                 usAqiType = UsAqType.fromAQI(usAqi),
                 particulateMatter10 = particulateMatter10,
                 particulateMatter25 = particulateMatter25,
@@ -50,7 +52,9 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
 fun CurrentAqDto.toCurrentAqData(): CurrentAqData {
     return CurrentAqData(
         time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+        europeanAqi = europeanAqi,
         europeanAqiType = EuropeanAqType.fromAQI(europeanAqi),
+        usAqi = usAqi,
         usAqiType = UsAqType.fromAQI(usAqi),
         particulateMatter10 = particulateMatter10,
         particulateMatter25 = particulateMatter25,

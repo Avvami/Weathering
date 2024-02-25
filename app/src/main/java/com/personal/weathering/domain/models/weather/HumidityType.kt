@@ -13,11 +13,11 @@ sealed class HumidityType(
     )
     data object Middle: HumidityType(
         iconDesc = "Humidity middle",
-        iconRes = R.drawable.ic_humidity_mid_fill1
+        iconRes = R.drawable.icon_humidity_mid_fill1_wght400
     )
     data object High: HumidityType(
         iconDesc = "Humidity high",
-        iconRes = R.drawable.ic_humidity_high_fill1
+        iconRes = R.drawable.icon_humidity_high_fill1_wght400
     )
 
     companion object {

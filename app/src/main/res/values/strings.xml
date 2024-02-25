@@ -19,6 +19,9 @@
     <string name="weekly_forecast">Weekly forecast</string>
     <string name="max">Max</string>
     <string name="min">Min</string>
+    <string name="aqi">AQI</string>
+    <string name="aqi_rate">%s - %s</string>
+    <string name="three_day_forecast">3 day forecast</string>
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.
         \n\nParticles with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects.
