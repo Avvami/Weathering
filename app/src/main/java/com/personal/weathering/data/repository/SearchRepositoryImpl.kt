@@ -15,10 +15,10 @@ class SearchRepositoryImpl(
     private val searchApi: SearchApi,
     private val context: Context
 ): SearchRepository {
-    override suspend fun getSearchData(query: String): Resource<SearchInfo> {
+    override suspend fun getSearchData(query: String, language: String): Resource<SearchInfo> {
         return try {
             Resource.Success(
-                data = searchApi.getSearchData(query).toSearchInfo()
+                data = searchApi.getSearchData(query, language).toSearchInfo()
             )
         } catch (e: HttpException) {
             e.printStackTrace()

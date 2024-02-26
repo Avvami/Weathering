@@ -6,8 +6,9 @@ import retrofit2.http.Query
 
 interface SearchApi {
 
-    @GET("v1/search?count=10&language=en&format=json")
+    @GET("v1/search?count=10&format=json")
     suspend fun getSearchData(
-        @Query("name") query: String
+        @Query("name") query: String,
+        @Query("language") language: String
     ): SearchDto
 }

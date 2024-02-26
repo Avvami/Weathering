@@ -40,7 +40,7 @@ class SearchViewModel(
                 var searchInfo: SearchInfo? = null
                 var error: String? = null
 
-                searchRepository.getSearchData(query.trim()).let { result ->
+                searchRepository.getSearchData(query = query.trim(), language = "en").let { result ->
                     when (result) {
                         is Resource.Error -> {
                             error = result.message
