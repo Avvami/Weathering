@@ -14,6 +14,7 @@ import com.personal.weathering.domain.models.weather.WeatherType
 import com.personal.weathering.domain.models.weather.WindDirectionType
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -89,7 +90,7 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
 }
 
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
-    val now = LocalDateTime.now()
+    val now = LocalDateTime.now(ZoneId.of(timezoneAbbreviation))
     val flattenHourlyWeatherData = hourlyWeather.toHourlyWeatherData().values.flatten()
     val twentyFourHoursWeatherData = flattenHourlyWeatherData.filter { hourlyData ->
         hourlyData.time.isAfter(now) && hourlyData.time.isBefore(now.plusDays(1))
