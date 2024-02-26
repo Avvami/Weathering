@@ -5,11 +5,14 @@ import android.content.Context
 import com.google.android.gms.location.LocationServices
 import com.personal.weathering.data.location.DefaultLocationTracker
 import com.personal.weathering.data.remote.AqApi
+import com.personal.weathering.data.remote.SearchApi
 import com.personal.weathering.data.remote.WeatherApi
 import com.personal.weathering.data.repository.AqRepositoryImpl
+import com.personal.weathering.data.repository.SearchRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
 import com.personal.weathering.domain.location.LocationTracker
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.SearchRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.C
 import retrofit2.Retrofit
@@ -22,6 +25,8 @@ interface AppModule {
     val aqApi: AqApi
     val aqRepository: AqRepository
     val locationTracker: LocationTracker
+    val searchApi: SearchApi
+    val searRepository: SearchRepository
 }
 
 class AppModuleImpl(private val appContext: Context): AppModule {
@@ -55,5 +60,17 @@ class AppModuleImpl(private val appContext: Context): AppModule {
             LocationServices.getFusedLocationProviderClient(appContext),
             appContext as Application
         )
+    }
+
+    override val searchApi: SearchApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(C.OM_SEARCH_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
+    }
+
+    override val searRepository: SearchRepository by lazy {
+        SearchRepositoryImpl(searchApi, appContext)
     }
 }
