@@ -15,12 +15,12 @@ class AqRepositoryImpl(
     private val aqApi: AqApi,
     private val context: Context
 ): AqRepository {
-    override suspend fun getAqData(lat: Double, long: Double): Resource<AqInfo> {
+    override suspend fun getAqData(lat: Double, lon: Double): Resource<AqInfo> {
         return try {
             Resource.Success(
                 data = aqApi.getAQData(
                     lat = lat,
-                    long = long
+                    lon = lon
                 ).toAqInfo()
             )
         } catch (e: HttpException) {

@@ -32,6 +32,7 @@ fun RootNavigationGraph(
 
         ) {
             WeatherScreen(
+                currentCityState = mainViewModel::currentCityState,
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
@@ -54,7 +55,8 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
         ) {
             SearchScreen(
-                navigateBack = { if (navController.canGoBack) navController.popBackStack() }
+                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
+                uiEvent = mainViewModel::uiEvent
             )
         }
     }

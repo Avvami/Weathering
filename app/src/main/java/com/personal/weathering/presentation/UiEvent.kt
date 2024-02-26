@@ -3,9 +3,10 @@ package com.personal.weathering.presentation
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.personal.weathering.R
+import com.personal.weathering.presentation.state.CurrentCityState
 
 sealed interface UiEvent {
-    data object LoadWeatherInfo: UiEvent
+    data class LoadWeatherInfo(val lat: Double = CurrentCityState().lat, val lon: Double = CurrentCityState().lon): UiEvent
     data class ShowMessageDialog(
         @DrawableRes val iconRes: Int? = null,
         @StringRes val titleRes: Int? = null,
@@ -17,4 +18,5 @@ sealed interface UiEvent {
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
     data object CloseMessageDialog: UiEvent
+    data class UpdateCurrentCityState(val currentCityState: CurrentCityState): UiEvent
 }

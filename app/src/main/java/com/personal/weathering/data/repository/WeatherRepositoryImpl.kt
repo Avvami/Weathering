@@ -15,12 +15,12 @@ class WeatherRepositoryImpl(
     private val weatherApi: WeatherApi,
     private val context: Context
 ): WeatherRepository {
-    override suspend fun getWeatherData(lat: Double, long: Double): Resource<WeatherInfo> {
+    override suspend fun getWeatherData(lat: Double, lon: Double): Resource<WeatherInfo> {
         return try {
             Resource.Success(
                 data = weatherApi.getWeatherData(
                     lat = lat,
-                    long = long
+                    lon = lon
                 ).toWeatherInfo()
             )
         } catch (e: HttpException) {

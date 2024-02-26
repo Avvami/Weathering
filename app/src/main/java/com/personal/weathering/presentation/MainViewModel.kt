@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.personal.weathering.domain.location.LocationTracker
+import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
@@ -22,6 +23,9 @@ class MainViewModel(
     private val locationTracker: LocationTracker
 ): ViewModel() {
 
+    var currentCityState by mutableStateOf(CurrentCityState())
+        private set
+
     var weatherState by mutableStateOf(WeatherState())
         private set
 
@@ -31,7 +35,7 @@ class MainViewModel(
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
-    private fun loadWeatherInfo() {
+    private fun loadWeatherInfo(lat: Double, lon: Double) {
         viewModelScope.launch {
             weatherState = weatherState.copy(
                 isLoading = true,
@@ -41,7 +45,7 @@ class MainViewModel(
             var weatherInfo: WeatherInfo? = null
             var error: String? = null
 
-            weatherRepository.getWeatherData(56.0184, 92.8672).let { result ->
+            weatherRepository.getWeatherData(lat, lon).let { result ->
                 when (result) {
                     is Resource.Error -> {
                         error = result.message
@@ -62,7 +66,7 @@ class MainViewModel(
         }
     }
 
-    private fun loadAqInfo() {
+    private fun loadAqInfo(lat: Double, lon: Double) {
         viewModelScope.launch {
             aqState = aqState.copy(
                 isLoading = true,
@@ -72,7 +76,7 @@ class MainViewModel(
             var aqInfo: AqInfo? = null
             var error: String? = null
 
-            aqRepository.getAqData(56.0184, 92.8672).let { result ->
+            aqRepository.getAqData(lat, lon).let { result ->
                 when (result) {
                     is Resource.Error -> {
                         error = result.message
@@ -93,9 +97,9 @@ class MainViewModel(
 
     fun uiEvent(event: UiEvent) {
         when(event) {
-            UiEvent.LoadWeatherInfo -> {
-                loadWeatherInfo()
-                loadAqInfo()
+            is UiEvent.LoadWeatherInfo -> {
+                loadWeatherInfo(event.lat, event.lon)
+                loadAqInfo(event.lat, event.lon)
             }
             is UiEvent.ShowMessageDialog -> {
                 messageDialogState = messageDialogState.copy(
@@ -112,6 +116,11 @@ class MainViewModel(
                 )
             }
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
+            is UiEvent.UpdateCurrentCityState -> {
+                currentCityState = event.currentCityState
+                loadWeatherInfo(currentCityState.lat, currentCityState.lon)
+                loadAqInfo(currentCityState.lat, currentCityState.lon)
+            }
         }
     }
 }

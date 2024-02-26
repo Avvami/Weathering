@@ -7,7 +7,7 @@ import com.personal.weathering.domain.models.search.SearchResult
 
 fun SearchDto.toSearchInfo(): SearchInfo {
     return SearchInfo(
-        searchResults = searchResults.map { it.toSearchResult() }
+        searchResults = searchResults?.map { it.toSearchResult() }
     )
 }
 

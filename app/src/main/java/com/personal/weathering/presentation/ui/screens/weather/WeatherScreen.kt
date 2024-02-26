@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.presentation.state.AqState
+import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
+    currentCityState: () -> CurrentCityState,
     weatherState: () -> WeatherState,
     aqState: () -> AqState,
     navigateToAqScreen: () -> Unit,
@@ -63,7 +65,7 @@ fun WeatherScreen(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(text = "Krasnoyarsk", fontWeight = FontWeight.Medium) },
+                    title = { Text(text = currentCityState().name, fontWeight = FontWeight.Medium) },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
                         navigationIconContentColor = weatheringDarkBlue,

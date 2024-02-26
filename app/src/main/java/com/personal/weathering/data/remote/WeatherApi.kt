@@ -11,6 +11,6 @@ interface WeatherApi {
             "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto")
     suspend fun getWeatherData(
         @Query("latitude") lat: Double,
-        @Query("longitude") long: Double
+        @Query("longitude") lon: Double
     ): WeatherDto
 }
