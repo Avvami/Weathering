@@ -1,42 +1,43 @@
 package com.personal.weathering.domain.models.airquality
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.personal.weathering.R
 
 sealed class UsAqType(
-    val aqDesc: String,
+    @StringRes val aqDescRes: Int,
     @DrawableRes val iconSmallRes: Int,
     @DrawableRes val iconLargeRes: Int
 ) {
     data object Good: UsAqType(
-        aqDesc = "Good",
+        aqDescRes = R.string.good,
         iconSmallRes = R.drawable.icon_eco_fill1_wght400,
         iconLargeRes = R.drawable.icon_eco_fill0_wght200
     )
     data object Moderate: UsAqType(
-        aqDesc = "Moderate",
+        aqDescRes = R.string.moderate,
         iconSmallRes = R.drawable.icon_sentiment_neutral_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_neutral_fill0_wght200
     )
     data object UnhealthyForSensitiveGroups: UsAqType(
-        aqDesc = "Unhealthy for sensitive groups",
+        aqDescRes = R.string.unhealthy_for_sensitive,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
-        iconLargeRes = R.drawable.icon_weather_snowy_fill0_wght200
+        iconLargeRes = R.drawable.icon_ecg_heart_fill0_wght200
     )
     data object Unhealthy: UsAqType(
-        aqDesc = "Unhealthy",
+        aqDescRes = R.string.unhealthy,
         iconSmallRes = R.drawable.icon_masks_fill1_wght400,
         iconLargeRes = R.drawable.icon_masks_fill0_wght200
     )
     data object VeryUnhealthy: UsAqType(
-        aqDesc = "Very unhealthy",
+        aqDescRes = R.string.very_unhealthy,
         iconSmallRes = R.drawable.icon_sentiment_very_dissatisfied_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_very_dissatisfied_fill0_wght200
     )
     data object Hazardous: UsAqType(
-        aqDesc = "Hazardous",
-        iconSmallRes = R.drawable.icon_bedtime_fill1_wght400,
-        iconLargeRes = R.drawable.icon_bedtime_fill0_wght200
+        aqDescRes = R.string.hazardous,
+        iconSmallRes = R.drawable.icon_skull_fill1_wght400,
+        iconLargeRes = R.drawable.icon_skull_fill0_wght200
     )
 
     companion object {

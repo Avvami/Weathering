@@ -1,4 +1,4 @@
-package com.personal.weathering.presentation.ui.screens.weather.components
+package com.personal.weathering.presentation.ui.screens.aq.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,28 +8,26 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
-import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun WeatherWeeklyForecast(
-    weatherInfo: () -> WeatherInfo
+fun AqThreeDayForecast(
+    aqInfo: () -> AqInfo
 ) {
     Column(
         modifier = Modifier
@@ -37,7 +35,7 @@ fun WeatherWeeklyForecast(
             .padding(horizontal = 24.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.weekly_forecast),
+            text = stringResource(id = R.string.three_day_forecast),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Medium
         )
@@ -46,7 +44,7 @@ fun WeatherWeeklyForecast(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            weatherInfo().dailyWeatherData.forEachIndexed { index, weatherData ->
+            aqInfo().hourlyAqData.values.forEachIndexed { index, hourlyAqData ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -58,7 +56,7 @@ fun WeatherWeeklyForecast(
                 ) {
                     Column {
                         Text(
-                            text = weatherData.time.format(DateTimeFormatter.ofPattern("d MMMM")),
+                            text = hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("d MMMM")),
                             style = MaterialTheme.typography.labelLarge,
                             color = weatheringDarkBlue70p
                         )
@@ -66,7 +64,7 @@ fun WeatherWeeklyForecast(
                             text = when (index) {
                                 0 -> stringResource(id = R.string.today)
                                 1 -> stringResource(id = R.string.tomorrow)
-                                else -> weatherData.time.format(DateTimeFormatter.ofPattern("EEEE"))
+                                else -> hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("EEEE"))
                             },
                             style = MaterialTheme.typography.titleMedium,
                             color = weatheringDarkBlue
@@ -76,11 +74,11 @@ fun WeatherWeeklyForecast(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Icon(
-                            painter = painterResource(id = weatherData.weatherType.iconSmallRes),
-                            contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes),
-                            tint = weatheringDarkBlue,
-                            modifier = Modifier.size(28.dp)
+                        Text(
+                            modifier = Modifier.weight(weight = .5f, fill = false),
+                            text = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
+                            style = MaterialTheme.typography.labelMedium,
+                            textAlign = TextAlign.End
                         )
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -93,7 +91,7 @@ fun WeatherWeeklyForecast(
                                 )
                             }
                             Text(
-                                text = stringResource(id = R.string.temperature, weatherData.temperatureMax),
+                                text = hourlyAqData.maxBy { it.usAqi }.usAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue
@@ -110,7 +108,7 @@ fun WeatherWeeklyForecast(
                                 )
                             }
                             Text(
-                                text = stringResource(id = R.string.temperature, weatherData.temperatureMin),
+                                text = hourlyAqData.minBy { it.usAqi }.usAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue70p

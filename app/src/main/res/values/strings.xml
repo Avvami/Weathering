@@ -25,6 +25,51 @@
     <string name="search_placeholder">City</string>
     <string name="search_result">%s, %s</string>
     <string name="nothing_found">Nothing found</string>
+
+    <!--AQI types-->
+    <string name="good">Good</string>
+    <string name="fair">Fair</string>
+    <string name="moderate">Moderate</string>
+    <string name="unhealthy_for_sensitive">Unhealthy for sensitive groups</string>
+    <string name="poor">Poor</string>
+    <string name="unhealthy">Unhealthy</string>
+    <string name="very_poor">Very poor</string>
+    <string name="very_unhealthy">Very unhealthy</string>
+    <string name="extremely_poor">Extremely poor</string>
+    <string name="hazardous">Hazardous</string>
+
+    <!--Weather types-->
+    <string name="clear_night_sky">Clear sky</string>
+    <string name="clear_day_sky">Clear sky</string>
+    <string name="mainly_night_clear">Mainly clear</string>
+    <string name="mainly_day_clear">Mainly clear</string>
+    <string name="partly_night_cloudy">Partly cloudy</string>
+    <string name="partly_day_cloudy">Partly cloudy</string>
+    <string name="overcast">Overcast</string>
+    <string name="foggy">Foggy</string>
+    <string name="depositing_rime_fog">Depositing rime fog</string>
+    <string name="light_drizzle">Light drizzle</string>
+    <string name="moderate_drizzle">Moderate drizzle</string>
+    <string name="dense_drizzle">Dense drizzle</string>
+    <string name="light_freezing_drizzle">Slight freezing drizzle</string>
+    <string name="dense_freezing_drizzle">Dense freezing drizzle</string>
+    <string name="slight_rain">Slight rain</string>
+    <string name="moderate_rain">Rainy</string>
+    <string name="heavy_rain">Heavy rain</string>
+    <string name="heavy_freezing_rain">Heavy freezing rain</string>
+    <string name="slight_snow_fall">Slight snow fall</string>
+    <string name="moderate_snow_fall">Moderate snow fall</string>
+    <string name="heavy_snow_fall">Heavy snow fall</string>
+    <string name="snow_grains">Snow grains</string>
+    <string name="slight_rain_showers">Slight rain showers</string>
+    <string name="moderate_rain_showers">Moderate rain showers</string>
+    <string name="violent_rain_showers">Violent rain showers</string>
+    <string name="slight_snow_showers">Light snow showers</string>
+    <string name="heavy_snow_showers">Heavy snow showers</string>
+    <string name="moderate_thunderstorm">Moderate thunderstorm</string>
+    <string name="slight_hail_thunderstorm">Thunderstorm with slight hail</string>
+    <string name="heavy_hail_thunderstorm">Thunderstorm with heavy hail</string>
+
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.
         \n\nParticles with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects.

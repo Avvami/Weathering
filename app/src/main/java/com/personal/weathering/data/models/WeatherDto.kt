@@ -3,8 +3,8 @@ package com.personal.weathering.data.models
 import com.squareup.moshi.Json
 
 data class WeatherDto(
-    @field:Json(name = "timezone_abbreviation")
-    val timezoneAbbreviation: String,
+    @field:Json(name = "utc_offset_seconds")
+    val utcOffset: Int,
     @field:Json(name = "current")
     val currentWeather: CurrentWeatherDto,
     @field:Json(name = "hourly")

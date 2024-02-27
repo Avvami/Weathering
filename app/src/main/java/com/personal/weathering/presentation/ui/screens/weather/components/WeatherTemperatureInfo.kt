@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
@@ -60,19 +61,21 @@ fun WeatherTemperatureInfo(
             ) {
                 Text(
                     text = stringResource(id = R.string.today_time, timeFormat(time = weatherInfo().currentWeatherData.time)),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.End
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = weatherInfo().currentWeatherData.weatherType.weatherDesc,
-                    style = MaterialTheme.typography.titleMedium
+                    text = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.End
                 )
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
         Icon(
             painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconLargeRes),
-            contentDescription = weatherInfo().currentWeatherData.weatherType.weatherDesc,
+            contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .size(200.dp)
@@ -108,7 +111,7 @@ fun WeatherTemperatureInfo(
                         }
                         Icon(
                             painter = painterResource(id = weatherData.weatherType.iconSmallRes),
-                            contentDescription = weatherData.weatherType.weatherDesc
+                            contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
                         )
                         Text(
                             text = stringResource(id = R.string.temperature, weatherData.temperature),

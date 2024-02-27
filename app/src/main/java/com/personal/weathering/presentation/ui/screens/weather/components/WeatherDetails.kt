@@ -166,14 +166,14 @@ fun WeatherDetails(
             aqState().aqInfo?.let { aqInfo ->
                 Icon(
                     painter = painterResource(id = aqInfo.currentAqData.usAqiType.iconSmallRes),
-                    contentDescription = aqInfo.currentAqData.usAqiType.aqDesc,
+                    contentDescription = stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes),
                     tint = weatheringBlue,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = aqInfo.currentAqData.usAqiType.aqDesc,
-                    style = MaterialTheme.typography.titleMedium,
+                    text = stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes),
+                    style = MaterialTheme.typography.titleSmall,
                     color = weatheringBlue
                 )
             }

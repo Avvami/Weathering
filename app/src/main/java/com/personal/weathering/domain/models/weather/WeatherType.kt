@@ -1,160 +1,161 @@
 package com.personal.weathering.domain.models.weather
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.personal.weathering.R
 
 sealed class WeatherType(
-    val weatherDesc: String,
+    @StringRes val weatherDescRes: Int,
     @DrawableRes val iconSmallRes: Int,
     @DrawableRes val iconLargeRes: Int
 ) {
     data object ClearNightSky : WeatherType(
-        weatherDesc = "Clear sky",
+        weatherDescRes = R.string.clear_night_sky,
         iconSmallRes = R.drawable.icon_bedtime_fill1_wght400,
         iconLargeRes = R.drawable.icon_bedtime_fill0_wght200
     )
     data object ClearDaySky : WeatherType(
-        weatherDesc = "Clear sky",
+        weatherDescRes = R.string.clear_day_sky,
         iconSmallRes = R.drawable.icon_clear_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_clear_day_fill0_wght200
     )
     data object MainlyNightClear : WeatherType(
-        weatherDesc = "Mainly clear",
+        weatherDescRes = R.string.mainly_night_clear,
         iconSmallRes = R.drawable.icon_partly_cloudy_night_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_night_fill0_wght200
     )
     data object MainlyDayClear : WeatherType(
-        weatherDesc = "Mainly clear",
+        weatherDescRes = R.string.mainly_day_clear,
         iconSmallRes = R.drawable.icon_partly_cloudy_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_day_fill0_wght200
     )
     data object PartlyNightCloudy : WeatherType(
-        weatherDesc = "Partly cloudy",
+        weatherDescRes = R.string.partly_night_cloudy,
         iconSmallRes = R.drawable.icon_partly_cloudy_night_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_night_fill0_wght200
     )
     data object PartlyDayCloudy : WeatherType(
-        weatherDesc = "Partly cloudy",
+        weatherDescRes = R.string.partly_day_cloudy,
         iconSmallRes = R.drawable.icon_partly_cloudy_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_day_fill0_wght200
     )
     data object Overcast : WeatherType(
-        weatherDesc = "Overcast",
+        weatherDescRes = R.string.overcast,
         iconSmallRes = R.drawable.icon_cloud_fill1_wght400,
         iconLargeRes = R.drawable.icon_cloud_fill0_wght200
     )
     data object Foggy : WeatherType(
-        weatherDesc = "Foggy",
+        weatherDescRes = R.string.foggy,
         iconSmallRes = R.drawable.icon_foggy_fill1_wght400,
         iconLargeRes = R.drawable.icon_foggy_fill0_wght200
     )
     data object DepositingRimeFog : WeatherType(
-        weatherDesc = "Depositing rime fog",
+        weatherDescRes = R.string.depositing_rime_fog,
         iconSmallRes = R.drawable.icon_foggy_fill1_wght400,
         iconLargeRes = R.drawable.icon_foggy_fill0_wght200
     )
     data object LightDrizzle : WeatherType(
-        weatherDesc = "Light drizzle",
+        weatherDescRes = R.string.light_drizzle,
         iconSmallRes = R.drawable.icon_rainy_light_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_light_fill0_wght200
     )
     data object ModerateDrizzle : WeatherType(
-        weatherDesc = "Moderate drizzle",
+        weatherDescRes = R.string.moderate_drizzle,
         iconSmallRes = R.drawable.icon_rainy_light_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_light_fill0_wght200
     )
     data object DenseDrizzle : WeatherType(
-        weatherDesc = "Dense drizzle",
+        weatherDescRes = R.string.dense_drizzle,
         iconSmallRes = R.drawable.icon_rainy_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_heavy_fill0_wght200
     )
     data object LightFreezingDrizzle : WeatherType(
-        weatherDesc = "Slight freezing drizzle",
+        weatherDescRes = R.string.light_freezing_drizzle,
         iconSmallRes = R.drawable.icon_rainy_snow_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_snow_fill0_wght200
     )
     data object DenseFreezingDrizzle : WeatherType(
-        weatherDesc = "Dense freezing drizzle",
+        weatherDescRes = R.string.dense_freezing_drizzle,
         iconSmallRes = R.drawable.icon_rainy_snow_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_snow_fill0_wght200
     )
     data object SlightRain : WeatherType(
-        weatherDesc = "Slight rain",
+        weatherDescRes = R.string.slight_rain,
         iconSmallRes = R.drawable.icon_rainy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_fill0_wght200
     )
     data object ModerateRain : WeatherType(
-        weatherDesc = "Rainy",
+        weatherDescRes = R.string.moderate_rain,
         iconSmallRes = R.drawable.icon_rainy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_fill0_wght200
     )
     data object HeavyRain : WeatherType(
-        weatherDesc = "Heavy rain",
+        weatherDescRes = R.string.heavy_rain,
         iconSmallRes = R.drawable.icon_rainy_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_heavy_fill0_wght200
     )
-    data object HeavyFreezingRain: WeatherType(
-        weatherDesc = "Heavy freezing rain",
+    data object HeavyFreezingRain : WeatherType(
+        weatherDescRes = R.string.heavy_freezing_rain,
         iconSmallRes = R.drawable.icon_rainy_snow_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_snow_fill0_wght200
     )
-    data object SlightSnowFall: WeatherType(
-        weatherDesc = "Slight snow fall",
+    data object SlightSnowFall : WeatherType(
+        weatherDescRes = R.string.slight_snow_fall,
         iconSmallRes = R.drawable.icon_weather_snowy_fill1_wght400,
         iconLargeRes = R.drawable.icon_weather_snowy_fill0_wght200
     )
-    data object ModerateSnowFall: WeatherType(
-        weatherDesc = "Moderate snow fall",
+    data object ModerateSnowFall : WeatherType(
+        weatherDescRes = R.string.moderate_snow_fall,
         iconSmallRes = R.drawable.icon_weather_snowy_fill1_wght400,
         iconLargeRes = R.drawable.icon_weather_snowy_fill0_wght200
     )
-    data object HeavySnowFall: WeatherType(
-        weatherDesc = "Heavy snow fall",
+    data object HeavySnowFall : WeatherType(
+        weatherDescRes = R.string.heavy_snow_fall,
         iconSmallRes = R.drawable.icon_snowing_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_snowing_heavy_fill0_wght200
     )
-    data object SnowGrains: WeatherType(
-        weatherDesc = "Snow grains",
+    data object SnowGrains : WeatherType(
+        weatherDescRes = R.string.snow_grains,
         iconSmallRes = R.drawable.icon_snowing_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_snowing_heavy_fill0_wght200
     )
-    data object SlightRainShowers: WeatherType(
-        weatherDesc = "Slight rain showers",
+    data object SlightRainShowers : WeatherType(
+        weatherDescRes = R.string.slight_rain_showers,
         iconSmallRes = R.drawable.icon_rainy_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_heavy_fill0_wght200
     )
-    data object ModerateRainShowers: WeatherType(
-        weatherDesc = "Moderate rain showers",
+    data object ModerateRainShowers : WeatherType(
+        weatherDescRes = R.string.moderate_rain_showers,
         iconSmallRes = R.drawable.icon_rainy_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_heavy_fill0_wght200
     )
-    data object ViolentRainShowers: WeatherType(
-        weatherDesc = "Violent rain showers",
+    data object ViolentRainShowers : WeatherType(
+        weatherDescRes = R.string.violent_rain_showers,
         iconSmallRes = R.drawable.icon_rainy_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_rainy_heavy_fill0_wght200
     )
-    data object SlightSnowShowers: WeatherType(
-        weatherDesc = "Light snow showers",
+    data object SlightSnowShowers : WeatherType(
+        weatherDescRes = R.string.slight_snow_showers,
         iconSmallRes = R.drawable.icon_snowing_fill1_wght400,
         iconLargeRes = R.drawable.icon_snowing_fill0_wght200
     )
-    data object HeavySnowShowers: WeatherType(
-        weatherDesc = "Heavy snow showers",
+    data object HeavySnowShowers : WeatherType(
+        weatherDescRes = R.string.heavy_snow_showers,
         iconSmallRes = R.drawable.icon_snowing_heavy_fill1_wght400,
         iconLargeRes = R.drawable.icon_snowing_heavy_fill0_wght200
     )
-    data object ModerateThunderstorm: WeatherType(
-        weatherDesc = "Moderate thunderstorm",
+    data object ModerateThunderstorm : WeatherType(
+        weatherDescRes = R.string.moderate_thunderstorm,
         iconSmallRes = R.drawable.icon_thunderstorm_fill1_wght400,
         iconLargeRes = R.drawable.icon_thunderstorm_fill0_wght200
     )
-    data object SlightHailThunderstorm: WeatherType(
-        weatherDesc = "Thunderstorm with slight hail",
+    data object SlightHailThunderstorm : WeatherType(
+        weatherDescRes = R.string.slight_hail_thunderstorm,
         iconSmallRes = R.drawable.icon_thunderstorm_fill1_wght400,
         iconLargeRes = R.drawable.icon_thunderstorm_fill0_wght200
     )
-    data object HeavyHailThunderstorm: WeatherType(
-        weatherDesc = "Thunderstorm with heavy hail",
+    data object HeavyHailThunderstorm : WeatherType(
+        weatherDescRes = R.string.heavy_hail_thunderstorm,
         iconSmallRes = R.drawable.icon_thunderstorm_fill1_wght400,
         iconLargeRes = R.drawable.icon_thunderstorm_fill0_wght200
     )

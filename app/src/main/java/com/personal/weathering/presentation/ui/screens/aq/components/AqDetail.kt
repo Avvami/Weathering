@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 
 @Composable
-fun AqiDetails(
+fun AqDetail(
     data: Double,
     @DrawableRes iconRes: Int,
     showDivider: Boolean = true

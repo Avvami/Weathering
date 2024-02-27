@@ -1,42 +1,43 @@
 package com.personal.weathering.domain.models.airquality
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.personal.weathering.R
 
 sealed class EuropeanAqType(
-    val aqDesc: String,
+    @StringRes val aqDescRes: Int,
     @DrawableRes val iconSmallRes: Int,
     @DrawableRes val iconLargeRes: Int
 ) {
     data object Good: EuropeanAqType(
-        aqDesc = "Good",
+        aqDescRes = R.string.good,
         iconSmallRes = R.drawable.icon_eco_fill1_wght400,
         iconLargeRes = R.drawable.icon_eco_fill0_wght200
     )
     data object Fair: EuropeanAqType(
-        aqDesc = "Fair",
+        aqDescRes = R.string.fair,
         iconSmallRes = R.drawable.icon_sentiment_neutral_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_neutral_fill0_wght200
     )
     data object Moderate: EuropeanAqType(
-        aqDesc = "Moderate",
+        aqDescRes = R.string.moderate,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
-        iconLargeRes = R.drawable.icon_weather_snowy_fill0_wght200
+        iconLargeRes = R.drawable.icon_ecg_heart_fill0_wght200
     )
     data object Poor: EuropeanAqType(
-        aqDesc = "Poor",
+        aqDescRes = R.string.poor,
         iconSmallRes = R.drawable.icon_masks_fill1_wght400,
         iconLargeRes = R.drawable.icon_masks_fill0_wght200
     )
     data object VeryPoor: EuropeanAqType(
-        aqDesc = "Very poor",
+        aqDescRes = R.string.very_poor,
         iconSmallRes = R.drawable.icon_sentiment_very_dissatisfied_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_very_dissatisfied_fill0_wght200
     )
     data object ExtremelyPoor: EuropeanAqType(
-        aqDesc = "Extremely poor",
-        iconSmallRes = R.drawable.icon_bedtime_fill1_wght400,
-        iconLargeRes = R.drawable.icon_bedtime_fill0_wght200
+        aqDescRes = R.string.extremely_poor,
+        iconSmallRes = R.drawable.icon_skull_fill1_wght400,
+        iconLargeRes = R.drawable.icon_skull_fill0_wght200
     )
 
     companion object {
