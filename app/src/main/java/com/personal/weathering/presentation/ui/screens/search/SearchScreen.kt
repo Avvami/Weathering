@@ -35,14 +35,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.WeatheringApp
+import com.personal.weathering.domain.models.DropdownItem
+import com.personal.weathering.domain.models.search.SearchLanguage
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.CurrentCityState
+import com.personal.weathering.presentation.ui.components.CustomDropdownMenu
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
@@ -105,18 +109,42 @@ fun SearchScreen(
                     }
                 },
                 trailingIcon = {
-                    AnimatedVisibility(
-                        visible = searchViewModel.searchQuery.isNotEmpty(),
-                        enter = scaleIn() + fadeIn(),
-                        exit = scaleOut() + fadeOut()
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     ) {
-                        IconButton(
-                            onClick = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange("")) },
-                            modifier = Modifier.padding(horizontal = 8.dp)
+                        AnimatedVisibility(
+                            visible = searchViewModel.searchQuery.isNotEmpty(),
+                            enter = scaleIn() + fadeIn(),
+                            exit = scaleOut() + fadeOut()
                         ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "Clear"
+                            IconButton(
+                                onClick = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange("")) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "Clear"
+                                )
+                            }
+                        }
+                        IconButton(
+                            onClick = { searchViewModel.searchUiEvent(SearchUiEvent.SetLanguageDropdownExpanded(true)) }
+                        ) {
+                            Icon(painter = painterResource(id = R.drawable.icon_language_fill0_wght400), contentDescription = "Language")
+                            CustomDropdownMenu(
+                                expanded = searchViewModel.isLanguageDropdownExpanded,
+                                onDismissRequest = {
+                                    searchViewModel.searchUiEvent(SearchUiEvent.SetLanguageDropdownExpanded(false))
+                                },
+                                dropDownItems = SearchLanguage.languages.map {
+                                    DropdownItem(
+                                        iconRes = R.drawable.icon_done_all_fill0_wght400,
+                                        textRes = it.name,
+                                        selected = searchViewModel.currentSearchLanguage == it.code,
+                                        onItemClick = {
+                                            searchViewModel.searchUiEvent(SearchUiEvent.SetSearchLanguage(it.code))
+                                        }
+                                    )
+                                }
                             )
                         }
                     }
@@ -168,7 +196,7 @@ fun SearchScreen(
                                                     uiEvent(
                                                         UiEvent.UpdateCurrentCityState(
                                                             CurrentCityState(
-                                                                name = searchResult.city,
+                                                                name = searchResult.name,
                                                                 lat = searchResult.lat,
                                                                 lon = searchResult.lon
                                                             )
@@ -180,16 +208,19 @@ fun SearchScreen(
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
+                                            val components = listOfNotNull(searchResult.name, searchResult.adminLevel, searchResult.country)
                                             Text(
-                                                text = if (searchResult.adminLevel == null) searchResult.city else
-                                                    stringResource(id = R.string.search_result, searchResult.city, searchResult.adminLevel),
-                                                style = MaterialTheme.typography.titleMedium
+                                                text = components.joinToString(separator = ", "),
+                                                style = MaterialTheme.typography.titleMedium,
+                                                modifier = Modifier.weight(fill = false, weight = .5f)
                                             )
-                                            Text(
-                                                text = searchResult.countryCode,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = weatheringDarkBlue70p
-                                            )
+                                            searchResult.countryCode?.let {
+                                                Text(
+                                                    text = searchResult.countryCode,
+                                                    style = MaterialTheme.typography.labelLarge,
+                                                    color = weatheringDarkBlue70p
+                                                )
+                                            }
                                         }
                                     }
                                 }

@@ -70,6 +70,17 @@
     <string name="slight_hail_thunderstorm">Thunderstorm with slight hail</string>
     <string name="heavy_hail_thunderstorm">Thunderstorm with heavy hail</string>
 
+    <!--Languages-->
+    <string name="english">English</string>
+    <string name="german">German</string>
+    <string name="french">French</string>
+    <string name="spanish">Spanish</string>
+    <string name="italian">Italian</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="russian">Russian</string>
+    <string name="turkish">Turkish</string>
+    <string name="hindi">Hindi</string>
+
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.
         \n\nParticles with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects.

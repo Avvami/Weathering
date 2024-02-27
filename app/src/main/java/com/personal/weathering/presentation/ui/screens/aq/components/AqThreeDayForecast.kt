@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -74,12 +77,23 @@ fun AqThreeDayForecast(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
+                        Row(
                             modifier = Modifier.weight(weight = .5f, fill = false),
-                            text = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
-                            style = MaterialTheme.typography.labelMedium,
-                            textAlign = TextAlign.End
-                        )
+                            horizontalArrangement = Arrangement.spacedBy(2.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                modifier = Modifier.weight(weight = .8f, fill = false),
+                                text = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
+                                style = MaterialTheme.typography.labelMedium,
+                                textAlign = TextAlign.End
+                            )
+                            Icon(
+                                painter = painterResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.iconSmallRes),
+                                contentDescription = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {

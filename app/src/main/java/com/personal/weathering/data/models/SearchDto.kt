@@ -8,14 +8,14 @@ data class SearchDto(
 )
 
 data class SearchResultDto(
-    @field:Json(name = "name")
-    val city: String,
+    val name: String,
     @field:Json(name = "latitude")
     val lat: Double,
     @field:Json(name = "longitude")
     val lon: Double,
+    val country: String?,
     @field:Json(name = "country_code")
-    val countryCode: String,
+    val countryCode: String?,
     @field:Json(name = "admin1")
     val adminLevel: String?,
 )

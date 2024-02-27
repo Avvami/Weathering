@@ -27,6 +27,12 @@ class SearchViewModel(
 
     private var searchJob: Job? = null
 
+    var currentSearchLanguage by mutableStateOf("en")
+        private set
+
+    var isLanguageDropdownExpanded by mutableStateOf(false)
+        private set
+
     private fun searchLocation(query: String) {
         if (query.isBlank()) {
             searchState = SearchState()
@@ -40,7 +46,7 @@ class SearchViewModel(
                 var searchInfo: SearchInfo? = null
                 var error: String? = null
 
-                searchRepository.getSearchData(query = query.trim(), language = "en").let { result ->
+                searchRepository.getSearchData(query = query.trim(), language = currentSearchLanguage).let { result ->
                     when (result) {
                         is Resource.Error -> {
                             error = result.message
@@ -71,6 +77,12 @@ class SearchViewModel(
                 }
             }
             is SearchUiEvent.SetSearchFieldActive -> { searchFieldActive = event.active }
+            is SearchUiEvent.SetLanguageDropdownExpanded -> { isLanguageDropdownExpanded = event.expanded }
+            is SearchUiEvent.SetSearchLanguage -> {
+                currentSearchLanguage = event.languageCode
+                isLanguageDropdownExpanded = false
+                searchLocation(searchQuery)
+            }
         }
     }
 }
