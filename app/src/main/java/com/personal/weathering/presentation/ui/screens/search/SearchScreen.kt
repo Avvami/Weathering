@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
@@ -214,6 +215,7 @@ fun SearchScreen(
                                                 style = MaterialTheme.typography.titleMedium,
                                                 modifier = Modifier.weight(fill = false, weight = .5f)
                                             )
+                                            Spacer(modifier = Modifier.width(8.dp))
                                             searchResult.countryCode?.let {
                                                 Text(
                                                     text = searchResult.countryCode,

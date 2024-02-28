@@ -32,11 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
+import com.personal.weathering.presentation.ui.screens.weather.components.ModalDrawer
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
@@ -58,14 +60,18 @@ fun WeatherScreen(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
-        drawerContent = { /**/ },
+        drawerContent = {
+            ModalDrawer(
+                currentCityState = currentCityState
+            )
+        },
         drawerState = drawerState,
         gesturesEnabled = true
     ) {
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(text = currentCityState().name, fontWeight = FontWeight.Medium) },
+                    title = { Text(text = currentCityState().name, fontSize = 20.sp, fontWeight = FontWeight.Medium) },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
                         navigationIconContentColor = weatheringDarkBlue,

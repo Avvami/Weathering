@@ -80,6 +80,23 @@
     <string name="russian">Russian</string>
     <string name="turkish">Turkish</string>
     <string name="hindi">Hindi</string>
+    
+    <!--Modal drawer sheet-->
+    <string name="measurement_units">Units of measurement</string>
+    <string name="temperature_units">Temperature</string>
+    <string name="fahrenheit_unit">°F</string>
+    <string name="celsius_unit">°C</string>
+    <string name="wind_speed_units">Wind speed</string>
+    <string name="m_per_second_unit">m/s</string>
+    <string name="km_per_hour_unit">km/h</string>
+    <string name="pressure_units">Pressure</string>
+    <string name="mmHg_unit">mmHg</string>
+    <string name="hPa_unit">hPa</string>
+    <string name="air_quality_index">Air quality index</string>
+    <string name="european_aqi">European AQI</string>
+    <string name="us_aqi">U.S. AQI</string>
+    <string name="my_cities">My cities</string>
+    <string name="current">Current</string>
 
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.

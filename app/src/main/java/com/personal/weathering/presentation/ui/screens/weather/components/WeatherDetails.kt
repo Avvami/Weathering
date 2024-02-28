@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
@@ -61,7 +62,8 @@ fun WeatherDetails(
             Text(
                 text = stringResource(id = R.string.km_per_hour, weatherInfo().currentWeatherData.windSpeed),
                 style = MaterialTheme.typography.titleMedium,
-                color = weatheringBlue
+                color = weatheringBlue,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row(
@@ -103,7 +105,8 @@ fun WeatherDetails(
             Text(
                 text = stringResource(id = R.string.hPa, weatherInfo().currentWeatherData.pressure),
                 style = MaterialTheme.typography.titleMedium,
-                color = weatheringBlue
+                color = weatheringBlue,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -174,7 +177,8 @@ fun WeatherDetails(
                 Text(
                     text = stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes),
                     style = MaterialTheme.typography.titleSmall,
-                    color = weatheringBlue
+                    color = weatheringBlue,
+                    modifier = Modifier.weight(weight = .5f, fill = false)
                 )
             }
             Box(

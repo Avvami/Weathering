@@ -85,7 +85,7 @@ fun AqThreeDayForecast(
                             Text(
                                 modifier = Modifier.weight(weight = .8f, fill = false),
                                 text = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = MaterialTheme.typography.titleSmall,
                                 textAlign = TextAlign.End
                             )
                             Icon(
