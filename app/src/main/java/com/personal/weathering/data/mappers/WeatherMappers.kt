@@ -90,25 +90,45 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
 }
 
 fun WeatherDto.toWeatherInfo(): WeatherInfo {
-    val zoneOffset = ZoneOffset.ofTotalSeconds(utcOffset)
-    val now = LocalDateTime.now(ZoneId.ofOffset("UTC", zoneOffset))
+    val now = LocalDateTime.now(ZoneId.ofOffset("UTC", ZoneOffset.ofTotalSeconds(utcOffset)))
     val flattenHourlyWeatherData = hourlyWeather.toHourlyWeatherData().values.flatten()
-    val twentyFourHoursWeatherData = flattenHourlyWeatherData.filter { hourlyData ->
+
+    val twentyFourHoursWeatherData = flattenHourlyWeatherData.asSequence().filter { hourlyData ->
         hourlyData.time.isAfter(now) && hourlyData.time.isBefore(now.plusDays(1))
-    }.sortedBy { hourlyData ->
-        hourlyData.time
-    }.take(24).map { hourlyData ->
+    }.sortedBy { it.time }.take(24).map { hourlyData ->
         TwentyFourHoursWeatherData(
             time = hourlyData.time,
             temperature = hourlyData.temperature,
             weatherType = hourlyData.weatherType
         )
+    }.toMutableList()
+
+    val dailyWeatherData = dailyWeather.toDailyWeatherData()
+    dailyWeatherData.find { it.sunrise.isAfter(now) }?.let { sunriseData ->
+        twentyFourHoursWeatherData.add(
+            TwentyFourHoursWeatherData(
+                time = sunriseData.sunrise,
+                temperature = 0.0,
+                weatherType = WeatherType.fromWMO(0, false),
+                sunrise = sunriseData.sunrise
+            )
+        )
+    }
+    dailyWeatherData.find { it.sunset.isAfter(now) }?.let { sunsetData ->
+        twentyFourHoursWeatherData.add(
+            TwentyFourHoursWeatherData(
+                time = sunsetData.sunset,
+                temperature = 0.0,
+                weatherType = WeatherType.fromWMO(0, false),
+                sunset = sunsetData.sunset
+            )
+        )
     }
 
     return WeatherInfo(
         currentWeatherData = currentWeather.toCurrentWeatherData(),
-        twentyFourHoursWeatherData = twentyFourHoursWeatherData,
+        twentyFourHoursWeatherData = twentyFourHoursWeatherData.sortedBy { it.time },
         hourlyWeatherData = hourlyWeather.toHourlyWeatherData(),
-        dailyWeatherData = dailyWeather.toDailyWeatherData()
+        dailyWeatherData = dailyWeatherData
     )
 }

@@ -111,7 +111,11 @@ fun WeatherTemperatureInfo(
                         modifier = Modifier.fillMaxHeight()
                     ) {
                         Text(
-                            text = timeFormat(time = weatherData.time),
+                            text = when {
+                                weatherData.sunrise != null -> timeFormat(time = weatherData.sunrise)
+                                weatherData.sunset != null -> timeFormat(time = weatherData.sunset)
+                                else -> timeFormat(time = weatherData.time)
+                            },
                             style = MaterialTheme.typography.bodyMedium,
                             color = weatheringDarkBlue70p
                         )
@@ -123,15 +127,27 @@ fun WeatherTemperatureInfo(
                             )
                         }
                         Icon(
-                            painter = painterResource(id = weatherData.weatherType.iconSmallRes),
-                            contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
+                            painter = when {
+                                weatherData.sunrise != null -> painterResource(id = R.drawable.icon_wb_sunny_fill1_wght400)
+                                weatherData.sunset != null -> painterResource(id = R.drawable.icon_wb_twilight_fill1_wght400)
+                                else -> painterResource(id = weatherData.weatherType.iconSmallRes)
+                            },
+                            contentDescription = when {
+                                weatherData.sunrise != null -> stringResource(id = R.string.sunrise)
+                                weatherData.sunset != null -> stringResource(id = R.string.sunset)
+                                else -> stringResource(id = weatherData.weatherType.weatherDescRes)
+                            }
                         )
                         Text(
-                            text = stringResource(
-                                id = R.string.temperature,
-                                if (preferencesState.value.useCelsius) weatherData.temperature.roundToInt() else
-                                    UnitsConverter.toFahrenheit(weatherData.temperature).roundToInt()
-                            ),
+                            text = when {
+                                weatherData.sunrise != null -> stringResource(id = R.string.sunrise)
+                                weatherData.sunset != null -> stringResource(id = R.string.sunset)
+                                else -> stringResource(
+                                    id = R.string.temperature,
+                                    if (preferencesState.value.useCelsius) weatherData.temperature.roundToInt() else
+                                        UnitsConverter.toFahrenheit(weatherData.temperature).roundToInt()
+                                )
+                            },
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

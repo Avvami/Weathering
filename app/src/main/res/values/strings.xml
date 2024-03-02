@@ -25,6 +25,8 @@
     <string name="search_placeholder">City</string>
     <string name="search_result">%s, %s</string>
     <string name="nothing_found">Nothing found</string>
+    <string name="sunrise">sunrise</string>
+    <string name="sunset">sunset</string>
 
     <!--AQI types-->
     <string name="good">Good</string>
