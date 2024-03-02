@@ -17,7 +17,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import kotlin.math.roundToInt
 
 private data class IndexedHourlyWeather(
     val index: Int,
@@ -29,8 +28,8 @@ private fun Int.toBoolean() = this == 1
 fun CurrentWeatherDto.toCurrentWeatherData(): CurrentWeatherData {
     return CurrentWeatherData(
         time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-        temperature = temperature.roundToInt(),
-        apparentTemperature = apparentTemperature.roundToInt(),
+        temperature = temperature,
+        apparentTemperature = apparentTemperature,
         humidity = humidity,
         humidityType = HumidityType.fromPercentage(humidity),
         weatherType = WeatherType.fromWMO(weatherCode, isDay.toBoolean()),
@@ -81,8 +80,8 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
         val sunset = sunsets[index]
         DailyWeatherData(
             time = LocalDate.parse(time, DateTimeFormatter.ISO_DATE),
-            temperatureMax = temperatureMax.roundToInt(),
-            temperatureMin = temperatureMin.roundToInt(),
+            temperatureMax = temperatureMax,
+            temperatureMin = temperatureMin,
             weatherType = WeatherType.fromWMO(weatherCode, true),
             sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
             sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
@@ -101,7 +100,7 @@ fun WeatherDto.toWeatherInfo(): WeatherInfo {
     }.take(24).map { hourlyData ->
         TwentyFourHoursWeatherData(
             time = hourlyData.time,
-            temperature = hourlyData.temperature.roundToInt(),
+            temperature = hourlyData.temperature,
             weatherType = hourlyData.weatherType
         )
     }

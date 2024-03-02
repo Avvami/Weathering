@@ -23,11 +23,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @Composable
 fun WeatherWeeklyForecast(
@@ -96,7 +98,11 @@ fun WeatherWeeklyForecast(
                                 )
                             }
                             Text(
-                                text = stringResource(id = R.string.temperature, weatherData.temperatureMax),
+                                text = stringResource(
+                                    id = R.string.temperature,
+                                    if (preferencesState.value.useCelsius) weatherData.temperatureMax.roundToInt() else
+                                        UnitsConverter.toFahrenheit(weatherData.temperatureMax).roundToInt()
+                                ),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue
@@ -113,7 +119,11 @@ fun WeatherWeeklyForecast(
                                 )
                             }
                             Text(
-                                text = stringResource(id = R.string.temperature, weatherData.temperatureMin),
+                                text = stringResource(
+                                    id = R.string.temperature,
+                                    if (preferencesState.value.useCelsius) weatherData.temperatureMin.roundToInt() else
+                                        UnitsConverter.toFahrenheit(weatherData.temperatureMin).roundToInt()
+                                ),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue70p

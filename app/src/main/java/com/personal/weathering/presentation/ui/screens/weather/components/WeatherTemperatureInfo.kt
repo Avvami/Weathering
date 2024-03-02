@@ -29,10 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.domain.util.timeFormat
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,11 +52,19 @@ fun WeatherTemperatureInfo(
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.temperature, weatherInfo().currentWeatherData.temperature),
+                    text = stringResource(
+                        id = R.string.temperature,
+                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
+                            UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
+                    ),
                     fontSize = 82.sp
                 )
                 Text(
-                    text = stringResource(id = R.string.apparent_temperature, weatherInfo().currentWeatherData.apparentTemperature),
+                    text = stringResource(
+                        id = R.string.apparent_temperature,
+                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
+                                UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     color = weatheringDarkBlue70p
                 )
@@ -117,7 +127,11 @@ fun WeatherTemperatureInfo(
                             contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
                         )
                         Text(
-                            text = stringResource(id = R.string.temperature, weatherData.temperature),
+                            text = stringResource(
+                                id = R.string.temperature,
+                                if (preferencesState.value.useCelsius) weatherData.temperature.roundToInt() else
+                                    UnitsConverter.toFahrenheit(weatherData.temperature).roundToInt()
+                            ),
                             style = MaterialTheme.typography.titleMedium
                         )
                     }

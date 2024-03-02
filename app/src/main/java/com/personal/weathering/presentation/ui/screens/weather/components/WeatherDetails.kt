@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
@@ -63,7 +64,11 @@ fun WeatherDetails(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(id = R.string.km_per_hour, weatherInfo().currentWeatherData.windSpeed),
+                text = stringResource(
+                    id = if (preferencesState.value.useKmPerHour) R.string.km_per_hour else R.string.m_per_second,
+                    if (preferencesState.value.useKmPerHour) weatherInfo().currentWeatherData.windSpeed else
+                        UnitsConverter.toMetersPerSecond(weatherInfo().currentWeatherData.windSpeed)
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 color = weatheringBlue,
                 textAlign = TextAlign.Center
@@ -106,7 +111,11 @@ fun WeatherDetails(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(id = R.string.hPa, weatherInfo().currentWeatherData.pressure),
+                text = stringResource(
+                    id = if (preferencesState.value.useHpa) R.string.hPa else R.string.mmHg,
+                    if (preferencesState.value.useHpa) weatherInfo().currentWeatherData.pressure else
+                        UnitsConverter.toMmHg(weatherInfo().currentWeatherData.pressure)
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 color = weatheringBlue,
                 textAlign = TextAlign.Center
