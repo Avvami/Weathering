@@ -18,5 +18,5 @@ sealed interface UiEvent {
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
     data object CloseMessageDialog: UiEvent
-    data class UpdateCurrentCityState(val currentCityState: CurrentCityState): UiEvent
+    data class UpdateCurrentCityState(val city: String, val lat: Double, val lon: Double): UiEvent
 }

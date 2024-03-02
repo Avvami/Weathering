@@ -25,7 +25,8 @@ class MainActivity : ComponentActivity() {
             MainViewModel(
                 weatherRepository = WeatheringApp.appModule.weatherRepository,
                 aqRepository = WeatheringApp.appModule.aqRepository,
-                locationTracker = WeatheringApp.appModule.locationTracker
+                locationTracker = WeatheringApp.appModule.locationTracker,
+                localRepository = WeatheringApp.appModule.localRepository
             )
         }
     }

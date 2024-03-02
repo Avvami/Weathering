@@ -10,17 +10,26 @@ import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.MessageDialogState
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val weatherRepository: WeatherRepository,
     private val aqRepository: AqRepository,
-    private val locationTracker: LocationTracker
+    private val locationTracker: LocationTracker,
+    private val localRepository: LocalRepository
 ): ViewModel() {
 
     var currentCityState by mutableStateOf(CurrentCityState())
@@ -34,6 +43,28 @@ class MainViewModel(
 
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    var preferencesState: StateFlow<PreferencesState> = localRepository.getPreferences()
+        .flatMapLatest { preferencesEntity ->
+            localRepository.getFavorites().map { favorites ->
+                PreferencesState(
+                    currentCity = preferencesEntity.currentCity,
+                    lat = preferencesEntity.lat,
+                    lon = preferencesEntity.lon,
+                    searchLanguageCode = preferencesEntity.searchLanguageCode,
+                    useCelsius = preferencesEntity.useCelsius,
+                    useKmPerHour = preferencesEntity.useKmPerHour,
+                    useHpa = preferencesEntity.useHpa,
+                    useUSaq = preferencesEntity.useUSaq,
+                    favorites = favorites
+                )
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = PreferencesState()
+        )
 
     private fun loadWeatherInfo(lat: Double, lon: Double) {
         viewModelScope.launch {
@@ -117,9 +148,9 @@ class MainViewModel(
             }
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
             is UiEvent.UpdateCurrentCityState -> {
-                currentCityState = event.currentCityState
-                loadWeatherInfo(currentCityState.lat, currentCityState.lon)
-                loadAqInfo(currentCityState.lat, currentCityState.lon)
+//                currentCityState = event.currentCityState
+//                loadWeatherInfo(currentCityState.lat, currentCityState.lon)
+//                loadAqInfo(currentCityState.lat, currentCityState.lon)
             }
         }
     }

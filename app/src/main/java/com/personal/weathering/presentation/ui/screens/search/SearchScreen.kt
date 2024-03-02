@@ -46,7 +46,6 @@ import com.personal.weathering.WeatheringApp
 import com.personal.weathering.domain.models.DropdownItem
 import com.personal.weathering.domain.models.search.SearchLanguage
 import com.personal.weathering.presentation.UiEvent
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.ui.components.CustomDropdownMenu
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
@@ -196,11 +195,7 @@ fun SearchScreen(
                                                 .clickable {
                                                     uiEvent(
                                                         UiEvent.UpdateCurrentCityState(
-                                                            CurrentCityState(
-                                                                name = searchResult.name,
-                                                                lat = searchResult.lat,
-                                                                lon = searchResult.lon
-                                                            )
+                                                            searchResult.name, searchResult.lat, searchResult.lon
                                                         )
                                                     )
                                                     navigateBack()

@@ -3,15 +3,18 @@ package com.personal.weathering.di
 import android.app.Application
 import android.content.Context
 import com.google.android.gms.location.LocationServices
+import com.personal.weathering.data.local.AppDatabase
 import com.personal.weathering.data.location.DefaultLocationTracker
 import com.personal.weathering.data.remote.AqApi
 import com.personal.weathering.data.remote.SearchApi
 import com.personal.weathering.data.remote.WeatherApi
 import com.personal.weathering.data.repository.AqRepositoryImpl
+import com.personal.weathering.data.repository.LocalRepositoryImpl
 import com.personal.weathering.data.repository.SearchRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
 import com.personal.weathering.domain.location.LocationTracker
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.SearchRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.C
@@ -27,6 +30,7 @@ interface AppModule {
     val locationTracker: LocationTracker
     val searchApi: SearchApi
     val searRepository: SearchRepository
+    val localRepository: LocalRepository
 }
 
 class AppModuleImpl(private val appContext: Context): AppModule {
@@ -72,5 +76,12 @@ class AppModuleImpl(private val appContext: Context): AppModule {
 
     override val searRepository: SearchRepository by lazy {
         SearchRepositoryImpl(searchApi, appContext)
+    }
+
+    override val localRepository: LocalRepository by lazy {
+        LocalRepositoryImpl(
+            preferencesDao = AppDatabase.getDatabase(appContext).preferencesDao,
+            favoritesDao = AppDatabase.getDatabase(appContext).favoritesDao
+        )
     }
 }
