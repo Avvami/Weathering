@@ -41,6 +41,9 @@ class MainViewModel(
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
+    var holdSplash by mutableStateOf(true)
+        private set
+
     private val _currentCityState = MutableStateFlow(CurrentCityState())
     val currentCityState: StateFlow<CurrentCityState> = _currentCityState.asStateFlow()
 
@@ -63,6 +66,7 @@ class MainViewModel(
                         )
                     }
                     uiEvent(UiEvent.LoadWeatherInfo(preferencesEntity.lat, preferencesEntity.lon))
+                    holdSplash = false
                 }
         }
         viewModelScope.launch {
