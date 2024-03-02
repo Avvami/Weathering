@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,12 +30,14 @@ import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.util.timeFormat
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WeatherTemperatureInfo(
+    preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo
 ) {
     Column {

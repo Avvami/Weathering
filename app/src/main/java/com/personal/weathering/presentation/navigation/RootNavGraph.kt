@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -32,11 +33,14 @@ fun RootNavigationGraph(
 
         ) {
             WeatherScreen(
-                currentCityState = mainViewModel::currentCityState,
+                currentCityState = mainViewModel.currentCityState.collectAsState(),
+                preferencesState = mainViewModel.preferencesState.collectAsState(),
+                favoritesState = mainViewModel.favoritesState.collectAsState(),
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
-                navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) }
+                navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
+                uiEvent = mainViewModel::uiEvent
             )
         }
         composable(
@@ -45,6 +49,7 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
         ) {
             AqScreen(
+                preferencesState = mainViewModel.preferencesState.collectAsState(),
                 aqState = mainViewModel::aqState,
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() }
             )
@@ -55,6 +60,7 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
         ) {
             SearchScreen(
+                preferencesState = mainViewModel.preferencesState.collectAsState(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
                 uiEvent = mainViewModel::uiEvent
             )

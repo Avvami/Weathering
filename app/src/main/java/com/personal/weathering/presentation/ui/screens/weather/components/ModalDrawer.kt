@@ -18,6 +18,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,14 +26,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
+import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.CurrentCityState
+import com.personal.weathering.presentation.state.FavoritesState
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalDrawer(
-    currentCityState: () -> CurrentCityState
+    preferencesState: State<PreferencesState>,
+    favoritesState: State<List<FavoritesState>>,
+    currentCityState: State<CurrentCityState>,
+    uiEvent: (UiEvent) -> Unit
 ) {
     ModalDrawerSheet(
         drawerContentColor = weatheringDarkBlue,
@@ -53,8 +60,8 @@ fun ModalDrawer(
                 Spacer(modifier = Modifier.width(8.dp))
                 SingleChoiceSegmentedButtonRow {
                     SegmentedButton(
-                        selected = true,
-                        onClick = { /*TODO*/ },
+                        selected = preferencesState.value.useCelsius,
+                        onClick = { uiEvent(UiEvent.SetTemperatureUnit(true)) },
                         shape = RoundedCornerShape(topStart = 28.dp, bottomStart = 28.dp),
                         label = { Text(text = stringResource(id = R.string.celsius_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -68,8 +75,8 @@ fun ModalDrawer(
                         icon = {}
                     )
                     SegmentedButton(
-                        selected = false,
-                        onClick = { /*TODO*/ },
+                        selected = !preferencesState.value.useCelsius,
+                        onClick = { uiEvent(UiEvent.SetTemperatureUnit(false)) },
                         shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                         label = { Text(text = stringResource(id = R.string.fahrenheit_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -93,8 +100,8 @@ fun ModalDrawer(
                 Spacer(modifier = Modifier.width(8.dp))
                 SingleChoiceSegmentedButtonRow {
                     SegmentedButton(
-                        selected = false,
-                        onClick = { /*TODO*/ },
+                        selected = !preferencesState.value.useKmPerHour,
+                        onClick = { uiEvent(UiEvent.SetSpeedUnit(false)) },
                         shape = RoundedCornerShape(topStart = 28.dp, bottomStart = 28.dp),
                         label = { Text(text = stringResource(id = R.string.m_per_second_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -108,8 +115,8 @@ fun ModalDrawer(
                         icon = {}
                     )
                     SegmentedButton(
-                        selected = true,
-                        onClick = { /*TODO*/ },
+                        selected = preferencesState.value.useKmPerHour,
+                        onClick = { uiEvent(UiEvent.SetSpeedUnit(true)) },
                         shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                         label = { Text(text = stringResource(id = R.string.km_per_hour_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -133,8 +140,8 @@ fun ModalDrawer(
                 Spacer(modifier = Modifier.width(8.dp))
                 SingleChoiceSegmentedButtonRow {
                     SegmentedButton(
-                        selected = false,
-                        onClick = { /*TODO*/ },
+                        selected = !preferencesState.value.useHpa,
+                        onClick = { uiEvent(UiEvent.SetPressureUnit(false)) },
                         shape = RoundedCornerShape(topStart = 28.dp, bottomStart = 28.dp),
                         label = { Text(text = stringResource(id = R.string.mmHg_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -148,8 +155,8 @@ fun ModalDrawer(
                         icon = {}
                     )
                     SegmentedButton(
-                        selected = true,
-                        onClick = { /*TODO*/ },
+                        selected = preferencesState.value.useHpa,
+                        onClick = { uiEvent(UiEvent.SetPressureUnit(true)) },
                         shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                         label = { Text(text = stringResource(id = R.string.hPa_unit)) },
                         colors = SegmentedButtonDefaults.colors(
@@ -175,8 +182,8 @@ fun ModalDrawer(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 SegmentedButton(
-                    selected = false,
-                    onClick = { /*TODO*/ },
+                    selected = !preferencesState.value.useUSaq,
+                    onClick = { uiEvent(UiEvent.SetAqiUnit(false)) },
                     shape = RoundedCornerShape(topStart = 28.dp, bottomStart = 28.dp),
                     label = { Text(text = stringResource(id = R.string.european_aqi)) },
                     colors = SegmentedButtonDefaults.colors(
@@ -190,8 +197,8 @@ fun ModalDrawer(
                     icon = {}
                 )
                 SegmentedButton(
-                    selected = true,
-                    onClick = { /*TODO*/ },
+                    selected = preferencesState.value.useUSaq,
+                    onClick = { uiEvent(UiEvent.SetAqiUnit(true)) },
                     shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                     label = { Text(text = stringResource(id = R.string.us_aqi)) },
                     colors = SegmentedButtonDefaults.colors(
@@ -226,7 +233,7 @@ fun ModalDrawer(
                         color = weatheringBlue
                     )
                     Text(
-                        text = currentCityState().name,
+                        text = currentCityState.value.name,
                         style = MaterialTheme.typography.titleMedium,
                         color = weatheringBlue
                     )

@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +35,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
+import com.personal.weathering.presentation.state.FavoritesState
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.screens.weather.components.ModalDrawer
@@ -49,11 +53,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
-    currentCityState: () -> CurrentCityState,
+    currentCityState: State<CurrentCityState>,
+    preferencesState: State<PreferencesState>,
+    favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
     aqState: () -> AqState,
     navigateToAqScreen: () -> Unit,
-    navigateToSearchScreen: () -> Unit
+    navigateToSearchScreen: () -> Unit,
+    uiEvent: (UiEvent) -> Unit
 ) {
     val weatherViewModel: WeatherViewModel = viewModel()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -62,7 +69,10 @@ fun WeatherScreen(
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawer(
-                currentCityState = currentCityState
+                preferencesState = preferencesState,
+                favoritesState = favoritesState,
+                currentCityState = currentCityState,
+                uiEvent = uiEvent
             )
         },
         drawerState = drawerState,
@@ -71,7 +81,7 @@ fun WeatherScreen(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(text = currentCityState().name, fontSize = 20.sp, fontWeight = FontWeight.Medium) },
+                    title = { Text(text = currentCityState.value.name, fontSize = 20.sp, fontWeight = FontWeight.Medium) },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
                         navigationIconContentColor = weatheringDarkBlue,
@@ -120,11 +130,13 @@ fun WeatherScreen(
                         ) {
                             item {
                                 WeatherTemperatureInfo(
+                                    preferencesState = preferencesState,
                                     weatherInfo = { weatherInfo }
                                 )
                             }
                             item {
                                 WeatherDetails(
+                                    preferencesState = preferencesState,
                                     weatherInfo = { weatherInfo },
                                     aqState = aqState,
                                     navigateToAqScreen = navigateToAqScreen
@@ -132,6 +144,7 @@ fun WeatherScreen(
                             }
                             item {
                                 WeatherWeeklyForecast(
+                                    preferencesState = preferencesState,
                                     weatherInfo = { weatherInfo }
                                 )
                             }

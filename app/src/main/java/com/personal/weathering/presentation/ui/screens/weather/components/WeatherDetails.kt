@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,11 +30,13 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.presentation.state.AqState
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 
 @Composable
 fun WeatherDetails(
+    preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo,
     aqState: () -> AqState,
     navigateToAqScreen: () -> Unit
@@ -168,14 +171,17 @@ fun WeatherDetails(
         ) {
             aqState().aqInfo?.let { aqInfo ->
                 Icon(
-                    painter = painterResource(id = aqInfo.currentAqData.usAqiType.iconSmallRes),
-                    contentDescription = stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes),
+                    painter = if (preferencesState.value.useUSaq) painterResource(id = aqInfo.currentAqData.usAqiType.iconSmallRes) else
+                        painterResource(id = aqInfo.currentAqData.europeanAqiType.iconSmallRes),
+                    contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
+                        stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
                     tint = weatheringBlue,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes),
+                    text = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
+                        stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
                     style = MaterialTheme.typography.titleSmall,
                     color = weatheringBlue,
                     modifier = Modifier.weight(weight = .5f, fill = false)

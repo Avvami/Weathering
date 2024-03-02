@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.state.AqState
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayForecast
 import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfo
@@ -39,6 +41,7 @@ import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AqScreen(
+    preferencesState: State<PreferencesState>,
     aqState: () -> AqState,
     navigateBack: () -> Unit
 ) {
@@ -89,11 +92,13 @@ fun AqScreen(
                     ) {
                         item {
                             CurrentAqInfo(
+                                preferencesState = preferencesState,
                                 aqInfo = { aqInfo }
                             )
                         }
                         item {
                             AqThreeDayForecast(
+                                preferencesState = preferencesState,
                                 aqInfo = { aqInfo }
                             )
                         }

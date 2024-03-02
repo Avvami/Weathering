@@ -34,6 +34,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -46,6 +47,7 @@ import com.personal.weathering.WeatheringApp
 import com.personal.weathering.domain.models.DropdownItem
 import com.personal.weathering.domain.models.search.SearchLanguage
 import com.personal.weathering.presentation.UiEvent
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.CustomDropdownMenu
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
@@ -58,13 +60,14 @@ import com.personal.weathering.presentation.viewModelFactory
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SearchScreen(
+    preferencesState: State<PreferencesState>,
     navigateBack: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
     val searchViewModel: SearchViewModel = viewModel(
         factory = viewModelFactory {
             SearchViewModel(
-                searchRepository = WeatheringApp.appModule.searRepository
+                searchRepository = WeatheringApp.appModule.searchRepository
             )
         }
     )
@@ -79,8 +82,8 @@ fun SearchScreen(
         CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
             SearchBar(
                 query = searchViewModel.searchQuery,
-                onQueryChange = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange(it)) },
-                onSearch = {},
+                onQueryChange = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange(it, preferencesState.value.searchLanguageCode)) },
+                onSearch = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange(it, preferencesState.value.searchLanguageCode)) },
                 active = searchViewModel.searchFieldActive,
                 onActiveChange = { if (!it) navigateBack() },
                 modifier = Modifier.fillMaxWidth(),
@@ -118,7 +121,7 @@ fun SearchScreen(
                             exit = scaleOut() + fadeOut()
                         ) {
                             IconButton(
-                                onClick = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange("")) }
+                                onClick = { searchViewModel.searchUiEvent(SearchUiEvent.OnSearchQueryChange("", preferencesState.value.searchLanguageCode)) }
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Clear,
@@ -139,8 +142,9 @@ fun SearchScreen(
                                     DropdownItem(
                                         iconRes = R.drawable.icon_done_all_fill0_wght400,
                                         textRes = it.name,
-                                        selected = searchViewModel.currentSearchLanguage == it.code,
+                                        selected = preferencesState.value.searchLanguageCode == it.code,
                                         onItemClick = {
+                                            uiEvent(UiEvent.SetSearchLanguage(it.code))
                                             searchViewModel.searchUiEvent(SearchUiEvent.SetSearchLanguage(it.code))
                                         }
                                     )
@@ -194,7 +198,7 @@ fun SearchScreen(
                                                 .fillMaxWidth()
                                                 .clickable {
                                                     uiEvent(
-                                                        UiEvent.UpdateCurrentCityState(
+                                                        UiEvent.SetCurrentCityState(
                                                             searchResult.name, searchResult.lat, searchResult.lon
                                                         )
                                                     )

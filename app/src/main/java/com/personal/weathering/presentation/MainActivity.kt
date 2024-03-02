@@ -38,9 +38,7 @@ class MainActivity : ComponentActivity() {
 
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ) {
-            mainViewModel.uiEvent(UiEvent.LoadWeatherInfo())
-        }
+        ) {}
         permissionLauncher.launch(arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,

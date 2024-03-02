@@ -18,11 +18,11 @@ interface LocalRepository {
 
     suspend fun setSearchLanguageCode(languageCode: String)
 
-    suspend fun setUseCelsius(useCelsius: String)
+    suspend fun setUseCelsius(useCelsius: Boolean)
 
-    suspend fun setUseKmPerHour(useKmPerHour: String)
+    suspend fun setUseKmPerHour(useKmPerHour: Boolean)
 
-    suspend fun setUseHpa(useHpa: String)
+    suspend fun setUseHpa(useHpa: Boolean)
 
-    suspend fun setUseUSaq(useUSaq: String)
+    suspend fun setUseUSaq(useUSaq: Boolean)
 }

@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.personal.weathering.domain.location.LocationTracker
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
@@ -14,15 +13,16 @@ import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
 import com.personal.weathering.presentation.state.AqState
+import com.personal.weathering.presentation.state.CurrentCityState
+import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.MessageDialogState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -31,9 +31,6 @@ class MainViewModel(
     private val locationTracker: LocationTracker,
     private val localRepository: LocalRepository
 ): ViewModel() {
-
-    var currentCityState by mutableStateOf(CurrentCityState())
-        private set
 
     var weatherState by mutableStateOf(WeatherState())
         private set
@@ -44,27 +41,61 @@ class MainViewModel(
     var messageDialogState by mutableStateOf(MessageDialogState())
         private set
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    var preferencesState: StateFlow<PreferencesState> = localRepository.getPreferences()
-        .flatMapLatest { preferencesEntity ->
-            localRepository.getFavorites().map { favorites ->
-                PreferencesState(
-                    currentCity = preferencesEntity.currentCity,
-                    lat = preferencesEntity.lat,
-                    lon = preferencesEntity.lon,
-                    searchLanguageCode = preferencesEntity.searchLanguageCode,
-                    useCelsius = preferencesEntity.useCelsius,
-                    useKmPerHour = preferencesEntity.useKmPerHour,
-                    useHpa = preferencesEntity.useHpa,
-                    useUSaq = preferencesEntity.useUSaq,
-                    favorites = favorites
-                )
+    private val _currentCityState = MutableStateFlow(CurrentCityState())
+    val currentCityState: StateFlow<CurrentCityState> = _currentCityState.asStateFlow()
+
+    private val _preferencesState = MutableStateFlow(PreferencesState())
+    val preferencesState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
+
+    private val _favoritesState = MutableStateFlow<List<FavoritesState>>(listOf())
+    val favoritesState: StateFlow<List<FavoritesState>> = _favoritesState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            localRepository.getPreferences()
+                .distinctUntilChangedBy { Triple(it.lat, it.lon, it.currentCity) }
+                .collect { preferencesEntity ->
+                    _currentCityState.update {
+                        it.copy(
+                            name = preferencesEntity.currentCity,
+                            lat = preferencesEntity.lat,
+                            lon = preferencesEntity.lon
+                        )
+                    }
+                    uiEvent(UiEvent.LoadWeatherInfo(preferencesEntity.lat, preferencesEntity.lon))
+                }
+        }
+        viewModelScope.launch {
+            localRepository.getPreferences()
+                .distinctUntilChangedBy {
+                    listOf(
+                        it.searchLanguageCode,
+                        it.useCelsius,
+                        it.useKmPerHour,
+                        it.useHpa,
+                        it.useUSaq
+                    )
+                }
+                .collect { preferencesEntity ->
+                    _preferencesState.update {
+                        it.copy(
+                            searchLanguageCode = preferencesEntity.searchLanguageCode,
+                            useCelsius = preferencesEntity.useCelsius,
+                            useKmPerHour = preferencesEntity.useKmPerHour,
+                            useHpa = preferencesEntity.useHpa,
+                            useUSaq = preferencesEntity.useUSaq,
+                        )
+                    }
+                }
+        }
+        viewModelScope.launch {
+            localRepository.getFavorites().collect { favoritesEntity ->
+                _favoritesState.value = favoritesEntity.map {
+                    FavoritesState(id = it.id, city = it.city, lat = it.lat, lon = it.lon)
+                }
             }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = PreferencesState()
-        )
+        }
+    }
 
     private fun loadWeatherInfo(lat: Double, lon: Double) {
         viewModelScope.launch {
@@ -147,10 +178,35 @@ class MainViewModel(
                 )
             }
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
-            is UiEvent.UpdateCurrentCityState -> {
-//                currentCityState = event.currentCityState
-//                loadWeatherInfo(currentCityState.lat, currentCityState.lon)
-//                loadAqInfo(currentCityState.lat, currentCityState.lon)
+            is UiEvent.SetCurrentCityState -> {
+                viewModelScope.launch {
+                    localRepository.setCurrentCity(event.city, event.lat, event.lon)
+                }
+            }
+            is UiEvent.SetSearchLanguage -> {
+                viewModelScope.launch {
+                    localRepository.setSearchLanguageCode(event.code)
+                }
+            }
+            is UiEvent.SetTemperatureUnit -> {
+                viewModelScope.launch {
+                    localRepository.setUseCelsius(event.useCelsius)
+                }
+            }
+            is UiEvent.SetSpeedUnit -> {
+                viewModelScope.launch {
+                    localRepository.setUseKmPerHour(event.useKmPerHour)
+                }
+            }
+            is UiEvent.SetPressureUnit -> {
+                viewModelScope.launch {
+                    localRepository.setUseHpa(event.useHpa)
+                }
+            }
+            is UiEvent.SetAqiUnit -> {
+                viewModelScope.launch {
+                    localRepository.setUseUSaq(event.useUSaq)
+                }
             }
         }
     }

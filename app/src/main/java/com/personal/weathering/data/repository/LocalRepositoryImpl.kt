@@ -23,11 +23,11 @@ class LocalRepositoryImpl(
 
     override suspend fun setSearchLanguageCode(languageCode: String) = preferencesDao.setSearchLanguageCode(languageCode)
 
-    override suspend fun setUseCelsius(useCelsius: String) = preferencesDao.setUseCelsius(useCelsius)
+    override suspend fun setUseCelsius(useCelsius: Boolean) = preferencesDao.setUseCelsius(useCelsius)
 
-    override suspend fun setUseKmPerHour(useKmPerHour: String) = preferencesDao.setUseKmPerHour(useKmPerHour)
+    override suspend fun setUseKmPerHour(useKmPerHour: Boolean) = preferencesDao.setUseKmPerHour(useKmPerHour)
 
-    override suspend fun setUseHpa(useHpa: String) = preferencesDao.setUseHpa(useHpa)
+    override suspend fun setUseHpa(useHpa: Boolean) = preferencesDao.setUseHpa(useHpa)
 
-    override suspend fun setUseUSaq(useUSaq: String) = preferencesDao.setUseUSaq(useUSaq)
+    override suspend fun setUseUSaq(useUSaq: Boolean) = preferencesDao.setUseUSaq(useUSaq)
 }

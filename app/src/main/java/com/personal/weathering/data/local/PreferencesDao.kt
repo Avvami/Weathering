@@ -17,14 +17,14 @@ interface PreferencesDao {
     suspend fun setSearchLanguageCode(languageCode: String)
 
     @Query("UPDATE preferencesentity SET useCelsius = :useCelsius")
-    suspend fun setUseCelsius(useCelsius: String)
+    suspend fun setUseCelsius(useCelsius: Boolean)
 
     @Query("UPDATE preferencesentity SET useKmPerHour = :useKmPerHour")
-    suspend fun setUseKmPerHour(useKmPerHour: String)
+    suspend fun setUseKmPerHour(useKmPerHour: Boolean)
 
     @Query("UPDATE preferencesentity SET useHpa = :useHpa")
-    suspend fun setUseHpa(useHpa: String)
+    suspend fun setUseHpa(useHpa: Boolean)
 
     @Query("UPDATE preferencesentity SET useUSaq = :useUSaq")
-    suspend fun setUseUSaq(useUSaq: String)
+    suspend fun setUseUSaq(useUSaq: Boolean)
 }

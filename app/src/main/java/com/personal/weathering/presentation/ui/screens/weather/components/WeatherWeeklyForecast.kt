@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
@@ -29,6 +31,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun WeatherWeeklyForecast(
+    preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo
 ) {
     Column(

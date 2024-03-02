@@ -29,7 +29,7 @@ interface AppModule {
     val aqRepository: AqRepository
     val locationTracker: LocationTracker
     val searchApi: SearchApi
-    val searRepository: SearchRepository
+    val searchRepository: SearchRepository
     val localRepository: LocalRepository
 }
 
@@ -74,7 +74,7 @@ class AppModuleImpl(private val appContext: Context): AppModule {
             .create()
     }
 
-    override val searRepository: SearchRepository by lazy {
+    override val searchRepository: SearchRepository by lazy {
         SearchRepositoryImpl(searchApi, appContext)
     }
 

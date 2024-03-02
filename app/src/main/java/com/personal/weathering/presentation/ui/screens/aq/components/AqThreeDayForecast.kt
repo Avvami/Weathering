@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.airquality.AqInfo
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
@@ -30,6 +32,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun AqThreeDayForecast(
+    preferencesState: State<PreferencesState>,
     aqInfo: () -> AqInfo
 ) {
     Column(
@@ -84,13 +87,16 @@ fun AqThreeDayForecast(
                         ) {
                             Text(
                                 modifier = Modifier.weight(weight = .8f, fill = false),
-                                text = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
+                                text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqDescRes),
                                 style = MaterialTheme.typography.titleSmall,
                                 textAlign = TextAlign.End
                             )
                             Icon(
-                                painter = painterResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.iconSmallRes),
-                                contentDescription = stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes),
+                                painter = if (preferencesState.value.useUSaq) painterResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.iconSmallRes) else
+                                    painterResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.iconSmallRes),
+                                contentDescription = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqDescRes),
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -105,7 +111,8 @@ fun AqThreeDayForecast(
                                 )
                             }
                             Text(
-                                text = hourlyAqData.maxBy { it.usAqi }.usAqi.toString(),
+                                text = if (preferencesState.value.useUSaq) hourlyAqData.maxBy { it.usAqi }.usAqi.toString() else
+                                    hourlyAqData.maxBy { it.europeanAqi }.europeanAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue
@@ -122,7 +129,8 @@ fun AqThreeDayForecast(
                                 )
                             }
                             Text(
-                                text = hourlyAqData.minBy { it.usAqi }.usAqi.toString(),
+                                text = if (preferencesState.value.useUSaq) hourlyAqData.minBy { it.usAqi }.usAqi.toString() else
+                                    hourlyAqData.minBy { it.europeanAqi }.europeanAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = weatheringDarkBlue70p
