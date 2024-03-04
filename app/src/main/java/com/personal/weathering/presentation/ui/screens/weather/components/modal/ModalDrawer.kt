@@ -65,9 +65,9 @@ fun ModalDrawer(
             if (favoritesState.value.isNotEmpty()) {
                 items(
                     count = favoritesState.value.size,
-                    key = { favoritesState.value[it].id }
+                    key = { favoritesState.value.reversed()[it].id }
                 ) { index ->
-                    val favorite = favoritesState.value[index]
+                    val favorite = favoritesState.value.reversed()[index]
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
