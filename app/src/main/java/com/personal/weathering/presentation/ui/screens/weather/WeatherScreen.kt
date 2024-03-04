@@ -153,6 +153,7 @@ fun WeatherScreen(
                         Text(
                             text = error,
                             style = MaterialTheme.typography.bodyLarge,
+                            color = weatheringDarkBlue70p,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()

@@ -46,6 +46,7 @@ import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayF
 import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfo
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
+import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,6 +106,7 @@ fun AqScreen(
                     Text(
                         text = error,
                         style = MaterialTheme.typography.bodyLarge,
+                        color = weatheringDarkBlue70p,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()

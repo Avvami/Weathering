@@ -52,6 +52,7 @@ fun SearchResults(
             Text(
                 text = error,
                 style = MaterialTheme.typography.bodyLarge,
+                color = weatheringDarkBlue70p,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,6 +70,7 @@ fun SearchResults(
                         Text(
                             text = stringResource(id = R.string.nothing_found),
                             style = MaterialTheme.typography.bodyLarge,
+                            color = weatheringDarkBlue70p,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()

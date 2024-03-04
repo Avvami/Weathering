@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.SearchHistoryState
+import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -55,6 +56,7 @@ fun SearchHistory(
             Text(
                 text = stringResource(id = R.string.search_history),
                 style = MaterialTheme.typography.titleLarge,
+                color = weatheringDarkBlue70p,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
@@ -65,6 +67,7 @@ fun SearchHistory(
                 Text(
                     text = stringResource(id = R.string.empty),
                     style = MaterialTheme.typography.bodyLarge,
+                    color = weatheringDarkBlue70p,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
