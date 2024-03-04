@@ -67,6 +67,7 @@ fun RootNavigationGraph(
         ) {
             SearchScreen(
                 preferencesState = mainViewModel.preferencesState.collectAsState(),
+                favoritesState = mainViewModel.favoritesState.collectAsState(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
                 uiEvent = mainViewModel::uiEvent
             )

@@ -37,10 +37,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.personal.weathering.BuildConfig
+import com.personal.weathering.R
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
@@ -48,12 +52,13 @@ import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
-import com.personal.weathering.presentation.ui.screens.weather.components.ModalDrawer
+import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
+import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +92,8 @@ fun WeatherScreen(
                 favoritesState = favoritesState,
                 currentCityState = currentCityState,
                 weatherState = weatherState,
-                uiEvent = uiEvent
+                uiEvent = uiEvent,
+                closeDrawer = { scope.launch { drawerState.close() } }
             )
         },
         drawerState = drawerState,
@@ -96,7 +102,16 @@ fun WeatherScreen(
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
-                    title = { Text(text = currentCityState.value.name, fontSize = 20.sp, fontWeight = FontWeight.Medium) },
+                    title = {
+                        Text(
+                            text = currentCityState.value.name,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
                         navigationIconContentColor = weatheringDarkBlue,
@@ -168,6 +183,21 @@ fun WeatherScreen(
                                 WeatherWeeklyForecast(
                                     preferencesState = preferencesState,
                                     weatherInfo = { weatherInfo }
+                                )
+                            }
+                            item {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.app_version,
+                                        BuildConfig.VERSION_NAME,
+                                        BuildConfig.VERSION_CODE
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = weatheringDarkBlue70p,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 24.dp)
                                 )
                             }
                         }

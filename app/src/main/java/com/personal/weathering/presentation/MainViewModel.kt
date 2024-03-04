@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.personal.weathering.data.local.FavoriteEntity
 import com.personal.weathering.domain.location.LocationTracker
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
@@ -240,6 +241,20 @@ class MainViewModel(
             }
             is UiEvent.UpdateAqInfo -> {
                 loadAqInfo(event.lat, event.lon)
+            }
+            is UiEvent.AddFavorite -> {
+                viewModelScope.launch {
+                    localRepository.addFavorite(
+                        FavoriteEntity(event.cityId, event.city, event.lat, event.lon)
+                    )
+                }
+            }
+            is UiEvent.RemoveFavorite -> {
+                viewModelScope.launch {
+                    localRepository.removeFavorite(
+                        FavoriteEntity(event.cityId, event.city, event.lat, event.lon)
+                    )
+                }
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.personal.weathering.presentation.ui.screens.search
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,6 +49,7 @@ import com.personal.weathering.WeatheringApp
 import com.personal.weathering.domain.models.DropdownItem
 import com.personal.weathering.domain.models.search.SearchLanguage
 import com.personal.weathering.presentation.UiEvent
+import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.CustomDropdownMenu
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
@@ -61,6 +64,7 @@ import com.personal.weathering.presentation.viewModelFactory
 @Composable
 fun SearchScreen(
     preferencesState: State<PreferencesState>,
+    favoritesState: State<List<FavoritesState>>,
     navigateBack: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
@@ -199,12 +203,15 @@ fun SearchScreen(
                                                 .clickable {
                                                     uiEvent(
                                                         UiEvent.SetCurrentCityState(
-                                                            searchResult.id, searchResult.name, searchResult.lat, searchResult.lon
+                                                            searchResult.id,
+                                                            searchResult.name,
+                                                            searchResult.lat,
+                                                            searchResult.lon
                                                         )
                                                     )
                                                     navigateBack()
                                                 }
-                                                .padding(horizontal = 24.dp, vertical = 12.dp),
+                                                .padding(start = 24.dp, top = 2.dp, end = 12.dp, bottom = 2.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
@@ -215,12 +222,55 @@ fun SearchScreen(
                                                 modifier = Modifier.weight(fill = false, weight = .5f)
                                             )
                                             Spacer(modifier = Modifier.width(8.dp))
-                                            searchResult.countryCode?.let {
-                                                Text(
-                                                    text = searchResult.countryCode,
-                                                    style = MaterialTheme.typography.labelLarge,
-                                                    color = weatheringDarkBlue70p
-                                                )
+                                            Row(
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                searchResult.countryCode?.let {
+                                                    Text(
+                                                        text = searchResult.countryCode,
+                                                        style = MaterialTheme.typography.labelLarge,
+                                                        color = weatheringDarkBlue70p
+                                                    )
+                                                }
+                                                AnimatedContent(
+                                                    targetState = favoritesState.value.any { it.id == searchResult.id },
+                                                    label = "Animate favorite",
+                                                    transitionSpec = { scaleIn() + fadeIn() togetherWith scaleOut() + fadeOut() }
+                                                ) {targetState ->
+                                                    if (targetState) {
+                                                        IconButton(
+                                                            onClick = {
+                                                                uiEvent(UiEvent.RemoveFavorite(
+                                                                    cityId = searchResult.id,
+                                                                    city = searchResult.name,
+                                                                    lat = searchResult.lat,
+                                                                    lon = searchResult.lon
+                                                                ))
+                                                            }
+                                                        ) {
+                                                            Icon(
+                                                                painter = painterResource(id = R.drawable.icon_bookmark_remove_fill0_wght400),
+                                                                contentDescription = "Remove from favorite"
+                                                            )
+                                                        }
+                                                    } else {
+                                                        IconButton(
+                                                            onClick = {
+                                                                uiEvent(UiEvent.AddFavorite(
+                                                                    cityId = searchResult.id,
+                                                                    city = searchResult.name,
+                                                                    lat = searchResult.lat,
+                                                                    lon = searchResult.lon
+                                                                ))
+                                                            }
+                                                        ) {
+                                                            Icon(
+                                                                painter = painterResource(id = R.drawable.icon_bookmark_add_fill0_wght400),
+                                                                contentDescription = "Add to favorite"
+                                                            )
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }

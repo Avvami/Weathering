@@ -11,9 +11,9 @@ class LocalRepositoryImpl(
     private val preferencesDao: PreferencesDao,
     private val favoritesDao: FavoritesDao
 ): LocalRepository {
-    override suspend fun insertFavorite(favorite: FavoriteEntity) = favoritesDao.insertFavorite(favorite)
+    override suspend fun addFavorite(favorite: FavoriteEntity) = favoritesDao.addFavorite(favorite)
 
-    override suspend fun deleteFavorite(favorite: FavoriteEntity) = favoritesDao.deleteFavorite(favorite)
+    override suspend fun removeFavorite(favorite: FavoriteEntity) = favoritesDao.removeFavorite(favorite)
 
     override fun getFavorites(): Flow<List<FavoriteEntity>> = favoritesDao.getFavorites()
 
