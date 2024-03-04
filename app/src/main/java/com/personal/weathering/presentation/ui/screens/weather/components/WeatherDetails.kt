@@ -1,5 +1,10 @@
 package com.personal.weathering.presentation.ui.screens.weather.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -178,23 +183,33 @@ fun WeatherDetails(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            aqState().aqInfo?.let { aqInfo ->
-                Icon(
-                    painter = if (preferencesState.value.useUSaq) painterResource(id = aqInfo.currentAqData.usAqiType.iconSmallRes) else
-                        painterResource(id = aqInfo.currentAqData.europeanAqiType.iconSmallRes),
-                    contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
-                        stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
-                    tint = weatheringBlue,
-                    modifier = Modifier.size(16.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
-                        stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = weatheringBlue,
-                    modifier = Modifier.weight(weight = .5f, fill = false)
-                )
+            AnimatedVisibility(
+                visible = aqState().aqInfo != null,
+                enter = scaleIn() + fadeIn(),
+                exit = scaleOut() + fadeOut()
+            ) {
+                aqState().aqInfo?.let { aqInfo ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = if (preferencesState.value.useUSaq) painterResource(id = aqInfo.currentAqData.usAqiType.iconSmallRes) else
+                                painterResource(id = aqInfo.currentAqData.europeanAqiType.iconSmallRes),
+                            contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
+                                stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
+                            tint = weatheringBlue,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
+                                stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = weatheringBlue,
+                            modifier = Modifier.weight(weight = .5f, fill = false)
+                        )
+                    }
+                }
             }
             Box(
                 modifier = Modifier.size(48.dp),

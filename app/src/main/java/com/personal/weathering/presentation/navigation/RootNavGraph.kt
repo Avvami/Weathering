@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import com.personal.weathering.presentation.ui.screens.aq.AqScreen
 import com.personal.weathering.presentation.ui.screens.search.SearchScreen
 import com.personal.weathering.presentation.ui.screens.weather.WeatherScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
@@ -38,6 +40,7 @@ fun RootNavigationGraph(
                 favoritesState = mainViewModel.favoritesState.collectAsState(),
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
+                pullToRefreshState = mainViewModel::pullToRefreshState,
                 navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
                 navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
                 uiEvent = mainViewModel::uiEvent
@@ -49,9 +52,12 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
         ) {
             AqScreen(
+                currentCityState = mainViewModel.currentCityState.collectAsState(),
                 preferencesState = mainViewModel.preferencesState.collectAsState(),
                 aqState = mainViewModel::aqState,
-                navigateBack = { if (navController.canGoBack) navController.popBackStack() }
+                pullToRefreshState = mainViewModel::pullToRefreshState,
+                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
+                uiEvent = mainViewModel::uiEvent
             )
         }
         composable(

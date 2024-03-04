@@ -1,15 +1,17 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
@@ -23,18 +25,22 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
@@ -58,13 +64,21 @@ fun WeatherScreen(
     favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
     aqState: () -> AqState,
+    pullToRefreshState: () -> PullToRefreshState,
     navigateToAqScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
-    val weatherViewModel: WeatherViewModel = viewModel()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    if (pullToRefreshState().isRefreshing) {
+        LaunchedEffect(true) {
+            uiEvent(UiEvent.LoadWeatherInfo(currentCityState.value.lat, currentCityState.value.lon))
+        }
+    }
+    val scaleFraction = if (pullToRefreshState().isRefreshing) 1f else
+        LinearOutSlowInEasing.transform(pullToRefreshState().progress).coerceIn(0f, 1f)
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -109,18 +123,25 @@ fun WeatherScreen(
                 AnimatedVisibility(visible = weatherState().isLoading) {
                     ThinLinearProgressIndicator()
                 }
-                Box {
+                Box(
+                    modifier = if (weatherState().weatherInfo == null) {
+                        Modifier
+                            .fillMaxSize()
+                            .nestedScroll(pullToRefreshState().nestedScrollConnection)
+                            .verticalScroll(rememberScrollState())
+                    } else {
+                        Modifier.nestedScroll(pullToRefreshState().nestedScrollConnection)
+                    }
+                ) {
                     weatherState().error?.let { error ->
-                        Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = error,
                             style = MaterialTheme.typography.bodyLarge,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .align(Alignment.TopCenter)
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp, horizontal = 24.dp)
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
                     weatherState().weatherInfo?.let { weatherInfo ->
                         LazyColumn(
@@ -150,6 +171,12 @@ fun WeatherScreen(
                             }
                         }
                     }
+                    PullToRefreshContainer(
+                        modifier = Modifier.align(Alignment.TopCenter).graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+                        state = pullToRefreshState(),
+                        containerColor = weatheringDarkBlue,
+                        contentColor = weatheringBlue
+                    )
                 }
             }
         }

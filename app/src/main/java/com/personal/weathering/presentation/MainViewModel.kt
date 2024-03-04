@@ -1,5 +1,7 @@
 package com.personal.weathering.presentation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,12 +27,15 @@ import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 class MainViewModel(
     private val weatherRepository: WeatherRepository,
     private val aqRepository: AqRepository,
     private val locationTracker: LocationTracker,
     private val localRepository: LocalRepository
 ): ViewModel() {
+
+    var pullToRefreshState by mutableStateOf(PullToRefreshState(150f))
 
     var weatherState by mutableStateOf(WeatherState())
         private set
@@ -109,12 +114,12 @@ class MainViewModel(
             )
 
             var weatherInfo: WeatherInfo? = null
-            var error: String? = null
+            var weatherError: String? = null
 
             weatherRepository.getWeatherData(lat, lon).let { result ->
                 when (result) {
                     is Resource.Error -> {
-                        error = result.message
+                        weatherError = result.message
                     }
                     is Resource.Success -> {
                         weatherInfo = result.data
@@ -125,7 +130,33 @@ class MainViewModel(
             weatherState = weatherState.copy(
                 weatherInfo = weatherInfo,
                 isLoading = false,
-                error = error
+                error = weatherError
+            )
+            pullToRefreshState.endRefresh()
+
+            aqState = aqState.copy(
+                isLoading = true,
+                error = null
+            )
+
+            var aqInfo: AqInfo? = null
+            var aqError: String? = null
+
+            aqRepository.getAqData(lat, lon).let { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        aqError = result.message
+                    }
+                    is Resource.Success -> {
+                        aqInfo = result.data
+                    }
+                }
+            }
+
+            aqState = aqState.copy(
+                aqInfo = aqInfo,
+                isLoading = false,
+                error = aqError
             )
 
             locationTracker.getCurrentLocation()?.let {} ?: kotlin.run {}
@@ -158,6 +189,7 @@ class MainViewModel(
                 isLoading = false,
                 error = error
             )
+            pullToRefreshState.endRefresh()
         }
     }
 
@@ -165,7 +197,6 @@ class MainViewModel(
         when(event) {
             is UiEvent.LoadWeatherInfo -> {
                 loadWeatherInfo(event.lat, event.lon)
-                loadAqInfo(event.lat, event.lon)
             }
             is UiEvent.ShowMessageDialog -> {
                 messageDialogState = messageDialogState.copy(
@@ -211,6 +242,9 @@ class MainViewModel(
                 viewModelScope.launch {
                     localRepository.setUseUSaq(event.useUSaq)
                 }
+            }
+            is UiEvent.UpdateAqInfo -> {
+                loadAqInfo(event.lat, event.lon)
             }
         }
     }

@@ -23,4 +23,5 @@ sealed interface UiEvent {
     data class SetSpeedUnit(val useKmPerHour: Boolean): UiEvent
     data class SetPressureUnit(val useHpa: Boolean): UiEvent
     data class SetAqiUnit(val useUSaq: Boolean): UiEvent
+    data class UpdateAqInfo(val lat: Double, val lon: Double): UiEvent
 }
