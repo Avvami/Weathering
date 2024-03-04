@@ -86,6 +86,7 @@ fun WeatherScreen(
                 preferencesState = preferencesState,
                 favoritesState = favoritesState,
                 currentCityState = currentCityState,
+                weatherState = weatherState,
                 uiEvent = uiEvent
             )
         },
