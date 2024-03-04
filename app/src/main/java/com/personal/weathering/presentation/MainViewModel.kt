@@ -96,7 +96,7 @@ class MainViewModel(
         viewModelScope.launch {
             localRepository.getFavorites().collect { favoritesEntity ->
                 _favoritesState.value = favoritesEntity.map {
-                    FavoritesState(id = it.id, city = it.city, lat = it.lat, lon = it.lon)
+                    FavoritesState(it.id, it.cityId, it.city, it.lat, it.lon)
                 }
             }
         }
@@ -245,14 +245,14 @@ class MainViewModel(
             is UiEvent.AddFavorite -> {
                 viewModelScope.launch {
                     localRepository.addFavorite(
-                        FavoriteEntity(event.cityId, event.city, event.lat, event.lon)
+                        FavoriteEntity(cityId = event.cityId, city = event.city, lat = event.lat, lon = event.lon)
                     )
                 }
             }
             is UiEvent.RemoveFavorite -> {
                 viewModelScope.launch {
                     localRepository.removeFavorite(
-                        FavoriteEntity(event.cityId, event.city, event.lat, event.lon)
+                        FavoriteEntity(id = event.id, cityId = event.cityId, city = event.city, lat = event.lat, lon = event.lon)
                     )
                 }
             }

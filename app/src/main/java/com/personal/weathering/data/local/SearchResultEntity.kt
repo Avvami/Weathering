@@ -1,10 +1,11 @@
 package com.personal.weathering.data.local
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity
-data class FavoriteEntity(
+@Entity(indices = [Index(value = ["cityId"], unique = true)])
+data class SearchResultEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val cityId: Int,

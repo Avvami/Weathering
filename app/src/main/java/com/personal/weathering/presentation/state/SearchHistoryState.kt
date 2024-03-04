@@ -1,6 +1,6 @@
 package com.personal.weathering.presentation.state
 
-data class FavoritesState(
+data class SearchHistoryState(
     val id: Int,
     val cityId: Int,
     val city: String,

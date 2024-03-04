@@ -9,13 +9,14 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [PreferencesEntity::class, FavoriteEntity::class],
+    entities = [PreferencesEntity::class, FavoriteEntity::class, SearchResultEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract val preferencesDao: PreferencesDao
     abstract val favoritesDao: FavoritesDao
+    abstract val searchHistoryDao: SearchHistoryDao
 
     companion object {
         @Volatile

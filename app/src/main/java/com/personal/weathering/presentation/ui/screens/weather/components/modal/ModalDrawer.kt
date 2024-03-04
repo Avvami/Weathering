@@ -65,7 +65,7 @@ fun ModalDrawer(
             if (favoritesState.value.isNotEmpty()) {
                 items(
                     count = favoritesState.value.size,
-                    key = { favoritesState.value.reversed()[it].id }
+                    key = { favoritesState.value.reversed()[it].cityId }
                 ) { index ->
                     val favorite = favoritesState.value.reversed()[index]
                     Row(
@@ -76,7 +76,7 @@ fun ModalDrawer(
                             .border(width = 1.dp, color = weatheringDarkBlue, shape = MaterialTheme.shapes.large)
                             .clickable {
                                 uiEvent(UiEvent.SetCurrentCityState(
-                                    cityId = favorite.id,
+                                    cityId = favorite.cityId,
                                     city = favorite.city,
                                     lat = favorite.lat,
                                     lon = favorite.lon
@@ -95,7 +95,8 @@ fun ModalDrawer(
                         IconButton(
                             onClick = {
                                 uiEvent(UiEvent.RemoveFavorite(
-                                    cityId = favorite.id,
+                                    id = favorite.id,
+                                    cityId = favorite.cityId,
                                     city = favorite.city,
                                     lat = favorite.lat,
                                     lon = favorite.lon

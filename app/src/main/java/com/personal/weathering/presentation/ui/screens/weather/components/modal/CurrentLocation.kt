@@ -55,7 +55,7 @@ fun CurrentLocation(
                 modifier = Modifier.weight(weight = .8f, fill = false)
             ) {
                 Text(
-                    text = stringResource(id = R.string.current),
+                    text = stringResource(id = R.string.current_location),
                     style = MaterialTheme.typography.bodySmall,
                     color = weatheringBlue
                 )

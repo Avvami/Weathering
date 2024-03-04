@@ -81,7 +81,8 @@ class AppModuleImpl(private val appContext: Context): AppModule {
     override val localRepository: LocalRepository by lazy {
         LocalRepositoryImpl(
             preferencesDao = AppDatabase.getDatabase(appContext).preferencesDao,
-            favoritesDao = AppDatabase.getDatabase(appContext).favoritesDao
+            favoritesDao = AppDatabase.getDatabase(appContext).favoritesDao,
+            searchHistoryDao = AppDatabase.getDatabase(appContext).searchHistoryDao
         )
     }
 }

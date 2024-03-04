@@ -2,6 +2,7 @@ package com.personal.weathering.domain.repository
 
 import com.personal.weathering.data.local.FavoriteEntity
 import com.personal.weathering.data.local.PreferencesEntity
+import com.personal.weathering.data.local.SearchResultEntity
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
@@ -25,4 +26,10 @@ interface LocalRepository {
     suspend fun setUseHpa(useHpa: Boolean)
 
     suspend fun setUseUSaq(useUSaq: Boolean)
+
+    suspend fun addToHistory(searchResult: SearchResultEntity)
+
+    suspend fun removeFromHistory(searchResult: SearchResultEntity)
+
+    fun getSearchHistory(): Flow<List<SearchResultEntity>>
 }

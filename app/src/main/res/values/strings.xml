@@ -28,6 +28,8 @@
     <string name="nothing_found">Nothing found</string>
     <string name="sunrise">sunrise</string>
     <string name="sunset">sunset</string>
+    <string name="search_history">Search history</string>
+    <string name="empty">Empty</string>
 
     <!--AQI types-->
     <string name="good">Good</string>
@@ -99,7 +101,7 @@
     <string name="european_aqi">European AQI</string>
     <string name="us_aqi">U.S. AQI</string>
     <string name="my_cities">My cities</string>
-    <string name="current">Current</string>
+    <string name="current_location">Current location</string>
 
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.

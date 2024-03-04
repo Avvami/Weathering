@@ -25,5 +25,5 @@ sealed interface UiEvent {
     data class SetAqiUnit(val useUSaq: Boolean): UiEvent
     data class UpdateAqInfo(val lat: Double, val lon: Double): UiEvent
     data class AddFavorite(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
-    data class RemoveFavorite(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
+    data class RemoveFavorite(val id: Int, val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
 }
