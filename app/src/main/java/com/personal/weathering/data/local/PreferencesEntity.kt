@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class PreferencesEntity(
     @PrimaryKey val id: Int = 0,
+    val cityId: Int,
     val currentCity: String,
     val lat: Double,
     val lon: Double,

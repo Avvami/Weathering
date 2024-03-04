@@ -8,6 +8,7 @@ data class SearchDto(
 )
 
 data class SearchResultDto(
+    val id: Int,
     val name: String,
     @field:Json(name = "latitude")
     val lat: Double,

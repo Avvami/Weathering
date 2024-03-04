@@ -14,7 +14,7 @@ interface LocalRepository {
 
     fun getPreferences(): Flow<PreferencesEntity>
 
-    suspend fun setCurrentCity(city: String, lat: Double, lon: Double)
+    suspend fun setCurrentCity(cityId: Int, city: String, lat: Double, lon: Double)
 
     suspend fun setSearchLanguageCode(languageCode: String)
 

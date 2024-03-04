@@ -61,10 +61,11 @@ class MainViewModel(
     init {
         viewModelScope.launch {
             localRepository.getPreferences()
-                .distinctUntilChangedBy { Triple(it.lat, it.lon, it.currentCity) }
+                .distinctUntilChangedBy { listOf(it.cityId, it.lat, it.lon, it.currentCity) }
                 .collect { preferencesEntity ->
                     _currentCityState.update {
                         it.copy(
+                            cityId = preferencesEntity.cityId,
                             name = preferencesEntity.currentCity,
                             lat = preferencesEntity.lat,
                             lon = preferencesEntity.lon
@@ -77,13 +78,7 @@ class MainViewModel(
         viewModelScope.launch {
             localRepository.getPreferences()
                 .distinctUntilChangedBy {
-                    listOf(
-                        it.searchLanguageCode,
-                        it.useCelsius,
-                        it.useKmPerHour,
-                        it.useHpa,
-                        it.useUSaq
-                    )
+                    listOf(it.searchLanguageCode, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
                 }
                 .collect { preferencesEntity ->
                     _preferencesState.update {
@@ -215,7 +210,7 @@ class MainViewModel(
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
             is UiEvent.SetCurrentCityState -> {
                 viewModelScope.launch {
-                    localRepository.setCurrentCity(event.city, event.lat, event.lon)
+                    localRepository.setCurrentCity(event.cityId, event.city, event.lat, event.lon)
                 }
             }
             is UiEvent.SetSearchLanguage -> {

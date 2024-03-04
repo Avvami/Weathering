@@ -17,7 +17,7 @@ sealed interface UiEvent {
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
     data object CloseMessageDialog: UiEvent
-    data class SetCurrentCityState(val city: String, val lat: Double, val lon: Double): UiEvent
+    data class SetCurrentCityState(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
     data class SetSearchLanguage(val code: String): UiEvent
     data class SetTemperatureUnit(val useCelsius: Boolean): UiEvent
     data class SetSpeedUnit(val useKmPerHour: Boolean): UiEvent

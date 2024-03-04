@@ -13,6 +13,6 @@ fun SearchDto.toSearchInfo(): SearchInfo {
 
 fun SearchResultDto.toSearchResult(): SearchResult {
     return SearchResult(
-        name, lat, lon, country, countryCode, adminLevel
+        id, name, lat, lon, country, countryCode, adminLevel
     )
 }

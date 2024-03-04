@@ -35,6 +35,7 @@ abstract class AppDatabase: RoomDatabase() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 val defaultPreferences = ContentValues().apply {
+                    put("cityId", 2643743)
                     put("currentCity", "London")
                     put("lat", 51.50853)
                     put("lon", -0.12574)

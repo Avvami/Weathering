@@ -199,7 +199,7 @@ fun SearchScreen(
                                                 .clickable {
                                                     uiEvent(
                                                         UiEvent.SetCurrentCityState(
-                                                            searchResult.name, searchResult.lat, searchResult.lon
+                                                            searchResult.id, searchResult.name, searchResult.lat, searchResult.lon
                                                         )
                                                     )
                                                     navigateBack()
