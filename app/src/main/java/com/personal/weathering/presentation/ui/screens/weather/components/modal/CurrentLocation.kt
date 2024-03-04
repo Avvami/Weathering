@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -27,13 +29,15 @@ import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.theme.weatheringBlue
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
+import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import kotlin.math.roundToInt
 
 @Composable
 fun CurrentLocation(
     currentCityState: State<CurrentCityState>,
     preferencesState: State<PreferencesState>,
-    weatherState: () -> WeatherState
+    weatherState: () -> WeatherState,
+    setUseLocation: (useLocation: Boolean) -> Unit
 ) {
     Column {
         Spacer(modifier = Modifier.height(16.dp))
@@ -41,7 +45,30 @@ fun CurrentLocation(
             text = stringResource(id = R.string.my_cities),
             style = MaterialTheme.typography.titleMedium
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = stringResource(id = R.string.use_my_location),
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Switch(
+                checked = preferencesState.value.useLocation,
+                onCheckedChange = {
+                    setUseLocation(!preferencesState.value.useLocation)
+                },
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = weatheringBlue,
+                    checkedTrackColor = weatheringDarkBlue,
+                    uncheckedThumbColor = weatheringDarkBlue70p,
+                    uncheckedTrackColor = weatheringBlue,
+                    uncheckedBorderColor = weatheringDarkBlue70p
+                )
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()

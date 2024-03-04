@@ -19,6 +19,8 @@ interface LocalRepository {
 
     suspend fun setSearchLanguageCode(languageCode: String)
 
+    suspend fun setUseLocation(useLocation: Boolean)
+
     suspend fun setUseCelsius(useCelsius: Boolean)
 
     suspend fun setUseKmPerHour(useKmPerHour: Boolean)

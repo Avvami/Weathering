@@ -59,7 +59,10 @@ fun ModalDrawer(
                 CurrentLocation(
                     currentCityState = currentCityState,
                     preferencesState = preferencesState,
-                    weatherState = weatherState
+                    weatherState = weatherState,
+                    setUseLocation = { useLocation ->
+                        uiEvent(UiEvent.SetUseLocation(useLocation))
+                    }
                 )
             }
             if (favoritesState.value.isNotEmpty()) {

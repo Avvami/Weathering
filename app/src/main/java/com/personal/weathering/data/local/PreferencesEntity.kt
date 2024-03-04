@@ -11,6 +11,7 @@ data class PreferencesEntity(
     val lat: Double,
     val lon: Double,
     val searchLanguageCode: String,
+    val useLocation: Boolean,
     val useCelsius: Boolean,
     val useKmPerHour: Boolean,
     val useHpa: Boolean,
