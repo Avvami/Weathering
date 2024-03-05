@@ -16,8 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.domain.models.DropdownItem
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 
 @Composable
 fun CustomDropdownMenu(
@@ -29,7 +28,7 @@ fun CustomDropdownMenu(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
-            modifier = Modifier.background(weatheringDarkBlue)
+            modifier = Modifier.background(ExtendedTheme.colorScheme.surfaceContainer)
         ) {
             dropDownItems.forEachIndexed { index, dropDownItem ->
                 dropDownItem?.let { item ->
@@ -43,12 +42,12 @@ fun CustomDropdownMenu(
                         },
                         text = { Text(text = stringResource(id = item.textRes)) },
                         onClick = { item.onItemClick() },
-                        colors = MenuDefaults.itemColors(textColor = weatheringBlue, leadingIconColor = weatheringBlue)
+                        colors = MenuDefaults.itemColors(textColor = MaterialTheme.colorScheme.onSurface, leadingIconColor = MaterialTheme.colorScheme.onSurface)
                     )
                     if (index != dropDownItems.lastIndex) {
                         HorizontalDivider(
                             modifier = if (item.iconRes != null) Modifier.padding(start = 48.dp, end = 8.dp) else Modifier,
-                            color = weatheringBlue
+                            color = MaterialTheme.colorScheme.outline
                         )
                     }
                 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.SearchState
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 
 @Composable
@@ -48,33 +49,31 @@ fun SearchResults(
 ) {
     Box {
         searchState().error?.let { error ->
-            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = error,
                 style = MaterialTheme.typography.bodyLarge,
-                color = weatheringDarkBlue70p,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
         }
         searchState().searchInfo?.let { searchInfo ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
+                contentPadding = PaddingValues(top = 12.dp, bottom = 16.dp)
             ) {
                 if (searchInfo.searchResults == null) {
                     item {
                         Text(
                             text = stringResource(id = R.string.nothing_found),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = weatheringDarkBlue70p,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 24.dp, vertical = 12.dp)
+                                .padding(horizontal = 16.dp, vertical = 12.dp)
                         )
                     }
                 } else {
@@ -87,7 +86,7 @@ fun SearchResults(
                                     addToHistory(searchResult.cityId, searchResult.name, searchResult.lat, searchResult.lon)
                                     navigateBack()
                                 }
-                                .padding(start = 24.dp, top = 2.dp, end = 12.dp, bottom = 2.dp),
+                                .padding(start = 16.dp, top = 2.dp, end = 4.dp, bottom = 2.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -105,7 +104,7 @@ fun SearchResults(
                                     Text(
                                         text = searchResult.countryCode,
                                         style = MaterialTheme.typography.labelLarge,
-                                        color = weatheringDarkBlue70p
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 AnimatedContent(

@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.SearchHistoryState
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,16 +49,16 @@ fun SearchHistory(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
+        contentPadding = PaddingValues(top = 12.dp, bottom = 16.dp)
     ) {
         item {
             Text(
                 text = stringResource(id = R.string.search_history),
                 style = MaterialTheme.typography.titleLarge,
-                color = weatheringDarkBlue70p,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
             )
         }
         if (searchHistoryState.value.isEmpty()) {
@@ -67,11 +66,11 @@ fun SearchHistory(
                 Text(
                     text = stringResource(id = R.string.empty),
                     style = MaterialTheme.typography.bodyLarge,
-                    color = weatheringDarkBlue70p,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 12.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
                 )
             }
         } else {
@@ -88,7 +87,7 @@ fun SearchHistory(
                             addToHistory(searchResult.cityId, searchResult.city, searchResult.lat, searchResult.lon)
                             navigateBack()
                         }
-                        .padding(start = 24.dp, top = 2.dp, end = 12.dp, bottom = 2.dp)
+                        .padding(start = 16.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
                         .animateItemPlacement(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
