@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
 @Composable
 fun AqDetail(
@@ -33,12 +34,14 @@ fun AqDetail(
             Text(
                 text = "%.1f".format(data),
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = onSurfaceLight
             )
             Spacer(modifier = Modifier.height(4.dp))
             Icon(
                 painter = painterResource(id = iconRes),
                 contentDescription = "aqiDetail",
+                tint = onSurfaceLight,
                 modifier = Modifier.height(20.dp)
             )
         }
@@ -46,6 +49,7 @@ fun AqDetail(
             Icon(
                 painter = painterResource(id = R.drawable.icon_fiber_manual_record_fill1_wght400),
                 contentDescription = "Divider",
+                tint = onSurfaceLight,
                 modifier = Modifier.padding(horizontal = 12.dp).size(8.dp)
             )
         }

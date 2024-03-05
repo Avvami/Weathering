@@ -29,6 +29,7 @@ import com.personal.weathering.R
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.util.timeFormat
 import com.personal.weathering.presentation.state.PreferencesState
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -42,11 +43,12 @@ fun CurrentAqInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqi.toString() else aqInfo().currentAqData.europeanAqi.toString(),
-                fontSize = 82.sp
+                fontSize = 82.sp,
+                color = onSurfaceLight
             )
             Column(
                 horizontalAlignment = Alignment.End
@@ -54,7 +56,8 @@ fun CurrentAqInfo(
                 Text(
                     text = stringResource(id = R.string.today_time, timeFormat(time = aqInfo().currentAqData.time)),
                     style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = onSurfaceLight
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
@@ -65,7 +68,8 @@ fun CurrentAqInfo(
                             stringResource(id = aqInfo().currentAqData.europeanAqiType.aqDescRes)
                     ),
                     style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = onSurfaceLight
                 )
             }
         }
@@ -75,6 +79,7 @@ fun CurrentAqInfo(
                 painterResource(id = aqInfo().currentAqData.europeanAqiType.iconLargeRes),
             contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo().currentAqData.usAqiType.aqDescRes) else
                 stringResource(id = aqInfo().currentAqData.europeanAqiType.aqDescRes),
+            tint = onSurfaceLight,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .size(200.dp)
@@ -86,7 +91,7 @@ fun CurrentAqInfo(
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AqDetail(aqInfo().currentAqData.particulateMatter25, R.drawable.icon_pm2_5)

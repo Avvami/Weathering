@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,11 +27,10 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AqThreeDayForecast(
     preferencesState: State<PreferencesState>,
@@ -38,8 +39,11 @@ fun AqThreeDayForecast(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 16.dp)
     ) {
+        BottomSheetDefaults.DragHandle(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
         Text(
             text = stringResource(id = R.string.three_day_forecast),
             style = MaterialTheme.typography.titleLarge,
@@ -55,7 +59,7 @@ fun AqThreeDayForecast(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .background(weatheringDarkBlue3p)
+                        .background(ExtendedTheme.colorScheme.surfaceContainerLow)
                         .padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
@@ -64,7 +68,7 @@ fun AqThreeDayForecast(
                         Text(
                             text = hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("d MMMM")),
                             style = MaterialTheme.typography.labelLarge,
-                            color = weatheringDarkBlue70p
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = when (index) {
@@ -72,8 +76,7 @@ fun AqThreeDayForecast(
                                 1 -> stringResource(id = R.string.tomorrow)
                                 else -> hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("EEEE"))
                             },
-                            style = MaterialTheme.typography.titleMedium,
-                            color = weatheringDarkBlue
+                            style = MaterialTheme.typography.titleMedium
                         )
                     }
                     Row(
@@ -107,15 +110,14 @@ fun AqThreeDayForecast(
                                 Text(
                                     text = stringResource(id = R.string.max),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = weatheringDarkBlue70p
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Text(
                                 text = if (preferencesState.value.useUSaq) hourlyAqData.maxBy { it.usAqi }.usAqi.toString() else
                                     hourlyAqData.maxBy { it.europeanAqi }.europeanAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
-                                color = weatheringDarkBlue
+                                fontWeight = FontWeight.Medium
                             )
                         }
                         Column(
@@ -125,7 +127,7 @@ fun AqThreeDayForecast(
                                 Text(
                                     text = stringResource(id = R.string.min),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = weatheringDarkBlue70p
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Text(
@@ -133,7 +135,7 @@ fun AqThreeDayForecast(
                                     hourlyAqData.minBy { it.europeanAqi }.europeanAqi.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
-                                color = weatheringDarkBlue70p
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }

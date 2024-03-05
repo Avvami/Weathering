@@ -6,7 +6,6 @@ val weatheringDarkBlue = Color(0xFF191C1E)
 val weatheringDarkBlue70p = Color(0xFF191C1E).copy(alpha = .7f)
 val weatheringDarkBlue3p = Color(0xFF191C1E).copy(alpha = .03f)
 
-
 val onSurfaceLight70p = Color(0xFF171C1F).copy(alpha = .7f)
 val surfaceLight30p = Color(0xFFF6FAFE).copy(alpha = .3f)
 
@@ -38,6 +37,19 @@ val thunderstormPrimary = Color(0xFFCFD9DF)
 val thunderstormSecondary = Color(0xFF385F7E)
 val thunderstormWithHailPrimary = Color(0xFFCFD9DF)
 val thunderstormWithHailSecondary = Color(0xFF4D6777)
+
+val aqiGoodPrimary = Color(0xFF98FB98)
+val aqiGoodSecondary = Color(0xFF90EE90)
+val aqiModeratePrimary = Color(0xFFFDFD96)
+val aqiModerateSecondary = Color(0xFFFFD580)
+val aqiSensitivePrimary = Color(0xFFFFDAB9)
+val aqiSensitiveSecondary = Color(0xFFFFB347)
+val aqiUnhealthyPrimary = Color(0xFFFFB6C1)
+val aqiUnhealthySecondary = Color(0xFFF08080)
+val aqiVeryUnhealthyPrimary = Color(0xFFE6E6FA)
+val aqiVeryUnhealthySecondary = Color(0xFFE0B0FF)
+val aqiHazardousPrimary = Color(0xFFD3D3D3)
+val aqiHazardousSecondary = Color(0xFFC0C0C0)
 
 val primaryLight = Color(0xFF1A6585)
 val onPrimaryLight = Color(0xFFFFFFFF)

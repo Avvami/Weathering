@@ -64,6 +64,7 @@ import com.personal.weathering.presentation.ui.screens.weather.components.Weathe
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import kotlinx.coroutines.launch
 
@@ -150,7 +151,7 @@ fun WeatherScreen(
                         Text(
                             text = error,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = onSurfaceLight.copy(alpha = .7f),
+                            color = onSurfaceLight70p,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
