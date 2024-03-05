@@ -6,6 +6,10 @@ val weatheringDarkBlue = Color(0xFF191C1E)
 val weatheringDarkBlue70p = Color(0xFF191C1E).copy(alpha = .7f)
 val weatheringDarkBlue3p = Color(0xFF191C1E).copy(alpha = .03f)
 
+
+val onSurfaceLight70p = Color(0xFF171C1F).copy(alpha = .7f)
+val surfaceLight30p = Color(0xFFF6FAFE).copy(alpha = .3f)
+
 val clearDaySkyPrimary = Color(0xFFFFF2E2)
 val clearDaySkySecondary = Color(0xFFA2D2FF)
 val clearNightSkyPrimary = Color(0xFFC6DDFF)

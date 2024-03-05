@@ -32,7 +32,8 @@ import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.domain.util.timeFormat
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -48,7 +49,7 @@ fun WeatherTemperatureInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Column {
                 Text(
@@ -57,7 +58,8 @@ fun WeatherTemperatureInfo(
                         if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
                             UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
                     ),
-                    fontSize = 82.sp
+                    fontSize = 82.sp,
+                    color = onSurfaceLight
                 )
                 Text(
                     text = stringResource(
@@ -66,7 +68,7 @@ fun WeatherTemperatureInfo(
                                 UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
                     ),
                     style = MaterialTheme.typography.titleMedium,
-                    color = weatheringDarkBlue70p
+                    color = onSurfaceLight70p
                 )
             }
             Column(
@@ -75,13 +77,15 @@ fun WeatherTemperatureInfo(
                 Text(
                     text = stringResource(id = R.string.today_time, timeFormat(time = weatherInfo().currentWeatherData.time)),
                     style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = onSurfaceLight
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
                     style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = onSurfaceLight
                 )
             }
         }
@@ -89,10 +93,11 @@ fun WeatherTemperatureInfo(
         Icon(
             painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconLargeRes),
             contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
+            tint = onSurfaceLight,
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .size(200.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally),
         )
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
@@ -101,7 +106,7 @@ fun WeatherTemperatureInfo(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .height(intrinsicSize = IntrinsicSize.Max)
-                    .padding(horizontal = 24.dp),
+                    .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 weatherInfo().twentyFourHoursWeatherData.forEachIndexed { index, weatherData ->
@@ -117,13 +122,13 @@ fun WeatherTemperatureInfo(
                                 else -> timeFormat(time = weatherData.time)
                             },
                             style = MaterialTheme.typography.bodyMedium,
-                            color = weatheringDarkBlue70p
+                            color = onSurfaceLight70p
                         )
                         if (weatherData.time.hour == 0) {
                             Text(
                                 text = weatherData.time.format(DateTimeFormatter.ofPattern("dd MMM")),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = weatheringDarkBlue70p
+                                color = onSurfaceLight70p
                             )
                         }
                         Icon(
@@ -136,7 +141,8 @@ fun WeatherTemperatureInfo(
                                 weatherData.sunrise != null -> stringResource(id = R.string.sunrise)
                                 weatherData.sunset != null -> stringResource(id = R.string.sunset)
                                 else -> stringResource(id = weatherData.weatherType.weatherDescRes)
-                            }
+                            },
+                            tint = onSurfaceLight
                         )
                         Text(
                             text = when {
@@ -148,13 +154,15 @@ fun WeatherTemperatureInfo(
                                         UnitsConverter.toFahrenheit(weatherData.temperature).roundToInt()
                                 )
                             },
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleMedium,
+                            color = onSurfaceLight
                         )
                     }
                     if (index != weatherInfo().twentyFourHoursWeatherData.lastIndex) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_fiber_manual_record_fill1_wght400),
                             contentDescription = "Divider",
+                            tint = onSurfaceLight,
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
                                 .size(8.dp)

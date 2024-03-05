@@ -37,8 +37,8 @@ import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
+import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
 @Composable
 fun WeatherDetails(
@@ -51,9 +51,9 @@ fun WeatherDetails(
         modifier = Modifier
             .fillMaxWidth()
             .height(intrinsicSize = IntrinsicSize.Min)
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 16.dp)
             .clip(MaterialTheme.shapes.large)
-            .background(weatheringDarkBlue)
+            .background(surfaceLight30p)
             .padding(horizontal = 4.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -64,7 +64,7 @@ fun WeatherDetails(
             Icon(
                 painter = painterResource(id = R.drawable.icon_air_fill0_wght400),
                 contentDescription = "Air",
-                tint = weatheringBlue,
+                tint = onSurfaceLight,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -75,7 +75,7 @@ fun WeatherDetails(
                         UnitsConverter.toMetersPerSecond(weatherInfo().currentWeatherData.windSpeed)
                 ),
                 style = MaterialTheme.typography.titleMedium,
-                color = weatheringBlue,
+                color = onSurfaceLight,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -86,12 +86,12 @@ fun WeatherDetails(
                 Text(
                     text = stringResource(id = R.string.wind),
                     style = MaterialTheme.typography.bodySmall,
-                    color = weatheringBlue
+                    color = onSurfaceLight
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
                     contentDescription = "Direction",
-                    tint = weatheringBlue,
+                    tint = onSurfaceLight,
                     modifier = Modifier
                         .size(12.dp)
                         .rotate(degrees = (weatherInfo().currentWeatherData.windDirection + 180) % 360)
@@ -99,11 +99,11 @@ fun WeatherDetails(
                 Text(
                     text = weatherInfo().currentWeatherData.windDirectionType.direction,
                     style = MaterialTheme.typography.bodySmall,
-                    color = weatheringBlue
+                    color = onSurfaceLight
                 )
             }
         }
-        VerticalDivider(color = weatheringBlue)
+        VerticalDivider(color = onSurfaceLight)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
@@ -111,7 +111,7 @@ fun WeatherDetails(
             Icon(
                 painter = painterResource(id = R.drawable.icon_thermostat_fill1_wght400),
                 contentDescription = "Pressure",
-                tint = weatheringBlue,
+                tint = onSurfaceLight,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -122,17 +122,17 @@ fun WeatherDetails(
                         UnitsConverter.toMmHg(weatherInfo().currentWeatherData.pressure)
                 ),
                 style = MaterialTheme.typography.titleMedium,
-                color = weatheringBlue,
+                color = onSurfaceLight,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(id = R.string.pressure),
                 style = MaterialTheme.typography.bodySmall,
-                color = weatheringBlue
+                color = onSurfaceLight
             )
         }
-        VerticalDivider(color = weatheringBlue)
+        VerticalDivider(color = onSurfaceLight)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
@@ -140,20 +140,20 @@ fun WeatherDetails(
             Icon(
                 painter = painterResource(id = weatherInfo().currentWeatherData.humidityType.iconRes),
                 contentDescription = weatherInfo().currentWeatherData.humidityType.iconDesc,
-                tint = weatheringBlue,
+                tint = onSurfaceLight,
                 modifier = Modifier.size(32.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.percent, weatherInfo().currentWeatherData.humidity),
                 style = MaterialTheme.typography.titleMedium,
-                color = weatheringBlue
+                color = onSurfaceLight
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(id = R.string.humidity),
                 style = MaterialTheme.typography.bodySmall,
-                color = weatheringBlue
+                color = onSurfaceLight
             )
         }
     }
@@ -161,10 +161,10 @@ fun WeatherDetails(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 16.dp)
             .clip(MaterialTheme.shapes.large)
             .clickable { navigateToAqScreen() }
-            .background(weatheringDarkBlue)
+            .background(surfaceLight30p)
             .padding(
                 start = 12.dp,
                 top = 4.dp,
@@ -177,7 +177,7 @@ fun WeatherDetails(
         Icon(
             painter = painterResource(id = R.drawable.icon_aq_fill0_wght400),
             contentDescription = "AQ",
-            tint = weatheringBlue,
+            tint = onSurfaceLight,
             modifier = Modifier.size(36.dp)
         )
         Row(
@@ -197,7 +197,7 @@ fun WeatherDetails(
                                 painterResource(id = aqInfo.currentAqData.europeanAqiType.iconSmallRes),
                             contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
                                 stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
-                            tint = weatheringBlue,
+                            tint = onSurfaceLight,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
@@ -205,7 +205,7 @@ fun WeatherDetails(
                             text = if (preferencesState.value.useUSaq) stringResource(id = aqInfo.currentAqData.usAqiType.aqDescRes) else
                                 stringResource(id = aqInfo.currentAqData.europeanAqiType.aqDescRes),
                             style = MaterialTheme.typography.titleSmall,
-                            color = weatheringBlue,
+                            color = onSurfaceLight,
                             modifier = Modifier.weight(weight = .5f, fill = false)
                         )
                     }
@@ -218,7 +218,7 @@ fun WeatherDetails(
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_right_alt_fill0_wght400),
                     contentDescription = "Arrow right",
-                    tint = weatheringBlue
+                    tint = onSurfaceLight
                 )
             }
         }

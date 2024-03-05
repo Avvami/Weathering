@@ -2,15 +2,16 @@ package com.personal.weathering.presentation.ui.screens.weather
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
@@ -34,7 +35,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RadialGradientShader
+import androidx.compose.ui.graphics.Shader
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -52,13 +58,13 @@ import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
-import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
+import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,8 +120,8 @@ fun WeatherScreen(
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
-                        navigationIconContentColor = weatheringDarkBlue,
-                        titleContentColor = weatheringDarkBlue
+                        navigationIconContentColor = onSurfaceLight,
+                        titleContentColor = onSurfaceLight
                     ),
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
@@ -126,90 +132,106 @@ fun WeatherScreen(
                         IconButton(onClick = navigateToSearchScreen) {
                             Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search", tint = weatheringDarkBlue)
                         }
-                    },
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    }
                 )
             },
-            containerColor = weatheringBlue,
-            contentColor = weatheringDarkBlue
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface
         ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding)
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = innerPadding.calculateBottomPadding())
+                    .nestedScroll(pullToRefreshState().nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
             ) {
-                AnimatedVisibility(visible = weatherState().isLoading) {
-                    ThinLinearProgressIndicator()
-                }
-                Box(
-                    modifier = if (weatherState().weatherInfo == null) {
-                        Modifier
-                            .fillMaxSize()
-                            .nestedScroll(pullToRefreshState().nestedScrollConnection)
-                            .verticalScroll(rememberScrollState())
-                    } else {
-                        Modifier.nestedScroll(pullToRefreshState().nestedScrollConnection)
-                    }
-                ) {
+                Column {
                     weatherState().error?.let { error ->
                         Text(
                             text = error,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = weatheringDarkBlue70p,
+                            color = onSurfaceLight.copy(alpha = .7f),
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(innerPadding)
                                 .padding(vertical = 16.dp, horizontal = 24.dp)
                         )
                     }
                     weatherState().weatherInfo?.let { weatherInfo ->
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(top = 16.dp, bottom = 24.dp),
-                            verticalArrangement = Arrangement.spacedBy(24.dp)
-                        ) {
-                            item {
-                                WeatherTemperatureInfo(
-                                    preferencesState = preferencesState,
-                                    weatherInfo = { weatherInfo }
-                                )
-                            }
-                            item {
-                                WeatherDetails(
-                                    preferencesState = preferencesState,
-                                    weatherInfo = { weatherInfo },
-                                    aqState = aqState,
-                                    navigateToAqScreen = navigateToAqScreen
-                                )
-                            }
-                            item {
-                                WeatherWeeklyForecast(
-                                    preferencesState = preferencesState,
-                                    weatherInfo = { weatherInfo }
-                                )
-                            }
-                            item {
-                                Text(
-                                    text = stringResource(
-                                        id = R.string.app_version,
-                                        BuildConfig.VERSION_NAME,
-                                        BuildConfig.VERSION_CODE
+                        val radialGradient = object : ShaderBrush() {
+                            override fun createShader(size: Size): Shader {
+                                val biggerDimension = maxOf(size.height, size.width)
+                                return RadialGradientShader(
+                                    colors = listOf(
+                                        weatherInfo.currentWeatherData.weatherType.gradientPrimary,
+                                        weatherInfo.currentWeatherData.weatherType.gradientSecondary
                                     ),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = weatheringDarkBlue70p,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 24.dp)
+                                    center = Offset(size.width, 0f),
+                                    radius = biggerDimension
                                 )
                             }
                         }
+                        Column(
+                            modifier = Modifier
+                                .background(
+                                    brush = radialGradient,
+                                    shape = RoundedCornerShape(
+                                        bottomStart = 28.dp,
+                                        bottomEnd = 28.dp
+                                    )
+                                )
+                                .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
+                        ) {
+                            WeatherTemperatureInfo(
+                                preferencesState = preferencesState,
+                                weatherInfo = { weatherInfo }
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            WeatherDetails(
+                                preferencesState = preferencesState,
+                                weatherInfo = { weatherInfo },
+                                aqState = aqState,
+                                navigateToAqScreen = navigateToAqScreen
+                            )
+                        }
+                        Column {
+                            WeatherWeeklyForecast(
+                                preferencesState = preferencesState,
+                                weatherInfo = { weatherInfo }
+                            )
+                            Text(
+                                text = stringResource(
+                                    id = R.string.app_version,
+                                    BuildConfig.VERSION_NAME,
+                                    BuildConfig.VERSION_CODE
+                                ),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.outline,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                            )
+                        }
                     }
-                    PullToRefreshContainer(
-                        modifier = Modifier.align(Alignment.TopCenter).graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
-                        state = pullToRefreshState(),
-                        containerColor = weatheringDarkBlue,
-                        contentColor = weatheringBlue
-                    )
                 }
+                AnimatedVisibility(
+                    modifier = Modifier
+                        .padding(top = innerPadding.calculateTopPadding()),
+                    visible = weatherState().isLoading
+                ) {
+                    ThinLinearProgressIndicator()
+                }
+                PullToRefreshContainer(
+                    modifier = Modifier
+                        .padding(top = innerPadding.calculateTopPadding())
+                        .align(Alignment.TopCenter)
+                        .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
+                    state = pullToRefreshState(),
+                    containerColor = ExtendedTheme.colorScheme.surfaceContainerLow,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }

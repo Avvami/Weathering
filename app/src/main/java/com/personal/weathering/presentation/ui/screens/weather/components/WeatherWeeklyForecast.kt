@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,12 +27,11 @@ import com.personal.weathering.R
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue3p
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherWeeklyForecast(
     preferencesState: State<PreferencesState>,
@@ -39,8 +40,11 @@ fun WeatherWeeklyForecast(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp)
+            .padding(horizontal = 16.dp)
     ) {
+        BottomSheetDefaults.DragHandle(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
         Text(
             text = stringResource(id = R.string.weekly_forecast),
             style = MaterialTheme.typography.titleLarge,
@@ -56,7 +60,7 @@ fun WeatherWeeklyForecast(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .background(weatheringDarkBlue3p)
+                        .background(ExtendedTheme.colorScheme.surfaceContainerLow)
                         .padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
@@ -65,7 +69,7 @@ fun WeatherWeeklyForecast(
                         Text(
                             text = weatherData.time.format(DateTimeFormatter.ofPattern("d MMMM")),
                             style = MaterialTheme.typography.labelLarge,
-                            color = weatheringDarkBlue70p
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = when (index) {
@@ -73,8 +77,7 @@ fun WeatherWeeklyForecast(
                                 1 -> stringResource(id = R.string.tomorrow)
                                 else -> weatherData.time.format(DateTimeFormatter.ofPattern("EEEE"))
                             },
-                            style = MaterialTheme.typography.titleMedium,
-                            color = weatheringDarkBlue
+                            style = MaterialTheme.typography.titleMedium
                         )
                     }
                     Row(
@@ -84,7 +87,6 @@ fun WeatherWeeklyForecast(
                         Icon(
                             painter = painterResource(id = weatherData.weatherType.iconSmallRes),
                             contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes),
-                            tint = weatheringDarkBlue,
                             modifier = Modifier.size(28.dp)
                         )
                         Column(
@@ -94,7 +96,7 @@ fun WeatherWeeklyForecast(
                                 Text(
                                     text = stringResource(id = R.string.max),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = weatheringDarkBlue70p
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Text(
@@ -104,8 +106,7 @@ fun WeatherWeeklyForecast(
                                         UnitsConverter.toFahrenheit(weatherData.temperatureMax).roundToInt()
                                 ),
                                 style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
-                                color = weatheringDarkBlue
+                                fontWeight = FontWeight.Medium
                             )
                         }
                         Column(
@@ -115,7 +116,7 @@ fun WeatherWeeklyForecast(
                                 Text(
                                     text = stringResource(id = R.string.min),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = weatheringDarkBlue70p
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                             Text(
@@ -126,7 +127,7 @@ fun WeatherWeeklyForecast(
                                 ),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
-                                color = weatheringDarkBlue70p
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
