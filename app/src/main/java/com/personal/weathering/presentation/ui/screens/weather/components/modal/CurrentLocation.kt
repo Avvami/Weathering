@@ -27,9 +27,6 @@ import com.personal.weathering.domain.util.UnitsConverter
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
 import kotlin.math.roundToInt
 
 @Composable
@@ -46,8 +43,7 @@ fun CurrentLocation(
             style = MaterialTheme.typography.titleMedium
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -61,11 +57,11 @@ fun CurrentLocation(
                     setUseLocation(!preferencesState.value.useLocation)
                 },
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = weatheringBlue,
-                    checkedTrackColor = weatheringDarkBlue,
-                    uncheckedThumbColor = weatheringDarkBlue70p,
-                    uncheckedTrackColor = weatheringBlue,
-                    uncheckedBorderColor = weatheringDarkBlue70p
+                    checkedThumbColor = MaterialTheme.colorScheme.surface,
+                    checkedTrackColor = MaterialTheme.colorScheme.onSurface,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surface,
+                    uncheckedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }
@@ -73,7 +69,7 @@ fun CurrentLocation(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.large)
-                .background(weatheringDarkBlue)
+                .background(MaterialTheme.colorScheme.onSurface)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -84,12 +80,12 @@ fun CurrentLocation(
                 Text(
                     text = stringResource(id = R.string.current_location),
                     style = MaterialTheme.typography.bodySmall,
-                    color = weatheringBlue
+                    color = MaterialTheme.colorScheme.surface
                 )
                 Text(
                     text = currentCityState.value.name,
                     style = MaterialTheme.typography.titleMedium,
-                    color = weatheringBlue
+                    color = MaterialTheme.colorScheme.surface
                 )
             }
             weatherState().weatherInfo?.let { weatherInfo ->
@@ -100,7 +96,7 @@ fun CurrentLocation(
                     Icon(
                         painter = painterResource(id = weatherInfo.currentWeatherData.weatherType.iconSmallRes),
                         contentDescription = stringResource(id = weatherInfo.currentWeatherData.weatherType.weatherDescRes),
-                        tint = weatheringBlue,
+                        tint = MaterialTheme.colorScheme.surface,
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
@@ -111,7 +107,7 @@ fun CurrentLocation(
                                     .roundToInt()
                         ),
                         style = MaterialTheme.typography.titleMedium,
-                        color = weatheringBlue
+                        color = MaterialTheme.colorScheme.surface
                     )
                 }
             }

@@ -28,8 +28,6 @@ import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -42,8 +40,8 @@ fun ModalDrawer(
     closeDrawer: () -> Unit
 ) {
     ModalDrawerSheet(
-        drawerContentColor = weatheringDarkBlue,
-        drawerContainerColor = weatheringBlue
+        drawerContentColor = MaterialTheme.colorScheme.onSurface,
+        drawerContainerColor = MaterialTheme.colorScheme.surface
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -76,7 +74,7 @@ fun ModalDrawer(
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .clip(MaterialTheme.shapes.large)
-                            .border(width = 1.dp, color = weatheringDarkBlue, shape = MaterialTheme.shapes.large)
+                            .border(width = 1.dp, color = MaterialTheme.colorScheme.onSurface, shape = MaterialTheme.shapes.large)
                             .clickable {
                                 uiEvent(UiEvent.SetCurrentCityState(
                                     cityId = favorite.cityId,

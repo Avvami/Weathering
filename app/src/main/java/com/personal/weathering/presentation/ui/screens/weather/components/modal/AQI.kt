@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.theme.weatheringBlue
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,12 +40,12 @@ fun AQI(
                 shape = RoundedCornerShape(topStart = 28.dp, bottomStart = 28.dp),
                 label = { Text(text = stringResource(id = R.string.european_aqi)) },
                 colors = SegmentedButtonDefaults.colors(
-                    activeContentColor = weatheringBlue,
-                    activeContainerColor = weatheringDarkBlue,
-                    activeBorderColor = weatheringDarkBlue,
-                    inactiveContentColor = weatheringDarkBlue,
+                    activeContentColor = MaterialTheme.colorScheme.surface,
+                    activeContainerColor = MaterialTheme.colorScheme.onSurface,
+                    activeBorderColor = MaterialTheme.colorScheme.onSurface,
+                    inactiveContentColor = MaterialTheme.colorScheme.onSurface,
                     inactiveContainerColor = Color.Transparent,
-                    inactiveBorderColor = weatheringDarkBlue
+                    inactiveBorderColor = MaterialTheme.colorScheme.onSurface
                 ),
                 icon = {}
             )
@@ -57,12 +55,12 @@ fun AQI(
                 shape = RoundedCornerShape(topEnd = 28.dp, bottomEnd = 28.dp),
                 label = { Text(text = stringResource(id = R.string.us_aqi)) },
                 colors = SegmentedButtonDefaults.colors(
-                    activeContentColor = weatheringBlue,
-                    activeContainerColor = weatheringDarkBlue,
-                    activeBorderColor = weatheringDarkBlue,
-                    inactiveContentColor = weatheringDarkBlue,
+                    activeContentColor = MaterialTheme.colorScheme.surface,
+                    activeContainerColor = MaterialTheme.colorScheme.onSurface,
+                    activeBorderColor = MaterialTheme.colorScheme.onSurface,
+                    inactiveContentColor = MaterialTheme.colorScheme.onSurface,
                     inactiveContainerColor = Color.Transparent,
-                    inactiveBorderColor = weatheringDarkBlue
+                    inactiveBorderColor = MaterialTheme.colorScheme.onSurface
                 ),
                 icon = {}
             )
