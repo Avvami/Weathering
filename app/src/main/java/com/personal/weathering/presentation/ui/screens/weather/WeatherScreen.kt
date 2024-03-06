@@ -1,6 +1,5 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -58,7 +57,6 @@ import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
-import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
@@ -237,13 +235,6 @@ fun WeatherScreen(
                             )
                         }
                     }
-                }
-                AnimatedVisibility(
-                    modifier = Modifier
-                        .padding(top = innerPadding.calculateTopPadding()),
-                    visible = weatherState().isLoading
-                ) {
-                    ThinLinearProgressIndicator()
                 }
                 PullToRefreshContainer(
                     modifier = Modifier
