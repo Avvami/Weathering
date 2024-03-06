@@ -2,6 +2,7 @@ package com.personal.weathering.presentation.state
 
 data class PreferencesState(
     val searchLanguageCode: String = "en",
+    val isDark: Boolean = false,
     val useLocation: Boolean = false,
     val useCelsius: Boolean = true,
     val useKmPerHour: Boolean = true,

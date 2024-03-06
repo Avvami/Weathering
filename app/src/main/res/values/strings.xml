@@ -103,6 +103,7 @@
     <string name="my_cities">My cities</string>
     <string name="current_location">Current location</string>
     <string name="use_my_location">Use my location</string>
+    <string name="settings">Settings</string>
 
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.

@@ -1,5 +1,10 @@
 package com.personal.weathering.presentation.ui.screens.weather.components.modal
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.UiEvent
@@ -48,6 +54,42 @@ fun ModalDrawer(
             contentPadding = PaddingValues(16.dp)
         ) {
             item {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.settings),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    AnimatedContent(
+                        targetState = preferencesState.value.isDark,
+                        label = "Change theme anim",
+                        transitionSpec = {
+                            slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start, initialOffset = { it }) + scaleIn() togetherWith
+                                    slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start) + scaleOut()
+                        }
+                    ) { targetState ->
+                        if (targetState) {
+                            IconButton(onClick = { uiEvent(UiEvent.SetDarkMode(false)) }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_light_mode_fill1_wght400),
+                                    contentDescription = "Turn on light mode"
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { uiEvent(UiEvent.SetDarkMode(true)) }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_dark_mode_fill1_wght400),
+                                    contentDescription = "Turn on dark mode"
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            item {
                 Units(preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
@@ -74,14 +116,20 @@ fun ModalDrawer(
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .clip(MaterialTheme.shapes.large)
-                            .border(width = 1.dp, color = MaterialTheme.colorScheme.onSurface, shape = MaterialTheme.shapes.large)
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                shape = MaterialTheme.shapes.large
+                            )
                             .clickable {
-                                uiEvent(UiEvent.SetCurrentCityState(
-                                    cityId = favorite.cityId,
-                                    city = favorite.city,
-                                    lat = favorite.lat,
-                                    lon = favorite.lon
-                                ))
+                                uiEvent(
+                                    UiEvent.SetCurrentCityState(
+                                        cityId = favorite.cityId,
+                                        city = favorite.city,
+                                        lat = favorite.lat,
+                                        lon = favorite.lon
+                                    )
+                                )
                                 closeDrawer()
                             }
                             .padding(start = 16.dp, top = 4.dp, end = 4.dp, bottom = 4.dp)

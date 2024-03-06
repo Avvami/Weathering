@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.personal.weathering.WeatheringApp
@@ -45,7 +46,9 @@ class MainActivity : ComponentActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION,
         ))
         setContent {
-            WeatheringTheme {
+            WeatheringTheme(
+                darkTheme = mainViewModel.preferencesState.collectAsState().value.isDark
+            ) {
                 Surface {
                     RootNavigationGraph(
                         navController = rememberNavController(),

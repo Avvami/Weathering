@@ -26,6 +26,8 @@ class LocalRepositoryImpl(
 
     override suspend fun setSearchLanguageCode(languageCode: String) = preferencesDao.setSearchLanguageCode(languageCode)
 
+    override suspend fun setDarkMode(isDark: Boolean) = preferencesDao.setDarkMode(isDark)
+
     override suspend fun setUseLocation(useLocation: Boolean) = preferencesDao.setUseLocation(useLocation)
 
     override suspend fun setUseCelsius(useCelsius: Boolean) = preferencesDao.setUseCelsius(useCelsius)

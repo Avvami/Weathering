@@ -41,6 +41,7 @@ abstract class AppDatabase: RoomDatabase() {
                     put("lat", 51.50853)
                     put("lon", -0.12574)
                     put("searchLanguageCode", "en")
+                    put("isDark", false)
                     put("useLocation", false)
                     put("useCelsius", true)
                     put("useKmPerHour", true)

@@ -19,6 +19,7 @@ sealed interface UiEvent {
     data object CloseMessageDialog: UiEvent
     data class SetCurrentCityState(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
     data class SetSearchLanguage(val code: String): UiEvent
+    data class SetDarkMode(val isDark: Boolean): UiEvent
     data class SetUseLocation(val useLocation: Boolean): UiEvent
     data class SetTemperatureUnit(val useCelsius: Boolean): UiEvent
     data class SetSpeedUnit(val useKmPerHour: Boolean): UiEvent

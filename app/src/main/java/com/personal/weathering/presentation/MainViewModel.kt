@@ -79,12 +79,13 @@ class MainViewModel(
         viewModelScope.launch {
             localRepository.getPreferences()
                 .distinctUntilChangedBy {
-                    listOf(it.searchLanguageCode, it.useLocation, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
+                    listOf(it.searchLanguageCode, it.isDark, it.useLocation, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
                 }
                 .collect { preferencesEntity ->
                     _preferencesState.update {
                         it.copy(
                             searchLanguageCode = preferencesEntity.searchLanguageCode,
+                            isDark = preferencesEntity.isDark,
                             useLocation = preferencesEntity.useLocation,
                             useCelsius = preferencesEntity.useCelsius,
                             useKmPerHour = preferencesEntity.useKmPerHour,
@@ -218,6 +219,11 @@ class MainViewModel(
             is UiEvent.SetSearchLanguage -> {
                 viewModelScope.launch {
                     localRepository.setSearchLanguageCode(event.code)
+                }
+            }
+            is UiEvent.SetDarkMode -> {
+                viewModelScope.launch {
+                    localRepository.setDarkMode(event.isDark)
                 }
             }
             is UiEvent.SetUseLocation -> {

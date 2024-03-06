@@ -16,6 +16,9 @@ interface PreferencesDao {
     @Query("UPDATE preferencesentity SET searchLanguageCode = :languageCode")
     suspend fun setSearchLanguageCode(languageCode: String)
 
+    @Query("UPDATE preferencesentity SET isDark = :isDark")
+    suspend fun setDarkMode(isDark: Boolean)
+
     @Query("UPDATE preferencesentity SET useLocation = :useLocation")
     suspend fun setUseLocation(useLocation: Boolean)
 
