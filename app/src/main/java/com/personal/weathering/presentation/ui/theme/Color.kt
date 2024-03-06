@@ -1,11 +1,6 @@
 package com.personal.weathering.presentation.ui.theme
 import androidx.compose.ui.graphics.Color
 
-val weatheringBlue = Color(0xFF77D1FF)
-val weatheringDarkBlue = Color(0xFF191C1E)
-val weatheringDarkBlue70p = Color(0xFF191C1E).copy(alpha = .7f)
-val weatheringDarkBlue3p = Color(0xFF191C1E).copy(alpha = .03f)
-
 val onSurfaceLight70p = Color(0xFF171C1F).copy(alpha = .7f)
 val surfaceLight30p = Color(0xFFF6FAFE).copy(alpha = .3f)
 

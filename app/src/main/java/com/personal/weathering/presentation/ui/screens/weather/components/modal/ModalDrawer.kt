@@ -1,5 +1,6 @@
 package com.personal.weathering.presentation.ui.screens.weather.components.modal
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.scaleIn
@@ -15,6 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,10 +30,12 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
+import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
@@ -38,6 +45,7 @@ import com.personal.weathering.presentation.state.WeatherState
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ModalDrawer(
+    drawerState: DrawerState,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
     currentCityState: State<CurrentCityState>,
@@ -45,24 +53,46 @@ fun ModalDrawer(
     uiEvent: (UiEvent) -> Unit,
     closeDrawer: () -> Unit
 ) {
+    if (drawerState.targetValue == DrawerValue.Open) {
+        ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
+        BackHandler {
+            closeDrawer()
+        }
+    }
     ModalDrawerSheet(
+        modifier = Modifier.then(
+            if (drawerState.targetValue == DrawerValue.Open) Modifier.fillMaxSize() else Modifier
+        ),
         drawerContentColor = MaterialTheme.colorScheme.onSurface,
-        drawerContainerColor = MaterialTheme.colorScheme.surface
+        drawerContainerColor = MaterialTheme.colorScheme.surface,
+        drawerShape = RectangleShape
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
         ) {
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.settings),
-                        style = MaterialTheme.typography.titleLarge
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        IconButton(onClick = { closeDrawer() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                                contentDescription = "Close drawer"
+                            )
+                        }
+                        Text(
+                            text = stringResource(id = R.string.settings),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
                     AnimatedContent(
                         targetState = preferencesState.value.isDark,
                         label = "Change theme anim",
@@ -90,13 +120,14 @@ fun ModalDrawer(
                 }
             }
             item {
-                Units(preferencesState = preferencesState, uiEvent = uiEvent)
+                Units(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
-                AQI(preferencesState = preferencesState, uiEvent = uiEvent)
+                AQI(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
                 CurrentLocation(
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 4.dp),
                     currentCityState = currentCityState,
                     preferencesState = preferencesState,
                     weatherState = weatherState,
@@ -114,7 +145,7 @@ fun ModalDrawer(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp)
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
                             .clip(MaterialTheme.shapes.large)
                             .border(
                                 width = 1.dp,

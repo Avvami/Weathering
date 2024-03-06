@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
+import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
@@ -65,7 +66,6 @@ import com.personal.weathering.presentation.ui.screens.weather.components.modal.
 import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,6 +83,12 @@ fun WeatherScreen(
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollState = rememberScrollState()
+    if (drawerState.targetValue == DrawerValue.Closed && scrollState.value == 0 && preferencesState.value.isDark)
+        ApplySystemBarsTheme(darkTheme = false)
+    else
+        ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
 
     if (pullToRefreshState().isRefreshing) {
         LaunchedEffect(true) {
@@ -95,6 +101,7 @@ fun WeatherScreen(
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawer(
+                drawerState = drawerState,
                 preferencesState = preferencesState,
                 favoritesState = favoritesState,
                 currentCityState = currentCityState,
@@ -107,6 +114,10 @@ fun WeatherScreen(
         gesturesEnabled = true
     ) {
         Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(pullToRefreshState().nestedScrollConnection)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
@@ -119,21 +130,32 @@ fun WeatherScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent,
-                        navigationIconContentColor = onSurfaceLight,
-                        titleContentColor = onSurfaceLight
-                    ),
+                    colors = if (scrollState.value != 0 && preferencesState.value.isDark) {
+                        TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent,
+                            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+                            titleContentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    } else {
+                        TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent,
+                            navigationIconContentColor = onSurfaceLight,
+                            actionIconContentColor = onSurfaceLight,
+                            titleContentColor = onSurfaceLight
+                        )
+                    },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(imageVector = Icons.Rounded.Menu, contentDescription = "Drawer", tint = weatheringDarkBlue)
+                            Icon(imageVector = Icons.Rounded.Menu, contentDescription = "Drawer")
                         }
                     },
                     actions = {
                         IconButton(onClick = navigateToSearchScreen) {
-                            Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search", tint = weatheringDarkBlue)
+                            Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
                         }
-                    }
+                    },
+                    scrollBehavior = scrollBehavior
                 )
             },
             containerColor = MaterialTheme.colorScheme.surface,
@@ -143,8 +165,7 @@ fun WeatherScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = innerPadding.calculateBottomPadding())
-                    .nestedScroll(pullToRefreshState().nestedScrollConnection)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
             ) {
                 Column {
                     weatherState().error?.let { error ->

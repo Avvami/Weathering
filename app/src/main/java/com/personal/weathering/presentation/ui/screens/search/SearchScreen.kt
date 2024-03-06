@@ -30,6 +30,7 @@ import com.personal.weathering.R
 import com.personal.weathering.WeatheringApp
 import com.personal.weathering.domain.models.DropdownItem
 import com.personal.weathering.domain.models.search.SearchLanguage
+import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
@@ -56,6 +57,7 @@ fun SearchScreen(
             )
         }
     )
+    ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
     Scaffold(
         contentColor = MaterialTheme.colorScheme.onSurface,
         containerColor = MaterialTheme.colorScheme.surface

@@ -1,7 +1,6 @@
 package com.personal.weathering.presentation.ui.screens.aq
 
 import android.graphics.Shader
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -41,16 +40,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
+import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.PreferencesState
-import com.personal.weathering.presentation.ui.components.ThinLinearProgressIndicator
 import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayForecast
 import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfo
 import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
-import com.personal.weathering.presentation.ui.theme.weatheringDarkBlue70p
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +61,13 @@ fun AqScreen(
     navigateBack: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollState = rememberScrollState()
+    if (scrollState.value == 0 && preferencesState.value.isDark)
+        ApplySystemBarsTheme(darkTheme = false)
+    else
+        ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
+
     if (pullToRefreshState().isRefreshing) {
         LaunchedEffect(true) {
             uiEvent(UiEvent.UpdateAqInfo(currentCityState.value.lat, currentCityState.value.lon))
@@ -71,19 +77,34 @@ fun AqScreen(
         LinearOutSlowInEasing.transform(pullToRefreshState().progress).coerceIn(0f, 1f)
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(pullToRefreshState().nestedScrollConnection)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.aqi), fontWeight = FontWeight.Medium) },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    navigationIconContentColor = onSurfaceLight,
-                    titleContentColor = onSurfaceLight
-                ),
+                colors = if (scrollState.value != 0 && preferencesState.value.isDark) {
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent,
+                        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+                        actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                } else {
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent,
+                        navigationIconContentColor = onSurfaceLight,
+                        actionIconContentColor = onSurfaceLight,
+                        titleContentColor = onSurfaceLight
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
                         Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
                     }
-                }
+                },
+                scrollBehavior = scrollBehavior
             )
         },
         containerColor = MaterialTheme.colorScheme.surface,
@@ -93,15 +114,14 @@ fun AqScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = innerPadding.calculateBottomPadding())
-                .nestedScroll(pullToRefreshState().nestedScrollConnection)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             Column {
                 aqState().error?.let { error ->
                     Text(
                         text = error,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = weatheringDarkBlue70p,
+                        color = onSurfaceLight70p,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -151,13 +171,6 @@ fun AqScreen(
                         )
                     }
                 }
-            }
-            AnimatedVisibility(
-                modifier = Modifier
-                    .padding(top = innerPadding.calculateTopPadding()),
-                visible = aqState().isLoading
-            ) {
-                ThinLinearProgressIndicator()
             }
             PullToRefreshContainer(
                 modifier = Modifier

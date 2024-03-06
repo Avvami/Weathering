@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -31,13 +29,15 @@ import kotlin.math.roundToInt
 
 @Composable
 fun CurrentLocation(
+    modifier: Modifier = Modifier,
     currentCityState: State<CurrentCityState>,
     preferencesState: State<PreferencesState>,
     weatherState: () -> WeatherState,
     setUseLocation: (useLocation: Boolean) -> Unit
 ) {
-    Column {
-        Spacer(modifier = Modifier.height(16.dp))
+    Column(
+        modifier = modifier
+    ) {
         Text(
             text = stringResource(id = R.string.my_cities),
             style = MaterialTheme.typography.titleMedium
@@ -112,6 +112,5 @@ fun CurrentLocation(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(4.dp))
     }
 }

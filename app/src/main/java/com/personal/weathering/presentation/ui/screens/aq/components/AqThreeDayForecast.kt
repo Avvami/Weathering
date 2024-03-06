@@ -40,6 +40,7 @@ fun AqThreeDayForecast(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
     ) {
         BottomSheetDefaults.DragHandle(
             modifier = Modifier.align(Alignment.CenterHorizontally)

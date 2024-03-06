@@ -1,9 +1,8 @@
 package com.personal.weathering.presentation.ui.screens.weather.components.modal
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -24,13 +23,15 @@ import com.personal.weathering.presentation.state.PreferencesState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AQI(
+    modifier: Modifier = Modifier,
     preferencesState: State<PreferencesState>,
     uiEvent: (UiEvent) -> Unit
 ) {
-    Column {
-        Spacer(modifier = Modifier.height(16.dp))
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Text(text = stringResource(id = R.string.air_quality_index), style = MaterialTheme.typography.titleMedium)
-        Spacer(modifier = Modifier.height(8.dp))
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier.fillMaxWidth()
         ) {
