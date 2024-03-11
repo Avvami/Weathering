@@ -1,6 +1,5 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,9 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Search
@@ -25,12 +24,14 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -57,11 +57,13 @@ import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
+import com.personal.weathering.presentation.ui.components.PullToRefresh
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
-import com.personal.weathering.presentation.ui.theme.ExtendedTheme
+import com.personal.weathering.presentation.ui.theme.drizzlePrimary
+import com.personal.weathering.presentation.ui.theme.drizzleSecondary
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 import kotlinx.coroutines.launch
@@ -82,21 +84,34 @@ fun WeatherScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val scrollState = rememberScrollState()
-    if (drawerState.targetValue == DrawerValue.Closed && scrollState.value == 0 && preferencesState.value.isDark)
-        ApplySystemBarsTheme(darkTheme = false)
-    else
-        ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
-
+    val lazyListState = rememberLazyListState()
+    val isScrolledToTop by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0
+        }
+    }
     if (pullToRefreshState().isRefreshing) {
         LaunchedEffect(true) {
             uiEvent(UiEvent.LoadWeatherInfo(currentCityState.value.lat, currentCityState.value.lon))
         }
     }
-    val scaleFraction = if (pullToRefreshState().isRefreshing) 1f else
-        LinearOutSlowInEasing.transform(pullToRefreshState().progress).coerceIn(0f, 1f)
+    val radialGradient = object : ShaderBrush() {
+        override fun createShader(size: Size): Shader {
+            val biggerDimension = maxOf(size.height, size.width)
+            return RadialGradientShader(
+                colors = if (weatherState().weatherInfo != null) listOf(
+                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
+                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
+                ) else listOf(drizzlePrimary, drizzleSecondary),
+                center = Offset(size.width, 0f),
+                radius = biggerDimension
+            )
+        }
+    }
 
     ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = true,
         drawerContent = {
             ModalDrawer(
                 drawerState = drawerState,
@@ -107,9 +122,7 @@ fun WeatherScreen(
                 uiEvent = uiEvent,
                 closeDrawer = { scope.launch { drawerState.close() } }
             )
-        },
-        drawerState = drawerState,
-        gesturesEnabled = true
+        }
     ) {
         Scaffold(
             modifier = Modifier
@@ -117,6 +130,10 @@ fun WeatherScreen(
                 .nestedScroll(pullToRefreshState().nestedScrollConnection)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
+                if (drawerState.targetValue == DrawerValue.Closed && isScrolledToTop && preferencesState.value.isDark)
+                    ApplySystemBarsTheme(applyLightStatusBars = false)
+                else
+                    ApplySystemBarsTheme(applyLightStatusBars = preferencesState.value.isDark)
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
@@ -128,7 +145,7 @@ fun WeatherScreen(
                             overflow = TextOverflow.Ellipsis
                         )
                     },
-                    colors = if (scrollState.value != 0 && preferencesState.value.isDark) {
+                    colors = if (!isScrolledToTop && preferencesState.value.isDark) {
                         TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent,
                             navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
@@ -159,91 +176,90 @@ fun WeatherScreen(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         ) { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = innerPadding.calculateBottomPadding())
-                    .verticalScroll(scrollState)
-            ) {
-                Column {
-                    weatherState().error?.let { error ->
-                        Text(
-                            text = error,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = onSurfaceLight70p,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(innerPadding)
-                                .padding(vertical = 16.dp, horizontal = 24.dp)
-                        )
-                    }
-                    weatherState().weatherInfo?.let { weatherInfo ->
-                        val radialGradient = object : ShaderBrush() {
-                            override fun createShader(size: Size): Shader {
-                                val biggerDimension = maxOf(size.height, size.width)
-                                return RadialGradientShader(
-                                    colors = listOf(
-                                        weatherInfo.currentWeatherData.weatherType.gradientPrimary,
-                                        weatherInfo.currentWeatherData.weatherType.gradientSecondary
-                                    ),
-                                    center = Offset(size.width, 0f),
-                                    radius = biggerDimension
-                                )
+            Box {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = innerPadding.calculateBottomPadding()),
+                    state = lazyListState
+                ) {
+                    if (weatherState().weatherInfo == null && weatherState().error == null && weatherState().isLoading) {
+                        item {
+                            // Shimmer content
+                        }
+                    } else {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .background(
+                                        brush = radialGradient,
+                                        shape = RoundedCornerShape(
+                                            bottomStart = 28.dp,
+                                            bottomEnd = 28.dp
+                                        )
+                                    )
+                                    .padding(
+                                        top = innerPadding.calculateTopPadding(),
+                                        bottom = 16.dp
+                                    )
+                            ) {
+                                weatherState().error?.let { error ->
+                                    Text(
+                                        text = error,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = onSurfaceLight70p,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(innerPadding)
+                                            .padding(vertical = 16.dp, horizontal = 24.dp)
+                                    )
+                                }
+                                weatherState().weatherInfo?.let { weatherInfo ->
+                                    WeatherTemperatureInfo(
+                                        preferencesState = preferencesState,
+                                        weatherInfo = { weatherInfo }
+                                    )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    WeatherDetails(
+                                        preferencesState = preferencesState,
+                                        weatherInfo = { weatherInfo },
+                                        aqState = aqState,
+                                        navigateToAqScreen = navigateToAqScreen
+                                    )
+                                }
                             }
                         }
-                        Column(
-                            modifier = Modifier
-                                .background(
-                                    brush = radialGradient,
-                                    shape = RoundedCornerShape(
-                                        bottomStart = 28.dp,
-                                        bottomEnd = 28.dp
+                        item {
+                            weatherState().weatherInfo?.let { weatherInfo ->
+                                Column {
+                                    WeatherWeeklyForecast(
+                                        preferencesState = preferencesState,
+                                        weatherInfo = { weatherInfo }
                                     )
-                                )
-                                .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
-                        ) {
-                            WeatherTemperatureInfo(
-                                preferencesState = preferencesState,
-                                weatherInfo = { weatherInfo }
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            WeatherDetails(
-                                preferencesState = preferencesState,
-                                weatherInfo = { weatherInfo },
-                                aqState = aqState,
-                                navigateToAqScreen = navigateToAqScreen
-                            )
-                        }
-                        Column {
-                            WeatherWeeklyForecast(
-                                preferencesState = preferencesState,
-                                weatherInfo = { weatherInfo }
-                            )
-                            Text(
-                                text = stringResource(
-                                    id = R.string.app_version,
-                                    BuildConfig.VERSION_NAME,
-                                    BuildConfig.VERSION_CODE
-                                ),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.outline,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp, horizontal = 16.dp)
-                            )
+                                    Text(
+                                        text = stringResource(
+                                            id = R.string.app_version,
+                                            BuildConfig.VERSION_NAME,
+                                            BuildConfig.VERSION_CODE
+                                        ),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.outline,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
-                PullToRefreshContainer(
+                PullToRefresh(
+                    pullToRefreshState = pullToRefreshState,
                     modifier = Modifier
                         .padding(top = innerPadding.calculateTopPadding())
                         .align(Alignment.TopCenter)
-                        .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
-                    state = pullToRefreshState(),
-                    containerColor = ExtendedTheme.colorScheme.surfaceContainerLow,
-                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

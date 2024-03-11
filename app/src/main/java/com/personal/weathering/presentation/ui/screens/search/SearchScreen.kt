@@ -57,7 +57,7 @@ fun SearchScreen(
             )
         }
     )
-    ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
+    ApplySystemBarsTheme(applyLightStatusBars = preferencesState.value.isDark)
     Scaffold(
         contentColor = MaterialTheme.colorScheme.onSurface,
         containerColor = MaterialTheme.colorScheme.surface

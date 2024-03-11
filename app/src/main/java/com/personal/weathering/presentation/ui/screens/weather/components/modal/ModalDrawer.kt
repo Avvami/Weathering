@@ -12,7 +12,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
-import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
@@ -54,15 +52,11 @@ fun ModalDrawer(
     closeDrawer: () -> Unit
 ) {
     if (drawerState.targetValue == DrawerValue.Open) {
-        ApplySystemBarsTheme(darkTheme = preferencesState.value.isDark)
         BackHandler {
             closeDrawer()
         }
     }
     ModalDrawerSheet(
-        modifier = Modifier.then(
-            if (drawerState.targetValue == DrawerValue.Open) Modifier.fillMaxSize() else Modifier
-        ),
         drawerContentColor = MaterialTheme.colorScheme.onSurface,
         drawerContainerColor = MaterialTheme.colorScheme.surface,
         drawerShape = RectangleShape

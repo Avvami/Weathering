@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
-fun ApplySystemBarsTheme(darkTheme: Boolean) {
+fun ApplySystemBarsTheme(applyLightStatusBars: Boolean) {
     val view = LocalView.current
     val context = LocalContext.current
 
@@ -16,7 +16,7 @@ fun ApplySystemBarsTheme(darkTheme: Boolean) {
         SideEffect {
             (context as? ComponentActivity)?.let { activity ->
                 WindowCompat.getInsetsController(activity.window, view).apply {
-                    isAppearanceLightStatusBars = !darkTheme
+                    isAppearanceLightStatusBars = !applyLightStatusBars
                 }
             }
         }
