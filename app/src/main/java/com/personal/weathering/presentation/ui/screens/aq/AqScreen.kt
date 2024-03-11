@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
+import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmer
 import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayForecast
 import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfo
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
@@ -75,27 +77,31 @@ fun AqScreen(
             uiEvent(UiEvent.UpdateAqInfo(currentCityState.value.lat, currentCityState.value.lon))
         }
     }
-    val radialGradient = object : ShaderBrush() {
-        override fun createShader(size: Size): Shader {
-            val biggerDimension = maxOf(size.height, size.width)
-            return RadialGradientShader(
-                colors = if (aqState().aqInfo == null)
-                    listOf(drizzlePrimary, drizzleSecondary)
-                else {
-                    if (preferencesState.value.useUSaq)
-                        listOf(
-                            aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary,
-                            aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
-                        ) else
-                        listOf(
-                            aqState().aqInfo!!.currentAqData.europeanAqiType.gradientPrimary,
-                            aqState().aqInfo!!.currentAqData.europeanAqiType.gradientSecondary
-                        )
-                },
-                center = Offset(size.width, 0f),
-                radius = biggerDimension
-            )
-        }
+    val radialGradient by remember(aqState().aqInfo) {
+        mutableStateOf(
+            object : ShaderBrush() {
+                override fun createShader(size: Size): Shader {
+                    val biggerDimension = maxOf(size.height, size.width)
+                    return RadialGradientShader(
+                        colors = if (aqState().aqInfo == null)
+                            listOf(drizzlePrimary, drizzleSecondary)
+                        else {
+                            if (preferencesState.value.useUSaq)
+                                listOf(
+                                    aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary,
+                                    aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
+                                ) else
+                                listOf(
+                                    aqState().aqInfo!!.currentAqData.europeanAqiType.gradientPrimary,
+                                    aqState().aqInfo!!.currentAqData.europeanAqiType.gradientSecondary
+                                )
+                        },
+                        center = Offset(size.width, 0f),
+                        radius = biggerDimension
+                    )
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -143,41 +149,47 @@ fun AqScreen(
                     .padding(bottom = innerPadding.calculateBottomPadding()),
                 state = lazyListState
             ) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .background(
-                                brush = radialGradient,
-                                shape = RoundedCornerShape(
-                                    bottomStart = 28.dp,
-                                    bottomEnd = 28.dp
+                if (aqState().aqInfo == null && aqState().error == null && aqState().isLoading) {
+                    item {
+                        AqShimmer(
+                            radialGradient = radialGradient,
+                            innerPadding = innerPadding
+                        )
+                    }
+                } else {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .background(
+                                    brush = radialGradient,
+                                    shape = RoundedCornerShape(
+                                        bottomStart = 28.dp,
+                                        bottomEnd = 28.dp
+                                    )
                                 )
-                            )
-                            .padding(top = innerPadding.calculateTopPadding(), bottom = 28.dp)
-                    ) {
-                        aqState().error?.let { error ->
-                            Text(
-                                text = error,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = onSurfaceLight70p,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(innerPadding)
-                                    .padding(vertical = 16.dp, horizontal = 24.dp)
-                            )
-                        }
-                        aqState().aqInfo?.let { aqInfo ->
-                            CurrentAqInfo(
-                                preferencesState = preferencesState,
-                                aqInfo = { aqInfo }
-                            )
+                                .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
+                        ) {
+                            aqState().error?.let { error ->
+                                Text(
+                                    text = error,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = onSurfaceLight70p,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                                )
+                            }
+                            aqState().aqInfo?.let { aqInfo ->
+                                CurrentAqInfo(
+                                    preferencesState = preferencesState,
+                                    aqInfo = { aqInfo }
+                                )
+                            }
                         }
                     }
-                }
-                item {
-                    aqState().aqInfo?.let { aqInfo ->
-                        Column {
+                    item {
+                        aqState().aqInfo?.let { aqInfo ->
                             AqThreeDayForecast(
                                 preferencesState = preferencesState,
                                 aqInfo = { aqInfo }

@@ -61,6 +61,7 @@ fun WeatherTemperatureInfo(
                     fontSize = 82.sp,
                     color = onSurfaceLight
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(
                         id = R.string.apparent_temperature,
@@ -89,13 +90,12 @@ fun WeatherTemperatureInfo(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Icon(
             painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconLargeRes),
             contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
             tint = onSurfaceLight,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .size(200.dp)
                 .align(Alignment.CenterHorizontally),
         )

@@ -31,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -59,6 +60,7 @@ import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
+import com.personal.weathering.presentation.ui.screens.weather.components.WeatherShimmer
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
@@ -95,18 +97,22 @@ fun WeatherScreen(
             uiEvent(UiEvent.LoadWeatherInfo(currentCityState.value.lat, currentCityState.value.lon))
         }
     }
-    val radialGradient = object : ShaderBrush() {
-        override fun createShader(size: Size): Shader {
-            val biggerDimension = maxOf(size.height, size.width)
-            return RadialGradientShader(
-                colors = if (weatherState().weatherInfo != null) listOf(
-                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
-                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
-                ) else listOf(drizzlePrimary, drizzleSecondary),
-                center = Offset(size.width, 0f),
-                radius = biggerDimension
-            )
-        }
+    val radialGradient by remember(weatherState().weatherInfo) {
+        mutableStateOf(
+            object : ShaderBrush() {
+                override fun createShader(size: Size): Shader {
+                    val biggerDimension = maxOf(size.height, size.width)
+                    return RadialGradientShader(
+                        colors = if (weatherState().weatherInfo != null) listOf(
+                            weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
+                            weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
+                        ) else listOf(drizzlePrimary, drizzleSecondary),
+                        center = Offset(size.width, 0f),
+                        radius = biggerDimension
+                    )
+                }
+            }
+        )
     }
 
     ModalNavigationDrawer(
@@ -185,7 +191,11 @@ fun WeatherScreen(
                 ) {
                     if (weatherState().weatherInfo == null && weatherState().error == null && weatherState().isLoading) {
                         item {
-                            // Shimmer content
+                            WeatherShimmer(
+                                radialGradient = radialGradient,
+                                innerPadding = innerPadding,
+                                navigateToAqScreen = navigateToAqScreen
+                            )
                         }
                     } else {
                         item {
@@ -198,10 +208,7 @@ fun WeatherScreen(
                                             bottomEnd = 28.dp
                                         )
                                     )
-                                    .padding(
-                                        top = innerPadding.calculateTopPadding(),
-                                        bottom = 16.dp
-                                    )
+                                    .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
                             ) {
                                 weatherState().error?.let { error ->
                                     Text(
@@ -211,8 +218,7 @@ fun WeatherScreen(
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(innerPadding)
-                                            .padding(vertical = 16.dp, horizontal = 24.dp)
+                                            .padding(start = 16.dp, top = 16.dp, end = 16.dp)
                                     )
                                 }
                                 weatherState().weatherInfo?.let { weatherInfo ->

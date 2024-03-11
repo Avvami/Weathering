@@ -73,7 +73,6 @@ fun CurrentAqInfo(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Icon(
             painter = if (preferencesState.value.useUSaq) painterResource(id = aqInfo().currentAqData.usAqiType.iconLargeRes) else
                 painterResource(id = aqInfo().currentAqData.europeanAqiType.iconLargeRes),
@@ -81,7 +80,7 @@ fun CurrentAqInfo(
                 stringResource(id = aqInfo().currentAqData.europeanAqiType.aqDescRes),
             tint = onSurfaceLight,
             modifier = Modifier
-                .padding(horizontal = 24.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .size(200.dp)
                 .align(Alignment.CenterHorizontally)
         )
