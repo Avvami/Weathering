@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -206,14 +207,22 @@ fun WeatherShimmer(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(id = R.string.good),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Color.Transparent,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .shimmerEffect()
-                )
+                ) {
+                    Box(
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(id = R.string.good),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Color.Transparent
+                    )
+                }
                 Box(
                     modifier = Modifier.size(48.dp),
                     contentAlignment = Alignment.Center

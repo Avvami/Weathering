@@ -30,6 +30,7 @@
     <string name="sunset">sunset</string>
     <string name="search_history">Search history</string>
     <string name="empty">Empty</string>
+    <string name="open_meteo">Weather data by Open-Meteo</string>
 
     <!--AQI types-->
     <string name="good">Good</string>

@@ -1,6 +1,9 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +47,8 @@ import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.Shader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +58,9 @@ import androidx.compose.ui.unit.sp
 import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
+import com.personal.weathering.domain.util.C
+import com.personal.weathering.domain.util.findActivity
+import com.personal.weathering.presentation.MainActivity
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.CurrentCityState
@@ -208,7 +217,10 @@ fun WeatherScreen(
                                             bottomEnd = 28.dp
                                         )
                                     )
-                                    .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
+                                    .padding(
+                                        top = innerPadding.calculateTopPadding(),
+                                        bottom = 16.dp
+                                    )
                             ) {
                                 weatherState().error?.let { error ->
                                     Text(
@@ -238,11 +250,37 @@ fun WeatherScreen(
                         }
                         item {
                             weatherState().weatherInfo?.let { weatherInfo ->
-                                Column {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     WeatherWeeklyForecast(
                                         preferencesState = preferencesState,
                                         weatherInfo = { weatherInfo }
                                     )
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    val activity = LocalContext.current.findActivity() as MainActivity
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(horizontal = 16.dp)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null
+                                            ) {
+                                                activity.openCustomWebTab(C.OM_URL)
+                                            },
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.icon_open_meteo),
+                                            contentDescription = stringResource(id = R.string.open_meteo),
+                                            modifier = Modifier.size(54.dp)
+                                        )
+                                        Text(
+                                            text = stringResource(id = R.string.open_meteo),
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
                                     Text(
                                         text = stringResource(
                                             id = R.string.app_version,
@@ -253,7 +291,6 @@ fun WeatherScreen(
                                         color = MaterialTheme.colorScheme.outline,
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier
-                                            .fillMaxWidth()
                                             .padding(vertical = 8.dp, horizontal = 16.dp)
                                     )
                                 }
