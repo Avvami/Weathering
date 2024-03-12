@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.WeatheringApp
@@ -70,6 +71,7 @@ fun SearchScreen(
             onActiveChange = { if (!it) navigateBack() },
             modifier = Modifier.fillMaxWidth(),
             colors = SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surface,
                 dividerColor = MaterialTheme.colorScheme.onSurface,
                 inputFieldColors = SearchBarDefaults.inputFieldColors(
                     focusedTextColor = MaterialTheme.colorScheme.onSurface,
@@ -83,6 +85,7 @@ fun SearchScreen(
                     unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             ),
+            tonalElevation = 0.dp,
             placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
             leadingIcon = {
                 IconButton(onClick = navigateBack) {

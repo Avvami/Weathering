@@ -95,7 +95,6 @@ class SearchViewModel(
                     searchLocation(searchQuery, event.languageCode)
                 }
             }
-            is SearchUiEvent.SetSearchFieldActive -> { searchFieldActive = event.active }
             is SearchUiEvent.SetLanguageDropdownExpanded -> { isLanguageDropdownExpanded = event.expanded }
             is SearchUiEvent.SetSearchLanguage -> {
                 isLanguageDropdownExpanded = false
