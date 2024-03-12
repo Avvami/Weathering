@@ -21,7 +21,7 @@ class WeatherRepositoryImpl(
                 data = weatherApi.getWeatherData(
                     lat = lat,
                     lon = lon
-                ).toWeatherInfo()
+                ).toWeatherInfo(context)
             )
         } catch (e: HttpException) {
             e.printStackTrace()

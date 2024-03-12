@@ -1,22 +1,28 @@
 package com.personal.weathering.data.mappers
 
+import android.content.Context
+import com.personal.weathering.R
 import com.personal.weathering.data.models.CurrentWeatherDto
 import com.personal.weathering.data.models.DailyWeatherDto
 import com.personal.weathering.data.models.HourlyWeatherDto
 import com.personal.weathering.data.models.WeatherDto
 import com.personal.weathering.domain.models.weather.CurrentWeatherData
 import com.personal.weathering.domain.models.weather.DailyWeatherData
+import com.personal.weathering.domain.models.weather.DailyWeatherSummaryData
 import com.personal.weathering.domain.models.weather.HourlyWeatherData
 import com.personal.weathering.domain.models.weather.HumidityType
 import com.personal.weathering.domain.models.weather.TwentyFourHoursWeatherData
 import com.personal.weathering.domain.models.weather.WeatherInfo
+import com.personal.weathering.domain.models.weather.WeatherSummaryData
 import com.personal.weathering.domain.models.weather.WeatherType
 import com.personal.weathering.domain.models.weather.WindDirectionType
+import com.personal.weathering.domain.util.UiText
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 
 private data class IndexedHourlyWeather(
     val index: Int,
@@ -89,9 +95,50 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
     }
 }
 
-fun WeatherDto.toWeatherInfo(): WeatherInfo {
+private fun Map<Int, List<HourlyWeatherData>>.toWeatherByTimePeriods(context: Context): Map<Int, List<DailyWeatherSummaryData>> {
+    val timeRanges = mapOf(
+        UiText.StringResource(R.string.morning).asString(context) to (6..11),
+        UiText.StringResource(R.string.day).asString(context) to (12..17),
+        UiText.StringResource(R.string.evening).asString(context) to (18..23),
+        UiText.StringResource(R.string.night).asString(context) to (0..5)
+    )
+    return this.mapValues { (_, hourlyData) ->
+        timeRanges.map { (rangeName, timeRange) ->
+            val periodWeatherData = hourlyData.filter { it.time.hour in timeRange }
+            DailyWeatherSummaryData(
+                period = rangeName,
+                weatherSummary = periodWeatherData.toOverallWeather()
+            )
+        }
+    }
+}
+
+private fun List<HourlyWeatherData>.toOverallWeather(): WeatherSummaryData {
+    return WeatherSummaryData(
+        temperature = averageBy { it.temperature },
+        apparentTemperature = averageBy { it.apparentTemperature },
+        humidity = averageBy { it.humidity.toDouble() }.roundToInt(),
+        humidityType = mostCommonBy { it.humidityType },
+        weatherType = mostCommonBy { it.weatherType },
+        pressure = averageBy { it.pressure },
+        windSpeed = averageBy { it.windSpeed },
+        windDirection = averageBy { it.windDirection.toDouble() }.toFloat(),
+        windDirectionType = mostCommonBy { it.windDirectionType }
+    )
+}
+
+private fun List<HourlyWeatherData>.averageBy(selector: (HourlyWeatherData) -> Double): Double {
+    return map(selector).average()
+}
+
+private fun <T> List<HourlyWeatherData>.mostCommonBy(selector: (HourlyWeatherData) -> T): T {
+    return groupingBy(selector).eachCount().maxBy { it.value }.key
+}
+
+fun WeatherDto.toWeatherInfo(context: Context): WeatherInfo {
     val now = LocalDateTime.now(ZoneId.ofOffset("UTC", ZoneOffset.ofTotalSeconds(utcOffset)))
-    val flattenHourlyWeatherData = hourlyWeather.toHourlyWeatherData().values.flatten()
+    val hourlyWeatherData = hourlyWeather.toHourlyWeatherData()
+    val flattenHourlyWeatherData = hourlyWeatherData.values.flatten()
 
     val twentyFourHoursWeatherData = flattenHourlyWeatherData.asSequence().filter { hourlyData ->
         hourlyData.time.isAfter(now) && hourlyData.time.isBefore(now.plusDays(1))
@@ -128,7 +175,8 @@ fun WeatherDto.toWeatherInfo(): WeatherInfo {
     return WeatherInfo(
         currentWeatherData = currentWeather.toCurrentWeatherData(),
         twentyFourHoursWeatherData = twentyFourHoursWeatherData.sortedBy { it.time },
-        hourlyWeatherData = hourlyWeather.toHourlyWeatherData(),
-        dailyWeatherData = dailyWeatherData
+        hourlyWeatherData = hourlyWeatherData,
+        dailyWeatherData = dailyWeatherData,
+        dailyWeatherSummaryData = hourlyWeatherData.toWeatherByTimePeriods(context)
     )
 }
