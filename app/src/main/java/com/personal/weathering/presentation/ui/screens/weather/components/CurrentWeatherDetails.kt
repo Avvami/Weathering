@@ -60,7 +60,7 @@ fun WeatherDetails(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_air_fill0_wght400),
-                contentDescription = "Air",
+                contentDescription = stringResource(id = R.string.wind),
                 tint = onSurfaceLight,
                 modifier = Modifier.size(32.dp)
             )
@@ -87,7 +87,7 @@ fun WeatherDetails(
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                    contentDescription = "Direction",
+                    contentDescription = weatherInfo().currentWeatherData.windDirectionType.direction,
                     tint = onSurfaceLight,
                     modifier = Modifier
                         .size(12.dp)
@@ -107,7 +107,7 @@ fun WeatherDetails(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_thermostat_fill1_wght400),
-                contentDescription = "Pressure",
+                contentDescription = stringResource(id = R.string.pressure),
                 tint = onSurfaceLight,
                 modifier = Modifier.size(32.dp)
             )
@@ -173,7 +173,7 @@ fun WeatherDetails(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_aq_fill0_wght400),
-            contentDescription = "AQ",
+            contentDescription = stringResource(id = R.string.aqi),
             tint = onSurfaceLight,
             modifier = Modifier.size(36.dp)
         )

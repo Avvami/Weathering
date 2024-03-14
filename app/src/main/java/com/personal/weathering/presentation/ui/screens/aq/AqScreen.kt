@@ -65,7 +65,7 @@ fun AqScreen(
     navigateBack: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val lazyListState = rememberLazyListState()
     val isScrolledToTop by remember {
         derivedStateOf {
@@ -108,7 +108,7 @@ fun AqScreen(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(pullToRefreshState().nestedScrollConnection)
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         topBar = {
             if (isScrolledToTop && preferencesState.value.isDark)
                 ApplySystemBarsTheme(applyLightStatusBars = false)
@@ -119,6 +119,7 @@ fun AqScreen(
                 colors = if (!isScrolledToTop && preferencesState.value.isDark) {
                     TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,
+                        scrolledContainerColor = MaterialTheme.colorScheme.surface,
                         navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
                         actionIconContentColor = MaterialTheme.colorScheme.onSurface,
                         titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -136,7 +137,7 @@ fun AqScreen(
                         Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = topAppBarScrollBehavior
             )
         },
         containerColor = MaterialTheme.colorScheme.surface,

@@ -88,13 +88,14 @@ fun WeatherScreen(
     weatherState: () -> WeatherState,
     aqState: () -> AqState,
     pullToRefreshState: () -> PullToRefreshState,
+    navigateToWeatherDetailsScreen: (dayOfWeek: Int) -> Unit,
     navigateToAqScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val lazyListState = rememberLazyListState()
     val isScrolledToTop by remember {
         derivedStateOf {
@@ -143,7 +144,7 @@ fun WeatherScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(pullToRefreshState().nestedScrollConnection)
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+                .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
             topBar = {
                 if (drawerState.targetValue == DrawerValue.Closed && isScrolledToTop && preferencesState.value.isDark)
                     ApplySystemBarsTheme(applyLightStatusBars = false)
@@ -163,6 +164,7 @@ fun WeatherScreen(
                     colors = if (!isScrolledToTop && preferencesState.value.isDark) {
                         TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent,
+                            scrolledContainerColor = MaterialTheme.colorScheme.surface,
                             navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
                             actionIconContentColor = MaterialTheme.colorScheme.onSurface,
                             titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -185,7 +187,7 @@ fun WeatherScreen(
                             Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
                         }
                     },
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = topAppBarScrollBehavior
                 )
             },
             containerColor = MaterialTheme.colorScheme.surface,
@@ -255,7 +257,8 @@ fun WeatherScreen(
                                 ) {
                                     WeatherWeeklyForecast(
                                         preferencesState = preferencesState,
-                                        weatherInfo = { weatherInfo }
+                                        weatherInfo = { weatherInfo },
+                                        navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
                                     )
                                     Spacer(modifier = Modifier.height(16.dp))
                                     val activity = LocalContext.current.findActivity() as MainActivity

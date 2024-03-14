@@ -1,5 +1,8 @@
 package com.personal.weathering.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,12 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.personal.weathering.presentation.MainViewModel
 import com.personal.weathering.presentation.ui.screens.aq.AqScreen
 import com.personal.weathering.presentation.ui.screens.search.SearchScreen
 import com.personal.weathering.presentation.ui.screens.weather.WeatherScreen
+import com.personal.weathering.presentation.ui.screens.weather_details.WeatherDetailsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,9 +36,8 @@ fun RootNavigationGraph(
     ) {
         composable(
             route = RootNavGraph.WEATHER,
-            enterTransition = { fadeIn() + scaleIn(initialScale = 1.2f) },
-            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = 1.2f) }
-
+            enterTransition = { scaleIn(initialScale = .98f) },
+            exitTransition = { scaleOut(targetScale = .98f) }
         ) {
             WeatherScreen(
                 currentCityState = mainViewModel.currentCityState.collectAsState(),
@@ -41,15 +46,38 @@ fun RootNavigationGraph(
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
+                navigateToWeatherDetailsScreen = { dayOfWeek -> navController.navigate(RootNavGraph.WEATHER_DETAILS + "/$dayOfWeek") },
                 navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
                 navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
                 uiEvent = mainViewModel::uiEvent
             )
         }
         composable(
+            route = RootNavGraph.WEATHER_DETAILS + "/{dayOfWeek}",
+            arguments = listOf(navArgument("dayOfWeek") { type = NavType.IntType; nullable = false }),
+            enterTransition = { fadeIn() + scaleIn(initialScale = .9f) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
+        ) {
+            WeatherDetailsScreen(
+                preferencesState = mainViewModel.preferencesState.collectAsState(),
+                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
+                weatherState = mainViewModel::weatherState
+            )
+        }
+        composable(
             route = RootNavGraph.AQ,
-            enterTransition = { fadeIn() + scaleIn(initialScale = .8f) },
-            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
+            enterTransition = {
+                slideIntoContainer(
+                    animationSpec = tween(350, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    animationSpec = tween(350, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.End
+                )
+            }
         ) {
             AqScreen(
                 currentCityState = mainViewModel.currentCityState.collectAsState(),
@@ -62,8 +90,8 @@ fun RootNavigationGraph(
         }
         composable(
             route = RootNavGraph.SEARCH,
-            enterTransition = { fadeIn() + scaleIn(initialScale = .8f) },
-            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .8f) }
+            enterTransition = { fadeIn() + scaleIn(initialScale = .9f) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 200)) + scaleOut(targetScale = .9f) }
         ) {
             SearchScreen(
                 preferencesState = mainViewModel.preferencesState.collectAsState(),
@@ -79,6 +107,7 @@ object RootNavGraph {
     const val ROOT = "root_graph"
 
     const val WEATHER = "weather_screen"
+    const val WEATHER_DETAILS = "weather_details_screen"
     const val AQ = "aq_screen"
     const val SEARCH = "search_screen"
 }

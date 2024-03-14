@@ -1,6 +1,7 @@
 package com.personal.weathering.presentation.ui.screens.weather.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +36,8 @@ import kotlin.math.roundToInt
 @Composable
 fun WeatherWeeklyForecast(
     preferencesState: State<PreferencesState>,
-    weatherInfo: () -> WeatherInfo
+    weatherInfo: () -> WeatherInfo,
+    navigateToWeatherDetailsScreen: (dayOfWeek: Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -61,6 +63,7 @@ fun WeatherWeeklyForecast(
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
                         .background(ExtendedTheme.colorScheme.surfaceContainerLow)
+                        .clickable { navigateToWeatherDetailsScreen(index) }
                         .padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
