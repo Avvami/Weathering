@@ -10,7 +10,7 @@ interface PreferencesDao {
     @Query("SELECT * FROM preferencesentity")
     fun getPreferences(): Flow<PreferencesEntity>
 
-    @Query("UPDATE preferencesentity SET useLocation = 0, cityId = :cityId, selectedCity = :city, selectedCityLat = :lat, selectedCityLon = :lon")
+    @Query("UPDATE preferencesentity SET cityId = :cityId, selectedCity = :city, selectedCityLat = :lat, selectedCityLon = :lon")
     suspend fun setSelectedCity(cityId: Int, city: String, lat: Double, lon: Double)
 
     @Query("UPDATE preferencesentity SET currentLocationCity = :city, currentLocationLat = :lat, currentLocationLon = :lon")

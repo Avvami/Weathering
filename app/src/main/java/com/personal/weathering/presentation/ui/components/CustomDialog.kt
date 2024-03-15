@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
+import com.personal.weathering.presentation.ui.theme.surfaceLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,20 +74,20 @@ fun CustomDialog(
                     modifier = modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(surfaceLight)
                 ) {
                     iconRes?.let {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.primary)
+                                .background(onSurfaceLight)
                                 .padding(24.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(id = iconRes),
                                 contentDescription = "Dialog icon",
-                                tint = MaterialTheme.colorScheme.onPrimary,
+                                tint = surfaceLight,
                                 modifier = Modifier.size(48.dp)
                             )
                         }
@@ -93,7 +96,7 @@ fun CustomDialog(
                         Text(
                             text = stringResource(id = it),
                             style = MaterialTheme.typography.headlineSmall,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = onSurfaceLight,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -101,7 +104,7 @@ fun CustomDialog(
                         Text(
                             text = stringResource(id = it),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = onSurfaceLight,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -109,7 +112,7 @@ fun CustomDialog(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = onSurfaceLight,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -122,11 +125,11 @@ fun CustomDialog(
                     ) {
                         println(onDismiss)
                         onDismiss?.let { dismiss ->
-                            TextButton(onClick = { dismiss() }) {
+                            TextButton(onClick = { dismiss() }, colors = ButtonDefaults.textButtonColors(contentColor = onSurfaceLight)) {
                                 Text(text = stringResource(id = dismissTextRes!!))
                             }
                         }
-                        TextButton(onClick = { onConfirm() }) {
+                        TextButton(onClick = { onConfirm() }, colors = ButtonDefaults.textButtonColors(contentColor = onSurfaceLight)) {
                             Text(text = stringResource(id = confirmTextRes))
                         }
                     }

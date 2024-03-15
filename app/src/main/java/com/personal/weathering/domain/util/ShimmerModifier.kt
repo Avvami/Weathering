@@ -13,12 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.personal.weathering.presentation.ui.theme.surfaceLight
 import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
-fun Modifier.shimmerEffect(): Modifier = composed {
+fun Modifier.shimmerEffect(
+    primaryColor: Color = surfaceLight,
+    secondaryColor: Color = surfaceLight30p
+): Modifier = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -31,7 +35,7 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
     background(
         brush = Brush.linearGradient(
-            colors = listOf(surfaceLight30p, surfaceLight, surfaceLight30p),
+            colors = listOf(secondaryColor, primaryColor, secondaryColor),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
         )

@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.android.gms.location.LocationServices
 import com.personal.weathering.data.local.AppDatabase
-import com.personal.weathering.data.location.DefaultLocationTracker
+import com.personal.weathering.data.location.DefaultLocationClient
 import com.personal.weathering.data.remote.AqApi
 import com.personal.weathering.data.remote.SearchApi
 import com.personal.weathering.data.remote.WeatherApi
@@ -12,7 +12,7 @@ import com.personal.weathering.data.repository.AqRepositoryImpl
 import com.personal.weathering.data.repository.LocalRepositoryImpl
 import com.personal.weathering.data.repository.SearchRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
-import com.personal.weathering.domain.location.LocationTracker
+import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.repository.AqRepository
 import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.SearchRepository
@@ -27,7 +27,7 @@ interface AppModule {
     val weatherRepository: WeatherRepository
     val aqApi: AqApi
     val aqRepository: AqRepository
-    val locationTracker: LocationTracker
+    val locationClient: LocationClient
     val searchApi: SearchApi
     val searchRepository: SearchRepository
     val localRepository: LocalRepository
@@ -59,8 +59,8 @@ class AppModuleImpl(private val appContext: Context): AppModule {
         AqRepositoryImpl(aqApi, appContext)
     }
 
-    override val locationTracker: LocationTracker by lazy {
-        DefaultLocationTracker(
+    override val locationClient: LocationClient by lazy {
+        DefaultLocationClient(
             LocationServices.getFusedLocationProviderClient(appContext),
             appContext as Application
         )

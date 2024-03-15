@@ -30,11 +30,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
+import com.personal.weathering.domain.util.LocationPermissionProvider
+import com.personal.weathering.domain.util.findActivity
+import com.personal.weathering.presentation.MainActivity
 import com.personal.weathering.presentation.UiEvent
+import com.personal.weathering.presentation.openAppSettings
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
@@ -46,8 +51,9 @@ fun ModalDrawer(
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
-    uiEvent: (UiEvent) -> Unit,
-    closeDrawer: () -> Unit
+    closeDrawer: () -> Unit,
+    requestPermissions: () -> Unit,
+    uiEvent: (UiEvent) -> Unit
 ) {
     if (drawerState.targetValue == DrawerValue.Open) {
         BackHandler {
@@ -118,12 +124,33 @@ fun ModalDrawer(
                 AQI(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
+                val activity = LocalContext.current.findActivity() as MainActivity
                 CurrentLocation(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 4.dp),
                     preferencesState = preferencesState,
                     weatherState = weatherState,
                     setUseLocation = {
-                        uiEvent(UiEvent.SetUseLocation)
+                        if (activity.hasPermissions()) {
+                            uiEvent(UiEvent.SetUseLocation)
+                            closeDrawer()
+                            return@CurrentLocation
+                        }
+                        uiEvent(UiEvent.ShowMessageDialog(
+                            iconRes = LocationPermissionProvider().getIcon(),
+                            messageRes = LocationPermissionProvider().getDescription(activity.shouldShowRationale()),
+                            dismissTextRes = R.string.not_now,
+                            onDismiss = { uiEvent(UiEvent.CloseMessageDialog) },
+                            confirmTextRes = if (activity.shouldShowRationale()) R.string.open_settings else R.string.grant,
+                            onConfirm = {
+                                if (activity.shouldShowRationale()) {
+                                    activity.openAppSettings()
+                                    uiEvent(UiEvent.CloseMessageDialog)
+                                } else {
+                                    requestPermissions()
+                                    uiEvent(UiEvent.CloseMessageDialog)
+                                }
+                            }
+                        ))
                     }
                 )
             }

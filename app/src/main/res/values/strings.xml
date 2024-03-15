@@ -118,6 +118,12 @@
     <string name="location_error">Unable to retrieve location</string>
     <string name="fetching_location_error">Error fetching location</string>
 
+    <string name="location_permission">Please allow location access to receive real-time weather information tailored to where you are.</string>
+    <string name="location_permission_declined">It seems you have permanently declined location permission. Please enable it in the app settings.</string>
+    <string name="not_now">Not now</string>
+    <string name="grant">Grant</string>
+    <string name="open_settings">Open settings</string>
+
     <string name="info_dialog_title">Info</string>
     <string name="info_dialog_text">μg/m³ - micrograms (one-millionth of a gram) per cubic meter air.
         \n\nParticles with a diameter of 10 microns or less (PM10) are inhalable into the lungs and can induce adverse health effects.

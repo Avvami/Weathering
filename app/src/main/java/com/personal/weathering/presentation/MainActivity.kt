@@ -1,18 +1,25 @@
 package com.personal.weathering.presentation
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
@@ -30,12 +37,11 @@ class MainActivity : ComponentActivity() {
             MainViewModel(
                 weatherRepository = WeatheringApp.appModule.weatherRepository,
                 aqRepository = WeatheringApp.appModule.aqRepository,
-                locationTracker = WeatheringApp.appModule.locationTracker,
+                locationClient = WeatheringApp.appModule.locationClient,
                 localRepository = WeatheringApp.appModule.localRepository
             )
         }
     }
-    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -44,21 +50,21 @@ class MainActivity : ComponentActivity() {
             mainViewModel.holdSplash
         }
 
-//        permissionLauncher = registerForActivityResult(
-//            ActivityResultContracts.RequestMultiplePermissions()
-//        ) {}
-//        permissionLauncher.launch(arrayOf(
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-//            Manifest.permission.ACCESS_COARSE_LOCATION,
-//        ))
         setContent {
             WeatheringTheme(
                 darkTheme = mainViewModel.preferencesState.collectAsState().value.isDark
             ) {
+                val permissionsResultLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestMultiplePermissions(),
+                    onResult = {
+                        mainViewModel.uiEvent(UiEvent.SetUseLocation)
+                    }
+                )
                 Surface {
                     RootNavigationGraph(
                         navController = rememberNavController(),
-                        mainViewModel = mainViewModel
+                        mainViewModel = mainViewModel,
+                        requestPermissions = { permissionsResultLauncher.launch(permissionsToRequest()) }
                     )
                     CustomDialog(
                         iconRes = mainViewModel.messageDialogState.iconRes,
@@ -83,6 +89,30 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun permissionsToRequest(): Array<String> {
+        val permissionsArray = arrayListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+        return permissionsArray.toTypedArray()
+    }
+
+    fun hasPermissions(permissions: Array<String> = permissionsToRequest()): Boolean {
+        return permissions.any { permission ->
+            ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    fun shouldShowRationale(): Boolean {
+        return ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) || ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
     fun openCustomWebTab(url: String) {
         val chromeIntent = CustomTabsIntent.Builder()
             .setDefaultColorSchemeParams(
@@ -97,4 +127,11 @@ class MainActivity : ComponentActivity() {
             .build()
         chromeIntent.launchUrl(this, Uri.parse(url))
     }
+}
+
+fun Activity.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
 }

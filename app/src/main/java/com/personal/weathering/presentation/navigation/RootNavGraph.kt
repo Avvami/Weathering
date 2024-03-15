@@ -27,7 +27,8 @@ import com.personal.weathering.presentation.ui.screens.weather_details.WeatherDe
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    requestPermissions: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -48,6 +49,7 @@ fun RootNavigationGraph(
                 navigateToWeatherDetailsScreen = { dayOfWeek -> navController.navigate(RootNavGraph.WEATHER_DETAILS + "/$dayOfWeek") },
                 navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
                 navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
+                requestPermissions = requestPermissions,
                 uiEvent = mainViewModel::uiEvent
             )
         }

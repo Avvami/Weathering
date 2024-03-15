@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -61,6 +62,7 @@ import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.domain.util.C
 import com.personal.weathering.domain.util.findActivity
+import com.personal.weathering.domain.util.shimmerEffect
 import com.personal.weathering.presentation.MainActivity
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
@@ -90,6 +92,7 @@ fun WeatherScreen(
     navigateToWeatherDetailsScreen: (dayOfWeek: Int) -> Unit,
     navigateToAqScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
+    requestPermissions: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -133,8 +136,9 @@ fun WeatherScreen(
                 preferencesState = preferencesState,
                 favoritesState = favoritesState,
                 weatherState = weatherState,
-                uiEvent = uiEvent,
-                closeDrawer = { scope.launch { drawerState.close() } }
+                closeDrawer = { scope.launch { drawerState.close() } },
+                requestPermissions = requestPermissions,
+                uiEvent = uiEvent
             )
         }
     ) {
@@ -159,14 +163,25 @@ fun WeatherScreen(
                                     style = MaterialTheme.typography.bodyMedium
                                 )
                             }
-                            Text(
-                                text = if (preferencesState.value.useLocation) preferencesState.value.currentLocationCity else preferencesState.value.selectedCity,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Medium,
-                                textAlign = TextAlign.Center,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
+                            if (weatherState().retrievingLocation) {
+                                Text(
+                                    modifier = Modifier
+                                        .clip(MaterialTheme.shapes.small)
+                                        .shimmerEffect(),
+                                    text = "Great London",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color.Transparent
+                                )
+                            } else {
+                                Text(
+                                    text = if (preferencesState.value.useLocation) preferencesState.value.currentLocationCity else preferencesState.value.selectedCity,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            }
                         }
                     },
                     colors = if (!isScrolledToTop && preferencesState.value.isDark) {

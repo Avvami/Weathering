@@ -4,24 +4,24 @@ import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.personal.weathering.R
-import com.personal.weathering.domain.location.LocationTracker
+import com.personal.weathering.data.mappers.toLocationInfo
+import com.personal.weathering.domain.location.LocationClient
+import com.personal.weathering.domain.models.location.LocationInfo
 import com.personal.weathering.domain.util.Resource
 import com.personal.weathering.domain.util.UiText
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.lang.Exception
-import java.util.concurrent.CancellationException
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-class DefaultLocationTracker(
+class DefaultLocationClient(
     private val locationClient: FusedLocationProviderClient,
     private val application: Application
-): LocationTracker {
-    override suspend fun getCurrentLocation(): Resource<Location> {
+): LocationClient {
+    override suspend fun getCurrentLocation(): Resource<LocationInfo> {
         try {
             val hasAccessFineLocationPermission = ContextCompat.checkSelfPermission(
                 application,
@@ -36,30 +36,20 @@ class DefaultLocationTracker(
                 return Resource.Error(UiText.StringResource(R.string.permission_error).asString(application))
 
             val locationManager = application.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) ||
-                    locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            if (!isGpsEnabled)
+            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            if (!isGpsEnabled && !isNetworkEnabled)
                 return Resource.Error(UiText.StringResource(R.string.gps_error).asString(application))
 
             return suspendCancellableCoroutine { cont ->
-                locationClient.lastLocation.apply {
-                    if (isComplete) {
-                        if (isSuccessful) {
-                            cont.resume(Resource.Success(result))
-                        } else {
-                            cont.resume(Resource.Error(UiText.StringResource(R.string.location_error).asString(application)))
-                        }
-                        return@suspendCancellableCoroutine
-                    }
-                    addOnSuccessListener { location ->
-                        cont.resume(Resource.Success(location))
-                    }
-                    addOnFailureListener {
+                locationClient.lastLocation.addOnCompleteListener { task ->
+                    if (task.isSuccessful && task.result != null) {
+                        cont.resume(Resource.Success(task.result.toLocationInfo()))
+                    } else {
                         cont.resume(Resource.Error(UiText.StringResource(R.string.location_error).asString(application)))
                     }
-                    addOnCanceledListener {
-                        cont.cancel(CancellationException("Location request cancelled"))
-                    }
+                }.addOnFailureListener { exception ->
+                    cont.resumeWithException(exception)
                 }
             }
         } catch (e: Exception) {

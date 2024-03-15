@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.personal.weathering.data.local.FavoriteEntity
-import com.personal.weathering.domain.location.LocationTracker
+import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val weatherRepository: WeatherRepository,
     private val aqRepository: AqRepository,
-    private val locationTracker: LocationTracker,
+    private val locationClient: LocationClient,
     private val localRepository: LocalRepository
 ): ViewModel() {
 
@@ -83,11 +83,12 @@ class MainViewModel(
         viewModelScope.launch {
             localRepository.getPreferences()
                 .distinctUntilChangedBy {
-                    listOf(it.searchLanguageCode, it.isDark, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
+                    listOf(it.useLocation, it.searchLanguageCode, it.isDark, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
                 }
                 .collect { preferencesEntity ->
                     _preferencesState.update {
                         it.copy(
+                            useLocation = preferencesEntity.useLocation,
                             searchLanguageCode = preferencesEntity.searchLanguageCode,
                             isDark = preferencesEntity.isDark,
                             useCelsius = preferencesEntity.useCelsius,
@@ -108,43 +109,48 @@ class MainViewModel(
     }
 
     private fun loadWeatherInfo(useLocation: Boolean, lat: Double, lon: Double) {
+        if (preferencesState.value.selectedCity == "" && !useLocation) return
         viewModelScope.launch {
             weatherState = weatherState.copy(
                 isLoading = true,
                 error = null
             )
 
-            var weatherInfo: WeatherInfo? = null
+            var weatherInfo: WeatherInfo? = weatherState.weatherInfo
             var weatherError: String? = null
 
             if (useLocation) {
-                locationTracker.getCurrentLocation().let { locationResult ->
+                localRepository.setSelectedCity(0, "", 0.0, 0.0)
+                weatherState = weatherState.copy(
+                    retrievingLocation = true
+                )
+                locationClient.getCurrentLocation().let { locationResult ->
                     when (locationResult) {
                         is Resource.Error -> {
                             _locationError.send(locationResult.message ?: "")
-                            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
                         }
                         is Resource.Success -> {
                             /*TODO: Set the new current city and then weather request*/
-                            weatherRepository.getWeatherData(locationResult.data!!.latitude, locationResult.data.longitude).let { result ->
-                                when (result) {
-                                    is Resource.Error -> {
-                                        weatherError = result.message
-                                    }
-                                    is Resource.Success -> {
-                                        weatherInfo = result.data
+                            weatherState = weatherState.copy(
+                                retrievingLocation = false
+                            )
+                            println("Current location: ${locationResult.data?.latitude}; ${locationResult.data?.longitude}")
+                            locationResult.data?.let { locationInfo ->
+                                weatherRepository.getWeatherData(locationInfo.latitude, locationInfo.longitude).let { result ->
+                                    when (result) {
+                                        is Resource.Error -> {
+                                            weatherError = result.message
+                                        }
+                                        is Resource.Success -> {
+                                            weatherInfo = result.data
+                                        }
                                     }
                                 }
-                            }
-                            localRepository.setUseLocation(true)
-                            weatherState = weatherState.copy(
-                                weatherInfo = weatherInfo,
-                                isLoading = false,
-                                error = weatherError
-                            )
-                            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
-
-                            loadAqInfo(locationResult.data.latitude, locationResult.data.longitude)
+                                localRepository.setUseLocation(true)
+                                launch {
+                                    loadAqInfo(locationInfo.latitude, locationInfo.longitude)
+                                }
+                            } ?: _locationError.send("An unexpected error occurred")
                         }
                     }
                 }
@@ -159,16 +165,17 @@ class MainViewModel(
                         }
                     }
                 }
-
-                weatherState = weatherState.copy(
-                    weatherInfo = weatherInfo,
-                    isLoading = false,
-                    error = weatherError
-                )
-                if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
-
-                loadAqInfo(lat, lon)
+                launch {
+                    loadAqInfo(lat, lon)
+                }
             }
+
+            weatherState = weatherState.copy(
+                weatherInfo = weatherInfo,
+                isLoading = false,
+                error = weatherError
+            )
+            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
         }
     }
 
@@ -224,6 +231,7 @@ class MainViewModel(
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
             is UiEvent.SetSelectedCity -> {
                 viewModelScope.launch {
+                    localRepository.setUseLocation(false)
                     localRepository.setSelectedCity(event.cityId, event.city, event.lat, event.lon)
                 }
             }
