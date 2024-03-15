@@ -44,7 +44,6 @@ import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
 import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmer
@@ -58,7 +57,6 @@ import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AqScreen(
-    currentCityState: State<CurrentCityState>,
     preferencesState: State<PreferencesState>,
     aqState: () -> AqState,
     pullToRefreshState: () -> PullToRefreshState,
@@ -74,7 +72,10 @@ fun AqScreen(
     }
     if (pullToRefreshState().isRefreshing) {
         LaunchedEffect(true) {
-            uiEvent(UiEvent.UpdateAqInfo(currentCityState.value.lat, currentCityState.value.lon))
+            if (preferencesState.value.useLocation)
+                uiEvent(UiEvent.UpdateAqInfo(preferencesState.value.currentLocationLat, preferencesState.value.currentLocationLon))
+            else
+                uiEvent(UiEvent.UpdateAqInfo(preferencesState.value.selectedCityLat, preferencesState.value.selectedCityLon))
         }
     }
     val radialGradient by remember(aqState().aqInfo) {

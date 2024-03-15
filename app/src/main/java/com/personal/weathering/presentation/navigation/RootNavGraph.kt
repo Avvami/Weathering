@@ -40,7 +40,6 @@ fun RootNavigationGraph(
             exitTransition = { scaleOut(targetScale = .98f) }
         ) {
             WeatherScreen(
-                currentCityState = mainViewModel.currentCityState.collectAsState(),
                 preferencesState = mainViewModel.preferencesState.collectAsState(),
                 favoritesState = mainViewModel.favoritesState.collectAsState(),
                 weatherState = mainViewModel::weatherState,
@@ -80,7 +79,6 @@ fun RootNavigationGraph(
             }
         ) {
             AqScreen(
-                currentCityState = mainViewModel.currentCityState.collectAsState(),
                 preferencesState = mainViewModel.preferencesState.collectAsState(),
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,

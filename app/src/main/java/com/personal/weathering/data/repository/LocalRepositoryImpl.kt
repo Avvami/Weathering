@@ -22,7 +22,8 @@ class LocalRepositoryImpl(
 
     override fun getPreferences(): Flow<PreferencesEntity> = preferencesDao.getPreferences()
 
-    override suspend fun setCurrentCity(cityId: Int, city: String, lat: Double, lon: Double) = preferencesDao.setCurrentCity(cityId, city, lat, lon)
+    override suspend fun setSelectedCity(cityId: Int, city: String, lat: Double, lon: Double) = preferencesDao.setSelectedCity(cityId, city, lat, lon)
+    override suspend fun setCurrentLocationCity(city: String, lat: Double, lon: Double) = preferencesDao.setCurrentLocationCity(city, lat, lon)
 
     override suspend fun setSearchLanguageCode(languageCode: String) = preferencesDao.setSearchLanguageCode(languageCode)
 

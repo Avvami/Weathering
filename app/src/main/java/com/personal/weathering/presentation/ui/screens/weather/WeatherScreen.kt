@@ -1,5 +1,6 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -63,7 +64,6 @@ import com.personal.weathering.domain.util.findActivity
 import com.personal.weathering.presentation.MainActivity
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
@@ -82,7 +82,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
-    currentCityState: State<CurrentCityState>,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
@@ -104,7 +103,7 @@ fun WeatherScreen(
     }
     if (pullToRefreshState().isRefreshing) {
         LaunchedEffect(true) {
-            uiEvent(UiEvent.LoadWeatherInfo(currentCityState.value.lat, currentCityState.value.lon))
+            uiEvent(UiEvent.LoadWeatherInfo(preferencesState.value.useLocation, preferencesState.value.selectedCityLat, preferencesState.value.selectedCityLon))
         }
     }
     val radialGradient by remember(weatherState().weatherInfo) {
@@ -133,7 +132,6 @@ fun WeatherScreen(
                 drawerState = drawerState,
                 preferencesState = preferencesState,
                 favoritesState = favoritesState,
-                currentCityState = currentCityState,
                 weatherState = weatherState,
                 uiEvent = uiEvent,
                 closeDrawer = { scope.launch { drawerState.close() } }
@@ -152,14 +150,24 @@ fun WeatherScreen(
                     ApplySystemBarsTheme(applyLightStatusBars = preferencesState.value.isDark)
                 CenterAlignedTopAppBar(
                     title = {
-                        Text(
-                            text = currentCityState.value.name,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium,
-                            textAlign = TextAlign.Center,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            AnimatedVisibility(visible = preferencesState.value.useLocation) {
+                                Text(
+                                    text = stringResource(id = R.string.current_location),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                            Text(
+                                text = if (preferencesState.value.useLocation) preferencesState.value.currentLocationCity else preferencesState.value.selectedCity,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Medium,
+                                textAlign = TextAlign.Center,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     },
                     colors = if (!isScrolledToTop && preferencesState.value.isDark) {
                         TopAppBarDefaults.centerAlignedTopAppBarColors(

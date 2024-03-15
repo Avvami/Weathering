@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.presentation.UiEvent
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
@@ -46,7 +45,6 @@ fun ModalDrawer(
     drawerState: DrawerState,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
-    currentCityState: State<CurrentCityState>,
     weatherState: () -> WeatherState,
     uiEvent: (UiEvent) -> Unit,
     closeDrawer: () -> Unit
@@ -122,11 +120,10 @@ fun ModalDrawer(
             item {
                 CurrentLocation(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 4.dp),
-                    currentCityState = currentCityState,
                     preferencesState = preferencesState,
                     weatherState = weatherState,
-                    setUseLocation = { useLocation ->
-                        uiEvent(UiEvent.SetUseLocation(useLocation))
+                    setUseLocation = {
+                        uiEvent(UiEvent.SetUseLocation)
                     }
                 )
             }
@@ -148,7 +145,7 @@ fun ModalDrawer(
                             )
                             .clickable {
                                 uiEvent(
-                                    UiEvent.SetCurrentCityState(
+                                    UiEvent.SetSelectedCity(
                                         cityId = favorite.cityId,
                                         city = favorite.city,
                                         lat = favorite.lat,

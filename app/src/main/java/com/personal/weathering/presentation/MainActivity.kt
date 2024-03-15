@@ -1,17 +1,17 @@
 package com.personal.weathering.presentation
 
-import android.Manifest
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -21,6 +21,7 @@ import com.personal.weathering.WeatheringApp
 import com.personal.weathering.presentation.navigation.RootNavigationGraph
 import com.personal.weathering.presentation.ui.components.CustomDialog
 import com.personal.weathering.presentation.ui.theme.WeatheringTheme
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
 
@@ -43,13 +44,13 @@ class MainActivity : ComponentActivity() {
             mainViewModel.holdSplash
         }
 
-        permissionLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) {}
-        permissionLauncher.launch(arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        ))
+//        permissionLauncher = registerForActivityResult(
+//            ActivityResultContracts.RequestMultiplePermissions()
+//        ) {}
+//        permissionLauncher.launch(arrayOf(
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+//            Manifest.permission.ACCESS_COARSE_LOCATION,
+//        ))
         setContent {
             WeatheringTheme(
                 darkTheme = mainViewModel.preferencesState.collectAsState().value.isDark
@@ -71,6 +72,12 @@ class MainActivity : ComponentActivity() {
                         onConfirm = mainViewModel.messageDialogState.onConfirm,
                         showDialog = mainViewModel.messageDialogState.isShown
                     )
+                }
+            }
+
+            LaunchedEffect(mainViewModel.locationError) {
+                mainViewModel.locationError.collectLatest { message ->
+                    Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

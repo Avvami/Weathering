@@ -149,7 +149,7 @@ fun SearchScreen(
                     searchState = searchViewModel::searchState,
                     navigateBack = navigateBack,
                     setCurrentCityState = { cityId, city, lat, lon ->
-                        uiEvent(UiEvent.SetCurrentCityState(
+                        uiEvent(UiEvent.SetSelectedCity(
                             cityId, city, lat, lon
                         ))
                     },
@@ -180,7 +180,7 @@ fun SearchScreen(
                     searchHistoryState = searchViewModel.searchHistoryState.collectAsState(),
                     navigateBack = navigateBack,
                     setCurrentCityState = { cityId, city, lat, lon ->
-                        uiEvent(UiEvent.SetCurrentCityState(
+                        uiEvent(UiEvent.SetSelectedCity(
                             cityId, city, lat, lon
                         ))
                     },

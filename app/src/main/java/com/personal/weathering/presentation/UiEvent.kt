@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import com.personal.weathering.R
 
 sealed interface UiEvent {
-    data class LoadWeatherInfo(val lat: Double, val lon: Double): UiEvent
+    data class LoadWeatherInfo(val useLocation: Boolean, val lat: Double, val lon: Double): UiEvent
     data class ShowMessageDialog(
         @DrawableRes val iconRes: Int? = null,
         @StringRes val titleRes: Int? = null,
@@ -17,10 +17,10 @@ sealed interface UiEvent {
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
     data object CloseMessageDialog: UiEvent
-    data class SetCurrentCityState(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
+    data class SetSelectedCity(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
     data class SetSearchLanguage(val code: String): UiEvent
     data class SetDarkMode(val isDark: Boolean): UiEvent
-    data class SetUseLocation(val useLocation: Boolean): UiEvent
+    data object SetUseLocation: UiEvent
     data class SetTemperatureUnit(val useCelsius: Boolean): UiEvent
     data class SetSpeedUnit(val useKmPerHour: Boolean): UiEvent
     data class SetPressureUnit(val useHpa: Boolean): UiEvent

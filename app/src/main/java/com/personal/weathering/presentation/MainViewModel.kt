@@ -16,15 +16,16 @@ import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
 import com.personal.weathering.presentation.state.AqState
-import com.personal.weathering.presentation.state.CurrentCityState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.MessageDialogState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -38,6 +39,9 @@ class MainViewModel(
 
     var pullToRefreshState by mutableStateOf(PullToRefreshState(150f))
 
+    private val _locationError = Channel<String>()
+    val locationError = _locationError.receiveAsFlow()
+
     var weatherState by mutableStateOf(WeatherState())
         private set
 
@@ -50,9 +54,6 @@ class MainViewModel(
     var holdSplash by mutableStateOf(true)
         private set
 
-    private val _currentCityState = MutableStateFlow(CurrentCityState())
-    val currentCityState: StateFlow<CurrentCityState> = _currentCityState.asStateFlow()
-
     private val _preferencesState = MutableStateFlow(PreferencesState())
     val preferencesState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
@@ -62,31 +63,33 @@ class MainViewModel(
     init {
         viewModelScope.launch {
             localRepository.getPreferences()
-                .distinctUntilChangedBy { listOf(it.cityId, it.lat, it.lon, it.currentCity) }
+                .distinctUntilChangedBy { listOf(it.selectedCity, it.selectedCityLat, it.selectedCityLon) }
                 .collect { preferencesEntity ->
-                    _currentCityState.update {
+                    _preferencesState.update {
                         it.copy(
-                            cityId = preferencesEntity.cityId,
-                            name = preferencesEntity.currentCity,
-                            lat = preferencesEntity.lat,
-                            lon = preferencesEntity.lon
+                            selectedCity = preferencesEntity.selectedCity,
+                            selectedCityLat = preferencesEntity.selectedCityLat,
+                            selectedCityLon = preferencesEntity.selectedCityLon,
+                            useLocation = preferencesEntity.useLocation,
+                            currentLocationCity = preferencesEntity.currentLocationCity,
+                            currentLocationLat = preferencesEntity.currentLocationLat,
+                            currentLocationLon = preferencesEntity.currentLocationLon,
                         )
                     }
-                    uiEvent(UiEvent.LoadWeatherInfo(preferencesEntity.lat, preferencesEntity.lon))
+                    uiEvent(UiEvent.LoadWeatherInfo(preferencesEntity.useLocation, preferencesEntity.selectedCityLat, preferencesEntity.selectedCityLon))
                     holdSplash = false
                 }
         }
         viewModelScope.launch {
             localRepository.getPreferences()
                 .distinctUntilChangedBy {
-                    listOf(it.searchLanguageCode, it.isDark, it.useLocation, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
+                    listOf(it.searchLanguageCode, it.isDark, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
                 }
                 .collect { preferencesEntity ->
                     _preferencesState.update {
                         it.copy(
                             searchLanguageCode = preferencesEntity.searchLanguageCode,
                             isDark = preferencesEntity.isDark,
-                            useLocation = preferencesEntity.useLocation,
                             useCelsius = preferencesEntity.useCelsius,
                             useKmPerHour = preferencesEntity.useKmPerHour,
                             useHpa = preferencesEntity.useHpa,
@@ -104,7 +107,7 @@ class MainViewModel(
         }
     }
 
-    private fun loadWeatherInfo(lat: Double, lon: Double) {
+    private fun loadWeatherInfo(useLocation: Boolean, lat: Double, lon: Double) {
         viewModelScope.launch {
             weatherState = weatherState.copy(
                 isLoading = true,
@@ -114,50 +117,58 @@ class MainViewModel(
             var weatherInfo: WeatherInfo? = null
             var weatherError: String? = null
 
-            weatherRepository.getWeatherData(lat, lon).let { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        weatherError = result.message
-                    }
-                    is Resource.Success -> {
-                        weatherInfo = result.data
-                    }
-                }
-            }
+            if (useLocation) {
+                locationTracker.getCurrentLocation().let { locationResult ->
+                    when (locationResult) {
+                        is Resource.Error -> {
+                            _locationError.send(locationResult.message ?: "")
+                            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
+                        }
+                        is Resource.Success -> {
+                            /*TODO: Set the new current city and then weather request*/
+                            weatherRepository.getWeatherData(locationResult.data!!.latitude, locationResult.data.longitude).let { result ->
+                                when (result) {
+                                    is Resource.Error -> {
+                                        weatherError = result.message
+                                    }
+                                    is Resource.Success -> {
+                                        weatherInfo = result.data
+                                    }
+                                }
+                            }
+                            localRepository.setUseLocation(true)
+                            weatherState = weatherState.copy(
+                                weatherInfo = weatherInfo,
+                                isLoading = false,
+                                error = weatherError
+                            )
+                            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
 
-            weatherState = weatherState.copy(
-                weatherInfo = weatherInfo,
-                isLoading = false,
-                error = weatherError
-            )
-            pullToRefreshState.endRefresh()
-
-            aqState = aqState.copy(
-                isLoading = true,
-                error = null
-            )
-
-            var aqInfo: AqInfo? = null
-            var aqError: String? = null
-
-            aqRepository.getAqData(lat, lon).let { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        aqError = result.message
-                    }
-                    is Resource.Success -> {
-                        aqInfo = result.data
+                            loadAqInfo(locationResult.data.latitude, locationResult.data.longitude)
+                        }
                     }
                 }
+            } else {
+                weatherRepository.getWeatherData(lat, lon).let { result ->
+                    when (result) {
+                        is Resource.Error -> {
+                            weatherError = result.message
+                        }
+                        is Resource.Success -> {
+                            weatherInfo = result.data
+                        }
+                    }
+                }
+
+                weatherState = weatherState.copy(
+                    weatherInfo = weatherInfo,
+                    isLoading = false,
+                    error = weatherError
+                )
+                if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
+
+                loadAqInfo(lat, lon)
             }
-
-            aqState = aqState.copy(
-                aqInfo = aqInfo,
-                isLoading = false,
-                error = aqError
-            )
-
-            locationTracker.getCurrentLocation()?.let {} ?: kotlin.run {}
         }
     }
 
@@ -187,14 +198,14 @@ class MainViewModel(
                 isLoading = false,
                 error = error
             )
-            pullToRefreshState.endRefresh()
+            if (pullToRefreshState.isRefreshing) pullToRefreshState.endRefresh()
         }
     }
 
     fun uiEvent(event: UiEvent) {
         when(event) {
             is UiEvent.LoadWeatherInfo -> {
-                loadWeatherInfo(event.lat, event.lon)
+                loadWeatherInfo(event.useLocation, event.lat, event.lon)
             }
             is UiEvent.ShowMessageDialog -> {
                 messageDialogState = messageDialogState.copy(
@@ -211,9 +222,9 @@ class MainViewModel(
                 )
             }
             UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
-            is UiEvent.SetCurrentCityState -> {
+            is UiEvent.SetSelectedCity -> {
                 viewModelScope.launch {
-                    localRepository.setCurrentCity(event.cityId, event.city, event.lat, event.lon)
+                    localRepository.setSelectedCity(event.cityId, event.city, event.lat, event.lon)
                 }
             }
             is UiEvent.SetSearchLanguage -> {
@@ -227,9 +238,7 @@ class MainViewModel(
                 }
             }
             is UiEvent.SetUseLocation -> {
-                viewModelScope.launch {
-                    localRepository.setUseLocation(event.useLocation)
-                }
+                loadWeatherInfo(true, 0.0, 0.0)
             }
             is UiEvent.SetTemperatureUnit -> {
                 viewModelScope.launch {
