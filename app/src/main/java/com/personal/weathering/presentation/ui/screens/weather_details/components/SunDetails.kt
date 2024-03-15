@@ -37,6 +37,27 @@ fun SunDetails(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Row {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(id = R.string.daylight_duration),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = onSurfaceLight70p
+                )
+                Text(
+                    text = stringResource(
+                        id = R.string.hours_minutes,
+                        dailyWeatherData.daylightDuration.toHours(),
+                        dailyWeatherData.daylightDuration.toMinutesPart()
+                    ),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {

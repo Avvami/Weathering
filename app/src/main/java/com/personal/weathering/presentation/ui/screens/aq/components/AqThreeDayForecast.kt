@@ -65,7 +65,9 @@ fun AqThreeDayForecast(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(
+                        modifier = Modifier.weight(.25f)
+                    ) {
                         Text(
                             text = hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("d MMMM")),
                             style = MaterialTheme.typography.labelLarge,
@@ -81,16 +83,17 @@ fun AqThreeDayForecast(
                         )
                     }
                     Row(
+                        modifier = Modifier.weight(.75f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Row(
-                            modifier = Modifier.weight(weight = .5f, fill = false),
+                            modifier = Modifier.weight(weight = .6f),
                             horizontalArrangement = Arrangement.spacedBy(2.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                modifier = Modifier.weight(weight = .8f, fill = false),
+                                modifier = Modifier.weight(weight = .8f),
                                 text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes) else
                                     stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqDescRes),
                                 style = MaterialTheme.typography.titleSmall,
@@ -105,6 +108,7 @@ fun AqThreeDayForecast(
                             )
                         }
                         Column(
+                            modifier = Modifier.weight(weight = .15f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (index == 0) {
@@ -122,6 +126,7 @@ fun AqThreeDayForecast(
                             )
                         }
                         Column(
+                            modifier = Modifier.weight(weight = .15f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (index == 0) {

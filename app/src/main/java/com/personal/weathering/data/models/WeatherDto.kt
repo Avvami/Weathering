@@ -61,6 +61,12 @@ data class DailyWeatherDto(
     val temperaturesMin: List<Double>,
     @field:Json(name = "weather_code")
     val weatherCodes: List<Int>,
+    @field:Json(name = "wind_speed_10m_max")
+    val windSpeedsMax: List<Double>,
+    @field:Json(name = "wind_direction_10m_dominant")
+    val dominantWindDirections: List<Int>,
+    @field:Json(name = "daylight_duration")
+    val daylightDurations: List<Double>,
     @field:Json(name = "sunrise")
     val sunrises: List<String>,
     @field:Json(name = "sunset")

@@ -68,7 +68,9 @@ fun WeatherWeeklyForecast(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(
+                        modifier = Modifier.weight(.52f)
+                    ) {
                         Text(
                             text = weatherData.time.format(DateTimeFormatter.ofPattern("d MMMM")),
                             style = MaterialTheme.typography.labelLarge,
@@ -84,15 +86,17 @@ fun WeatherWeeklyForecast(
                         )
                     }
                     Row(
+                        modifier = Modifier.weight(.48f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
+                            modifier = Modifier.weight(1f).size(28.dp),
                             painter = painterResource(id = weatherData.weatherType.iconSmallRes),
-                            contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes),
-                            modifier = Modifier.size(28.dp)
+                            contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
                         )
                         Column(
+                            modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (index == 0) {
@@ -113,6 +117,7 @@ fun WeatherWeeklyForecast(
                             )
                         }
                         Column(
+                            modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (index == 0) {

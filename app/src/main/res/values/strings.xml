@@ -8,6 +8,8 @@
     <string name="apparent_temperature">Feels like %d°</string>
     <string name="feels_like">Feels like</string>
     <string name="today_time">Today %s</string>
+    <string name="daylight_duration">Daylight duration</string>
+    <string name="hours_minutes">%d h %d min</string>
     <string name="wind">Wind</string>
     <string name="km_per_hour">%.1f km/h</string>
     <string name="m_per_second">%.1f m/s</string>

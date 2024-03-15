@@ -17,6 +17,7 @@ import com.personal.weathering.domain.models.weather.WeatherSummaryData
 import com.personal.weathering.domain.models.weather.WeatherType
 import com.personal.weathering.domain.models.weather.WindDirectionType
 import com.personal.weathering.domain.util.UiText
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -82,6 +83,9 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
         val temperatureMax = temperaturesMax[index]
         val temperatureMin = temperaturesMin[index]
         val weatherCode = weatherCodes[index]
+        val windSpeedMax = windSpeedsMax[index]
+        val dominantWindDirection = dominantWindDirections[index]
+        val daylightDuration = daylightDurations[index]
         val sunrise = sunrises[index]
         val sunset = sunsets[index]
         DailyWeatherData(
@@ -89,6 +93,10 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
             temperatureMax = temperatureMax,
             temperatureMin = temperatureMin,
             weatherType = WeatherType.fromWMO(weatherCode, true),
+            windSpeedMax = windSpeedMax,
+            dominantWindDirection = dominantWindDirection.toFloat(),
+            dominantWindDirectionType = WindDirectionType.fromDegree(dominantWindDirection),
+            daylightDuration = Duration.ofMillis((daylightDuration * 1000).toLong()),
             sunrise = LocalDateTime.parse(sunrise, DateTimeFormatter.ISO_DATE_TIME),
             sunset = LocalDateTime.parse(sunset, DateTimeFormatter.ISO_DATE_TIME)
         )

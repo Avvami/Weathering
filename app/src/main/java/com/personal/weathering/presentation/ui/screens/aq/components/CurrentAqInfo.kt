@@ -46,11 +46,13 @@ fun CurrentAqInfo(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
+                modifier = Modifier.weight(.45f),
                 text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqi.toString() else aqInfo().currentAqData.europeanAqi.toString(),
                 fontSize = 82.sp,
                 color = onSurfaceLight
             )
             Column(
+                modifier = Modifier.weight(.55f),
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
