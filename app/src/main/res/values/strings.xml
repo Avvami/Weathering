@@ -115,7 +115,7 @@
 
     <string name="permission_error">Location permission denied</string>
     <string name="gps_error">GPS is disabled</string>
-    <string name="location_error">Unable to retrieve new location</string>
+    <string name="location_error">Unable to retrieve location</string>
     <string name="fetching_location_error">Error fetching location</string>
 
     <string name="location_permission">Please allow location access to receive real-time weather information tailored to where you are.</string>
