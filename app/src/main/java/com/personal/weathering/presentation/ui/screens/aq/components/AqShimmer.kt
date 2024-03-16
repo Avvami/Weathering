@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.shimmerEffect
+import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,6 +102,25 @@ fun AqShimmer(
                 .clip(MaterialTheme.shapes.large)
                 .shimmerEffect()
         )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_format_quote_fill1_wght400),
+                contentDescription = "Aq desc",
+                tint = onSurfaceLight
+            )
+            Text(
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.small)
+                    .shimmerEffect(),
+                text = stringResource(id = R.string.eu_good_aqi_general_description),
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Transparent
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()

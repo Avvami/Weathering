@@ -94,16 +94,16 @@ fun AqThreeDayForecast(
                         ) {
                             Text(
                                 modifier = Modifier.weight(weight = .8f),
-                                text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes) else
-                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqDescRes),
+                                text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqIndexRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqIndexRes),
                                 style = MaterialTheme.typography.titleSmall,
                                 textAlign = TextAlign.End
                             )
                             Icon(
                                 painter = if (preferencesState.value.useUSaq) painterResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.iconSmallRes) else
                                     painterResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.iconSmallRes),
-                                contentDescription = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqDescRes) else
-                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqDescRes),
+                                contentDescription = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqIndexRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqIndexRes),
                                 modifier = Modifier.size(16.dp)
                             )
                         }

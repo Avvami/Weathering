@@ -47,7 +47,7 @@ fun CurrentAqInfo(
         ) {
             Text(
                 modifier = Modifier.weight(.45f),
-                text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqi.toString() else aqInfo().currentAqData.europeanAqi.toString(),
+                text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqi.toString() else aqInfo().currentAqData.euAqi.toString(),
                 fontSize = 82.sp,
                 color = onSurfaceLight
             )
@@ -66,8 +66,8 @@ fun CurrentAqInfo(
                     text = stringResource(
                         id = R.string.aqi_rate,
                         stringResource(id = R.string.aqi),
-                        if (preferencesState.value.useUSaq) stringResource(id = aqInfo().currentAqData.usAqiType.aqDescRes) else
-                            stringResource(id = aqInfo().currentAqData.europeanAqiType.aqDescRes)
+                        if (preferencesState.value.useUSaq) stringResource(id = aqInfo().currentAqData.usAqiType.aqIndexRes) else
+                            stringResource(id = aqInfo().currentAqData.euAqiType.aqIndexRes)
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.End,
@@ -77,15 +77,32 @@ fun CurrentAqInfo(
         }
         Icon(
             painter = if (preferencesState.value.useUSaq) painterResource(id = aqInfo().currentAqData.usAqiType.iconLargeRes) else
-                painterResource(id = aqInfo().currentAqData.europeanAqiType.iconLargeRes),
-            contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo().currentAqData.usAqiType.aqDescRes) else
-                stringResource(id = aqInfo().currentAqData.europeanAqiType.aqDescRes),
+                painterResource(id = aqInfo().currentAqData.euAqiType.iconLargeRes),
+            contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqInfo().currentAqData.usAqiType.aqIndexRes) else
+                stringResource(id = aqInfo().currentAqData.euAqiType.aqIndexRes),
             tint = onSurfaceLight,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .size(200.dp)
                 .align(Alignment.CenterHorizontally)
         )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_format_quote_fill1_wght400),
+                contentDescription = "Aq desc",
+                tint = onSurfaceLight
+            )
+            Text(
+                text = stringResource(id = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqiType.aqDescRes else
+                    aqInfo().currentAqData.euAqiType.aqDescRes),
+                style = MaterialTheme.typography.titleMedium,
+                color = onSurfaceLight
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
         ) {

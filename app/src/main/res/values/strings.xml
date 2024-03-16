@@ -118,6 +118,20 @@
     <string name="location_error">Unable to retrieve location</string>
     <string name="fetching_location_error">Error fetching location</string>
 
+    <string name="us_good_aqi_description">Air quality is satisfactory, and air pollution poses little or no risk.</string>
+    <string name="us_moderate_aqi_description">Air quality is acceptable. However, there may be a risk for some people, particularly those who are unusually sensitive to air pollution.</string>
+    <string name="us_unhealthy_sensitive_groups_description">Members of sensitive groups may experience health effects. The general public is less likely to be affected.</string>
+    <string name="us_unhealthy_aqi_description">Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.</string>
+    <string name="us_very_unhealthy_aqi_description">Health alert: The risk of health effects is increased for everyone.</string>
+    <string name="us_hazardous_aqi_description">Health warning of emergency conditions: everyone is more likely to be affected.</string>
+
+    <string name="eu_good_aqi_general_description">The air quality is good. Enjoy your usual outdoor activities.</string>
+    <string name="eu_fair_aqi_general_description">Enjoy your usual outdoor activities</string>
+    <string name="eu_moderate_aqi_general_description">Enjoy your usual outdoor activities</string>
+    <string name="eu_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat</string>
+    <string name="eu_very_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat</string>
+    <string name="eu_extremely_poor_aqi_general_description">Reduce physical activities outdoors.</string>
+
     <string name="location_permission">Please allow location access to receive real-time weather information tailored to where you are.</string>
     <string name="location_permission_declined">It seems you have permanently declined location permission. Please enable it in the app settings.</string>
     <string name="not_now">Not now</string>

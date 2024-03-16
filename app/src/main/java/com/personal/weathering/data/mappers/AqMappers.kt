@@ -5,7 +5,7 @@ import com.personal.weathering.data.models.CurrentAqDto
 import com.personal.weathering.data.models.HourlyAqDto
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.airquality.CurrentAqData
-import com.personal.weathering.domain.models.airquality.EuropeanAqType
+import com.personal.weathering.domain.models.airquality.EuAqType
 import com.personal.weathering.domain.models.airquality.HourlyAqData
 import com.personal.weathering.domain.models.airquality.UsAqType
 import java.time.LocalDateTime
@@ -31,7 +31,7 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
             data = HourlyAqData(
                 time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
                 europeanAqi = europeanAqi,
-                europeanAqiType = EuropeanAqType.fromAQI(europeanAqi),
+                europeanAqiType = EuAqType.fromAQI(europeanAqi),
                 usAqi = usAqi,
                 usAqiType = UsAqType.fromAQI(usAqi),
                 particulateMatter10 = particulateMatter10,
@@ -52,8 +52,8 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
 fun CurrentAqDto.toCurrentAqData(): CurrentAqData {
     return CurrentAqData(
         time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-        europeanAqi = europeanAqi,
-        europeanAqiType = EuropeanAqType.fromAQI(europeanAqi),
+        euAqi = europeanAqi,
+        euAqiType = EuAqType.fromAQI(europeanAqi),
         usAqi = usAqi,
         usAqiType = UsAqType.fromAQI(usAqi),
         particulateMatter10 = particulateMatter10,

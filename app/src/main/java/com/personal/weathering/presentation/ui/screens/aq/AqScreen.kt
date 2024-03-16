@@ -93,8 +93,8 @@ fun AqScreen(
                                     aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
                                 ) else
                                 listOf(
-                                    aqState().aqInfo!!.currentAqData.europeanAqiType.gradientPrimary,
-                                    aqState().aqInfo!!.currentAqData.europeanAqiType.gradientSecondary
+                                    aqState().aqInfo!!.currentAqData.euAqiType.gradientPrimary,
+                                    aqState().aqInfo!!.currentAqData.euAqiType.gradientSecondary
                                 )
                         },
                         center = Offset(size.width, 0f),

@@ -186,16 +186,16 @@ fun WeatherDetails(
                 ) {
                     Icon(
                         painter = if (preferencesState.value.useUSaq) painterResource(id = aqState().aqInfo!!.currentAqData.usAqiType.iconSmallRes) else
-                            painterResource(id = aqState().aqInfo!!.currentAqData.europeanAqiType.iconSmallRes),
-                        contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqState().aqInfo!!.currentAqData.usAqiType.aqDescRes) else
-                            stringResource(id = aqState().aqInfo!!.currentAqData.europeanAqiType.aqDescRes),
+                            painterResource(id = aqState().aqInfo!!.currentAqData.euAqiType.iconSmallRes),
+                        contentDescription = if (preferencesState.value.useUSaq) stringResource(id = aqState().aqInfo!!.currentAqData.usAqiType.aqIndexRes) else
+                            stringResource(id = aqState().aqInfo!!.currentAqData.euAqiType.aqIndexRes),
                         tint = onSurfaceLight,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = if (preferencesState.value.useUSaq) stringResource(id = aqState().aqInfo!!.currentAqData.usAqiType.aqDescRes) else
-                            stringResource(id = aqState().aqInfo!!.currentAqData.europeanAqiType.aqDescRes),
+                        text = if (preferencesState.value.useUSaq) stringResource(id = aqState().aqInfo!!.currentAqData.usAqiType.aqIndexRes) else
+                            stringResource(id = aqState().aqInfo!!.currentAqData.euAqiType.aqIndexRes),
                         style = MaterialTheme.typography.titleSmall,
                         color = onSurfaceLight,
                         modifier = Modifier.weight(weight = .5f, fill = false)

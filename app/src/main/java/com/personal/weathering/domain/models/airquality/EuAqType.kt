@@ -17,50 +17,57 @@ import com.personal.weathering.presentation.ui.theme.aqiUnhealthySecondary
 import com.personal.weathering.presentation.ui.theme.aqiVeryUnhealthyPrimary
 import com.personal.weathering.presentation.ui.theme.aqiVeryUnhealthySecondary
 
-sealed class EuropeanAqType(
+sealed class EuAqType(
+    @StringRes val aqIndexRes: Int,
     @StringRes val aqDescRes: Int,
     @DrawableRes val iconSmallRes: Int,
     @DrawableRes val iconLargeRes: Int,
     val gradientPrimary: Color,
     val gradientSecondary: Color
 ) {
-    data object Good: EuropeanAqType(
-        aqDescRes = R.string.good,
+    data object Good: EuAqType(
+        aqIndexRes = R.string.good,
+        aqDescRes = R.string.eu_good_aqi_general_description,
         iconSmallRes = R.drawable.icon_eco_fill1_wght400,
         iconLargeRes = R.drawable.icon_eco_fill0_wght200,
         gradientPrimary = aqiGoodPrimary,
         gradientSecondary = aqiGoodSecondary
     )
-    data object Fair: EuropeanAqType(
-        aqDescRes = R.string.fair,
+    data object Fair: EuAqType(
+        aqIndexRes = R.string.fair,
+        aqDescRes = R.string.eu_fair_aqi_general_description,
         iconSmallRes = R.drawable.icon_sentiment_neutral_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_neutral_fill0_wght200,
         gradientPrimary = aqiModeratePrimary,
         gradientSecondary = aqiModerateSecondary
     )
-    data object Moderate: EuropeanAqType(
-        aqDescRes = R.string.moderate,
+    data object Moderate: EuAqType(
+        aqIndexRes = R.string.moderate,
+        aqDescRes = R.string.eu_moderate_aqi_general_description,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
         iconLargeRes = R.drawable.icon_ecg_heart_fill0_wght200,
         gradientPrimary = aqiSensitivePrimary,
         gradientSecondary = aqiSensitiveSecondary
     )
-    data object Poor: EuropeanAqType(
-        aqDescRes = R.string.poor,
+    data object Poor: EuAqType(
+        aqIndexRes = R.string.poor,
+        aqDescRes = R.string.eu_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_masks_fill1_wght400,
         iconLargeRes = R.drawable.icon_masks_fill0_wght200,
         gradientPrimary = aqiUnhealthyPrimary,
         gradientSecondary = aqiUnhealthySecondary
     )
-    data object VeryPoor: EuropeanAqType(
-        aqDescRes = R.string.very_poor,
+    data object VeryPoor: EuAqType(
+        aqIndexRes = R.string.very_poor,
+        aqDescRes = R.string.eu_very_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_sentiment_very_dissatisfied_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_very_dissatisfied_fill0_wght200,
         gradientPrimary = aqiVeryUnhealthyPrimary,
         gradientSecondary = aqiVeryUnhealthySecondary
     )
-    data object ExtremelyPoor: EuropeanAqType(
-        aqDescRes = R.string.extremely_poor,
+    data object ExtremelyPoor: EuAqType(
+        aqIndexRes = R.string.extremely_poor,
+        aqDescRes = R.string.eu_extremely_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_skull_fill1_wght400,
         iconLargeRes = R.drawable.icon_skull_fill0_wght200,
         gradientPrimary = aqiHazardousPrimary,
@@ -68,7 +75,7 @@ sealed class EuropeanAqType(
     )
 
     companion object {
-        fun fromAQI(code: Int): EuropeanAqType {
+        fun fromAQI(code: Int): EuAqType {
             return when(code) {
                 in 0 until 21 -> Good
                 in 21 until 41 -> Fair
