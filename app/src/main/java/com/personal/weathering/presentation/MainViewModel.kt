@@ -12,6 +12,7 @@ import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.GeocodingRepository
 import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.WeatherRepository
 import com.personal.weathering.domain.util.Resource
@@ -34,7 +35,8 @@ class MainViewModel(
     private val weatherRepository: WeatherRepository,
     private val aqRepository: AqRepository,
     private val locationClient: LocationClient,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val geocodingRepository: GeocodingRepository
 ): ViewModel() {
 
     var pullToRefreshState by mutableStateOf(PullToRefreshState(150f))
@@ -120,7 +122,6 @@ class MainViewModel(
             var weatherError: String? = null
 
             if (useLocation) {
-                localRepository.setSelectedCity(0, "", 0.0, 0.0)
                 weatherState = weatherState.copy(
                     retrievingLocation = true
                 )
@@ -128,14 +129,47 @@ class MainViewModel(
                     when (locationResult) {
                         is Resource.Error -> {
                             _locationError.send(locationResult.message ?: "")
+                            localRepository.setSelectedCity(0, "", 0.0, 0.0)
+                            localRepository.setUseLocation(true)
+                            weatherRepository.getWeatherData(preferencesState.value.currentLocationLat, preferencesState.value.currentLocationLon).let { result ->
+                                when (result) {
+                                    is Resource.Error -> {
+                                        weatherError = result.message
+                                    }
+                                    is Resource.Success -> {
+                                        weatherInfo = result.data
+                                    }
+                                }
+                            }
+                            launch {
+                                loadAqInfo(lat, lon)
+                            }
                         }
                         is Resource.Success -> {
-                            /*TODO: Set the new current city and then weather request*/
-                            weatherState = weatherState.copy(
-                                retrievingLocation = false
-                            )
-                            println("Current location: ${locationResult.data?.latitude}; ${locationResult.data?.longitude}")
                             locationResult.data?.let { locationInfo ->
+                                geocodingRepository.getCurrentLocation(locationInfo.latitude, locationInfo.longitude).let { result ->
+                                    when (result) {
+                                        is Resource.Error -> {
+                                            _locationError.send(result.message ?: "")
+                                        }
+                                        is Resource.Success -> {
+                                            result.data?.error?.let { _locationError.send(it) }
+                                            val firstNonNull = listOf(
+                                                result.data?.city,
+                                                result.data?.town,
+                                                result.data?.village,
+                                                result.data?.hamlet,
+                                                result.data?.municipality
+                                            ).firstOrNull { it != null }
+                                            localRepository.setCurrentLocationCity(
+                                                city = firstNonNull ?: "???",
+                                                lat = locationInfo.latitude,
+                                                lon = locationInfo.longitude
+                                            )
+                                        }
+                                    }
+                                }
+                                localRepository.setSelectedCity(0, "", 0.0, 0.0)
                                 weatherRepository.getWeatherData(locationInfo.latitude, locationInfo.longitude).let { result ->
                                     when (result) {
                                         is Resource.Error -> {
@@ -172,6 +206,7 @@ class MainViewModel(
 
             weatherState = weatherState.copy(
                 weatherInfo = weatherInfo,
+                retrievingLocation = false,
                 isLoading = false,
                 error = weatherError
             )

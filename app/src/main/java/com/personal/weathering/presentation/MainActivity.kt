@@ -38,7 +38,8 @@ class MainActivity : ComponentActivity() {
                 weatherRepository = WeatheringApp.appModule.weatherRepository,
                 aqRepository = WeatheringApp.appModule.aqRepository,
                 locationClient = WeatheringApp.appModule.locationClient,
-                localRepository = WeatheringApp.appModule.localRepository
+                localRepository = WeatheringApp.appModule.localRepository,
+                geocodingRepository = WeatheringApp.appModule.geocodingRepository
             )
         }
     }
@@ -57,7 +58,8 @@ class MainActivity : ComponentActivity() {
                 val permissionsResultLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.RequestMultiplePermissions(),
                     onResult = {
-                        mainViewModel.uiEvent(UiEvent.SetUseLocation)
+                        if (hasPermissions())
+                            mainViewModel.uiEvent(UiEvent.SetUseLocation)
                     }
                 )
                 Surface {

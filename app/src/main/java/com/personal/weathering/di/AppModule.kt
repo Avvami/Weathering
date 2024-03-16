@@ -6,14 +6,17 @@ import com.google.android.gms.location.LocationServices
 import com.personal.weathering.data.local.AppDatabase
 import com.personal.weathering.data.location.DefaultLocationClient
 import com.personal.weathering.data.remote.AqApi
+import com.personal.weathering.data.remote.GeocodingApi
 import com.personal.weathering.data.remote.SearchApi
 import com.personal.weathering.data.remote.WeatherApi
 import com.personal.weathering.data.repository.AqRepositoryImpl
+import com.personal.weathering.data.repository.GeocodingRepositoryImpl
 import com.personal.weathering.data.repository.LocalRepositoryImpl
 import com.personal.weathering.data.repository.SearchRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
 import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.GeocodingRepository
 import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.SearchRepository
 import com.personal.weathering.domain.repository.WeatherRepository
@@ -31,6 +34,8 @@ interface AppModule {
     val searchApi: SearchApi
     val searchRepository: SearchRepository
     val localRepository: LocalRepository
+    val geocodingApi: GeocodingApi
+    val geocodingRepository: GeocodingRepository
 }
 
 class AppModuleImpl(private val appContext: Context): AppModule {
@@ -84,5 +89,16 @@ class AppModuleImpl(private val appContext: Context): AppModule {
             favoritesDao = AppDatabase.getDatabase(appContext).favoritesDao,
             searchHistoryDao = AppDatabase.getDatabase(appContext).searchHistoryDao
         )
+    }
+
+    override val geocodingApi: GeocodingApi by lazy {
+        Retrofit.Builder()
+            .baseUrl(C.NOMINATIM_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
+    }
+    override val geocodingRepository: GeocodingRepository by lazy {
+        GeocodingRepositoryImpl(geocodingApi, appContext)
     }
 }
