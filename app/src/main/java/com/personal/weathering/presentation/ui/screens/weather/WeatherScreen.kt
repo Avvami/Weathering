@@ -77,7 +77,8 @@ import com.personal.weathering.presentation.ui.screens.weather.components.Weathe
 import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherTemperatureInfoCompact
 import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherTemperatureInfoExpanded
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherShimmerExpanded
-import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
+import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecastCompat
+import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecastExtended
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
 import com.personal.weathering.presentation.ui.theme.drizzleSecondary
@@ -307,11 +308,19 @@ fun WeatherScreen(
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    WeatherWeeklyForecast(
-                                        preferencesState = preferencesState,
-                                        weatherInfo = { weatherInfo },
-                                        navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
-                                    )
+                                    if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                        WeatherWeeklyForecastCompat(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo },
+                                            navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
+                                        )
+                                    } else {
+                                        WeatherWeeklyForecastExtended(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo },
+                                            navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
+                                        )
+                                    }
                                     Spacer(modifier = Modifier.height(16.dp))
                                     val activity = LocalContext.current.findActivity() as MainActivity
                                     Column(

@@ -34,7 +34,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeatherWeeklyForecast(
+fun WeatherWeeklyForecastCompat(
     preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo,
     navigateToWeatherDetailsScreen: (dayOfWeek: Int) -> Unit
