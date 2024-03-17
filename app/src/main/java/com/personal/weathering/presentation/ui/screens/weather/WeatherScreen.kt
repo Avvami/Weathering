@@ -109,23 +109,6 @@ fun WeatherScreen(
             uiEvent(UiEvent.LoadWeatherInfo(preferencesState.value.useLocation, preferencesState.value.selectedCityLat, preferencesState.value.selectedCityLon))
         }
     }
-    val radialGradient by remember(weatherState().weatherInfo) {
-        mutableStateOf(
-            object : ShaderBrush() {
-                override fun createShader(size: Size): Shader {
-                    val biggerDimension = maxOf(size.height, size.width)
-                    return RadialGradientShader(
-                        colors = if (weatherState().weatherInfo != null) listOf(
-                            weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
-                            weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
-                        ) else listOf(drizzlePrimary, drizzleSecondary),
-                        center = Offset(size.width, 0f),
-                        radius = biggerDimension
-                    )
-                }
-            }
-        )
-    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -216,6 +199,23 @@ fun WeatherScreen(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface
         ) { innerPadding ->
+            val radialGradient by remember(weatherState().weatherInfo) {
+                mutableStateOf(
+                    object : ShaderBrush() {
+                        override fun createShader(size: Size): Shader {
+                            val biggerDimension = maxOf(size.height, size.width)
+                            return RadialGradientShader(
+                                colors = if (weatherState().weatherInfo != null) listOf(
+                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
+                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
+                                ) else listOf(drizzlePrimary, drizzleSecondary),
+                                center = Offset(size.width, 0f),
+                                radius = biggerDimension
+                            )
+                        }
+                    }
+                )
+            }
             Box {
                 LazyColumn(
                     modifier = Modifier

@@ -109,70 +109,11 @@ fun CurrentAqInfo(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            val aqiData by remember {
-                mutableStateOf(
-                    if (aqInfo().currentAqData.time.hour == 23) aqInfo().hourlyAqData[1]?.get(0) else
-                        aqInfo().hourlyAqData[0]?.find { it.time.isAfter(aqInfo().currentAqData.time) }
-                )
-            }
-            AqDetail(
-                iconRes = R.drawable.icon_pm2_5,
-                aqValue = aqInfo().currentAqData.particulateMatter25,
-                aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter25Type?.aqValue else
-                    aqiData?.euAqiParticulateMatter25Type?.aqValue,
-                aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter25Type?.aqIndexRes else
-                    aqiData?.euAqiParticulateMatter25Type?.aqIndexRes
-            )
-            AqDetail(
-                iconRes = R.drawable.icon_pm10,
-                aqValue = aqInfo().currentAqData.particulateMatter10,
-                aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter10Type?.aqValue else
-                    aqiData?.euAqiParticulateMatter10Type?.aqValue,
-                aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter10Type?.aqIndexRes else
-                    aqiData?.euAqiParticulateMatter10Type?.aqIndexRes
-            )
-            AnimatedVisibility(visible = aqDetailsExpanded()) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    AqDetail(
-                        iconRes = R.drawable.icon_no2,
-                        aqValue = aqInfo().currentAqData.nitrogenDioxide,
-                        aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiNitrogenDioxideType?.aqValue else
-                            aqiData?.euAqiNitrogenDioxideType?.aqValue,
-                        aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiNitrogenDioxideType?.aqIndexRes else
-                            aqiData?.euAqiNitrogenDioxideType?.aqIndexRes
-                    )
-                    AqDetail(
-                        iconRes = R.drawable.icon_o3,
-                        aqValue = aqInfo().currentAqData.ozone,
-                        aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiOzoneType?.aqValue else
-                            aqiData?.euAqiOzoneType?.aqValue,
-                        aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiOzoneType?.aqIndexRes else
-                            aqiData?.euAqiOzoneType?.aqIndexRes
-                    )
-                    AqDetail(
-                        iconRes = R.drawable.icon_so2,
-                        aqValue = aqInfo().currentAqData.sulphurDioxide,
-                        aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiSulphurDioxideType?.aqValue else
-                            aqiData?.euAqiSulphurDioxideType?.aqValue,
-                        aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiSulphurDioxideType?.aqIndexRes else
-                            aqiData?.euAqiSulphurDioxideType?.aqIndexRes
-                    )
-                    if (preferencesState.value.useUSaq)
-                        AqDetail(
-                            iconRes = R.drawable.icon_co,
-                            aqValue = aqInfo().currentAqData.carbonMonoxide,
-                            aqiValue = aqiData?.usAqiCarbonMonoxideType?.aqValue,
-                            aqiIndexRes = aqiData?.usAqiCarbonMonoxideType?.aqIndexRes
-                        )
-                }
-            }
-        }
+        AnimatedAqDetails(
+            preferencesState = preferencesState,
+            aqInfo = aqInfo,
+            aqDetailsExpanded = aqDetailsExpanded
+        )
         IconButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = { aqUiEvent(AqUiEvent.SetAqDetailsExpanded) },
@@ -185,6 +126,78 @@ fun CurrentAqInfo(
                     if (aqDetailsExpanded()) Modifier.rotate(90f) else Modifier.rotate(-90f)
                 )
             )
+        }
+    }
+}
+
+@Composable
+fun AnimatedAqDetails(
+    preferencesState: State<PreferencesState>,
+    aqInfo: () -> AqInfo,
+    aqDetailsExpanded: () -> Boolean
+) {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        val aqiData by remember {
+            mutableStateOf (
+                if (aqInfo().currentAqData.time.hour == 23) aqInfo().hourlyAqData[1]?.get(0) else
+                    aqInfo().hourlyAqData[0]?.find { it.time.isAfter(aqInfo().currentAqData.time) }
+            )
+        }
+        AqDetail(
+            iconRes = R.drawable.icon_pm2_5,
+            aqValue = aqInfo().currentAqData.particulateMatter25,
+            aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter25Type?.aqValue else
+                aqiData?.euAqiParticulateMatter25Type?.aqValue,
+            aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter25Type?.aqIndexRes else
+                aqiData?.euAqiParticulateMatter25Type?.aqIndexRes
+        )
+        AqDetail(
+            iconRes = R.drawable.icon_pm10,
+            aqValue = aqInfo().currentAqData.particulateMatter10,
+            aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter10Type?.aqValue else
+                aqiData?.euAqiParticulateMatter10Type?.aqValue,
+            aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter10Type?.aqIndexRes else
+                aqiData?.euAqiParticulateMatter10Type?.aqIndexRes
+        )
+        AnimatedVisibility(visible = aqDetailsExpanded()) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AqDetail(
+                    iconRes = R.drawable.icon_no2,
+                    aqValue = aqInfo().currentAqData.nitrogenDioxide,
+                    aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiNitrogenDioxideType?.aqValue else
+                        aqiData?.euAqiNitrogenDioxideType?.aqValue,
+                    aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiNitrogenDioxideType?.aqIndexRes else
+                        aqiData?.euAqiNitrogenDioxideType?.aqIndexRes
+                )
+                AqDetail(
+                    iconRes = R.drawable.icon_o3,
+                    aqValue = aqInfo().currentAqData.ozone,
+                    aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiOzoneType?.aqValue else
+                        aqiData?.euAqiOzoneType?.aqValue,
+                    aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiOzoneType?.aqIndexRes else
+                        aqiData?.euAqiOzoneType?.aqIndexRes
+                )
+                AqDetail(
+                    iconRes = R.drawable.icon_so2,
+                    aqValue = aqInfo().currentAqData.sulphurDioxide,
+                    aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiSulphurDioxideType?.aqValue else
+                        aqiData?.euAqiSulphurDioxideType?.aqValue,
+                    aqiIndexRes = if (preferencesState.value.useUSaq) aqiData?.usAqiSulphurDioxideType?.aqIndexRes else
+                        aqiData?.euAqiSulphurDioxideType?.aqIndexRes
+                )
+                if (preferencesState.value.useUSaq)
+                    AqDetail(
+                        iconRes = R.drawable.icon_co,
+                        aqValue = aqInfo().currentAqData.carbonMonoxide,
+                        aqiValue = aqiData?.usAqiCarbonMonoxideType?.aqValue,
+                        aqiIndexRes = aqiData?.usAqiCarbonMonoxideType?.aqIndexRes
+                    )
+            }
         }
     }
 }
