@@ -64,10 +64,11 @@ fun WeatherShimmerExpanded(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column {
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         text = stringResource(id = R.string.temperature),
                         fontSize = 82.sp,
@@ -76,20 +77,20 @@ fun WeatherShimmerExpanded(
                             .clip(MaterialTheme.shapes.large)
                             .shimmerEffect()
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(id = R.string.apparent_temperature),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Transparent,
+                    Box(
                         modifier = Modifier
-                            .clip(MaterialTheme.shapes.small)
+                            .clip(MaterialTheme.shapes.large)
+                            .size(64.dp)
                             .shimmerEffect()
                     )
                 }
-                Box(
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = R.string.apparent_temperature),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Transparent,
                     modifier = Modifier
-                        .clip(MaterialTheme.shapes.large)
-                        .size(64.dp)
+                        .clip(MaterialTheme.shapes.small)
                         .shimmerEffect()
                 )
             }

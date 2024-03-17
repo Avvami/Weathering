@@ -53,10 +53,11 @@ fun CurrentWeatherTemperatureInfoExpanded(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Column {
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         text = stringResource(
                             id = R.string.temperature,
@@ -66,22 +67,22 @@ fun CurrentWeatherTemperatureInfoExpanded(
                         fontSize = 82.sp,
                         color = onSurfaceLight
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(
-                            id = R.string.apparent_temperature,
-                            if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
-                                UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
-                        ),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = onSurfaceLight70p
+                    Icon(
+                        painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconSmallRes),
+                        contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
+                        tint = onSurfaceLight,
+                        modifier = Modifier.size(64.dp),
                     )
                 }
-                Icon(
-                    painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconSmallRes),
-                    contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
-                    tint = onSurfaceLight,
-                    modifier = Modifier.size(64.dp),
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(
+                        id = R.string.apparent_temperature,
+                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
+                            UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = onSurfaceLight70p
                 )
             }
             Column(

@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,11 +35,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.shimmerEffect
+import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun AqShimmer(
+fun AqShimmerExpanded(
+    preferencesState: State<PreferencesState>,
     radialGradient: ShaderBrush,
     innerPadding: PaddingValues
 ) {
@@ -57,14 +63,25 @@ fun AqShimmer(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Text(
-                text = "00",
-                fontSize = 82.sp,
-                color = Color.Transparent,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.large)
-                    .shimmerEffect()
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "00",
+                    fontSize = 82.sp,
+                    color = Color.Transparent,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.large)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(MaterialTheme.shapes.large)
+                        .shimmerEffect()
+                )
+            }
             Column(
                 horizontalAlignment = Alignment.End
             ) {
@@ -94,14 +111,6 @@ fun AqShimmer(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally)
-                .clip(MaterialTheme.shapes.large)
-                .shimmerEffect()
-        )
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -120,15 +129,42 @@ fun AqShimmer(
                 color = Color.Transparent
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(horizontal = 16.dp)
-                .clip(MaterialTheme.shapes.large)
-                .shimmerEffect()
-        )
+        Spacer(modifier = Modifier.height(16.dp))
+        FlowRow(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            maxItemsInEachRow = 2
+        ) {
+            repeat(if (preferencesState.value.useUSaq) 6 else 5) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(MaterialTheme.shapes.large)
+                        .shimmerEffect()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Box(modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(id = R.string.aq_units),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Transparent
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.aqi_rate),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Transparent
+                    )
+                }
+            }
+        }
     }
     Column(
         modifier = Modifier

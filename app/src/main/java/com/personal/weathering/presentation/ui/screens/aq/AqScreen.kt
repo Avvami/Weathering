@@ -43,13 +43,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
+import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
-import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmer
+import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmerCompact
+import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmerExpanded
 import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayForecast
-import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfo
+import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfoCompact
+import com.personal.weathering.presentation.ui.screens.aq.components.CurrentAqInfoExpanded
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
 import com.personal.weathering.presentation.ui.theme.drizzleSecondary
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
@@ -58,6 +61,7 @@ import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AqScreen(
+    windowInfo: () -> WindowInfo,
     preferencesState: State<PreferencesState>,
     aqState: () -> AqState,
     pullToRefreshState: () -> PullToRefreshState,
@@ -155,10 +159,18 @@ fun AqScreen(
             ) {
                 if (aqState().aqInfo == null && aqState().error == null && aqState().isLoading) {
                     item {
-                        AqShimmer(
-                            radialGradient = radialGradient,
-                            innerPadding = innerPadding
-                        )
+                        if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                            AqShimmerCompact(
+                                radialGradient = radialGradient,
+                                innerPadding = innerPadding
+                            )
+                        } else {
+                            AqShimmerExpanded(
+                                preferencesState = preferencesState,
+                                radialGradient = radialGradient,
+                                innerPadding = innerPadding
+                            )
+                        }
                     }
                 } else {
                     item {
@@ -181,16 +193,23 @@ fun AqScreen(
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
                                 )
                             }
                             aqState().aqInfo?.let { aqInfo ->
-                                CurrentAqInfo(
-                                    preferencesState = preferencesState,
-                                    aqInfo = { aqInfo },
-                                    aqDetailsExpanded = aqViewModel::aqDetailsExpanded,
-                                    aqUiEvent = aqViewModel::aqUiEvent
-                                )
+                                if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                    CurrentAqInfoCompact(
+                                        preferencesState = preferencesState,
+                                        aqInfo = { aqInfo },
+                                        aqDetailsExpanded = aqViewModel::aqDetailsExpanded,
+                                        aqUiEvent = aqViewModel::aqUiEvent
+                                    )
+                                } else {
+                                    CurrentAqInfoExpanded(
+                                        preferencesState = preferencesState,
+                                        aqInfo = { aqInfo }
+                                    )
+                                }
                             }
                         }
                     }

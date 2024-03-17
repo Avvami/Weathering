@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -28,14 +27,14 @@ import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
 @Composable
 fun AqDetail(
+    modifier: Modifier = Modifier,
     @DrawableRes iconRes: Int,
     aqValue: Double,
     @StringRes aqiValue: Int?,
     @StringRes aqiIndexRes: Int?
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .clip(MaterialTheme.shapes.large)
             .background(surfaceLight30p)
             .padding(horizontal = 16.dp, vertical = 8.dp),

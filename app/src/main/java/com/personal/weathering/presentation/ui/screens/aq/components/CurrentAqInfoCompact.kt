@@ -37,7 +37,7 @@ import com.personal.weathering.presentation.ui.screens.aq.AqUiEvent
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
 @Composable
-fun CurrentAqInfo(
+fun CurrentAqInfoCompact(
     preferencesState: State<PreferencesState>,
     aqInfo: () -> AqInfo,
     aqDetailsExpanded: () -> Boolean,
@@ -147,6 +147,7 @@ fun AnimatedAqDetails(
             )
         }
         AqDetail(
+            modifier = Modifier.fillMaxWidth(),
             iconRes = R.drawable.icon_pm2_5,
             aqValue = aqInfo().currentAqData.particulateMatter25,
             aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter25Type?.aqValue else
@@ -155,6 +156,7 @@ fun AnimatedAqDetails(
                 aqiData?.euAqiParticulateMatter25Type?.aqIndexRes
         )
         AqDetail(
+            modifier = Modifier.fillMaxWidth(),
             iconRes = R.drawable.icon_pm10,
             aqValue = aqInfo().currentAqData.particulateMatter10,
             aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiParticulateMatter10Type?.aqValue else
@@ -167,6 +169,7 @@ fun AnimatedAqDetails(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AqDetail(
+                    modifier = Modifier.fillMaxWidth(),
                     iconRes = R.drawable.icon_no2,
                     aqValue = aqInfo().currentAqData.nitrogenDioxide,
                     aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiNitrogenDioxideType?.aqValue else
@@ -175,6 +178,7 @@ fun AnimatedAqDetails(
                         aqiData?.euAqiNitrogenDioxideType?.aqIndexRes
                 )
                 AqDetail(
+                    modifier = Modifier.fillMaxWidth(),
                     iconRes = R.drawable.icon_o3,
                     aqValue = aqInfo().currentAqData.ozone,
                     aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiOzoneType?.aqValue else
@@ -183,6 +187,7 @@ fun AnimatedAqDetails(
                         aqiData?.euAqiOzoneType?.aqIndexRes
                 )
                 AqDetail(
+                    modifier = Modifier.fillMaxWidth(),
                     iconRes = R.drawable.icon_so2,
                     aqValue = aqInfo().currentAqData.sulphurDioxide,
                     aqiValue = if (preferencesState.value.useUSaq) aqiData?.usAqiSulphurDioxideType?.aqValue else
@@ -192,6 +197,7 @@ fun AnimatedAqDetails(
                 )
                 if (preferencesState.value.useUSaq)
                     AqDetail(
+                        modifier = Modifier.fillMaxWidth(),
                         iconRes = R.drawable.icon_co,
                         aqValue = aqInfo().currentAqData.carbonMonoxide,
                         aqiValue = aqiData?.usAqiCarbonMonoxideType?.aqValue,

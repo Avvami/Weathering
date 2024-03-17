@@ -84,6 +84,7 @@ fun RootNavigationGraph(
             }
         ) {
             AqScreen(
+                windowInfo = windowInfo,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
