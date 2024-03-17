@@ -39,11 +39,13 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WeatherTemperatureInfo(
+fun CurrentWeatherTemperatureInfoExpanded(
     preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo
 ) {
-    Column {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -51,25 +53,35 @@ fun WeatherTemperatureInfo(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Column {
-                Text(
-                    text = stringResource(
-                        id = R.string.temperature,
-                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
-                            UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
-                    ),
-                    fontSize = 82.sp,
-                    color = onSurfaceLight
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(
-                        id = R.string.apparent_temperature,
-                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Column {
+                    Text(
+                        text = stringResource(
+                            id = R.string.temperature,
+                            if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
+                                UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
+                        ),
+                        fontSize = 82.sp,
+                        color = onSurfaceLight
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(
+                            id = R.string.apparent_temperature,
+                            if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
                                 UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
-                    ),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = onSurfaceLight70p
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = onSurfaceLight70p
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconSmallRes),
+                    contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
+                    tint = onSurfaceLight,
+                    modifier = Modifier.size(64.dp),
                 )
             }
             Column(
@@ -90,15 +102,6 @@ fun WeatherTemperatureInfo(
                 )
             }
         }
-        Icon(
-            painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconLargeRes),
-            contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
-            tint = onSurfaceLight,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally),
-        )
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
         ) {

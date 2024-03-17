@@ -40,7 +40,7 @@ import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeatherShimmer(
+fun WeatherShimmerCompact(
     radialGradient: ShaderBrush,
     innerPadding: PaddingValues,
     navigateToAqScreen: () -> Unit

@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.personal.weathering.R
 import com.personal.weathering.WeatheringApp
+import com.personal.weathering.domain.util.rememberWindowInfo
 import com.personal.weathering.presentation.navigation.RootNavigationGraph
 import com.personal.weathering.presentation.ui.components.CustomDialog
 import com.personal.weathering.presentation.ui.theme.WeatheringTheme
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
             WeatheringTheme(
                 darkTheme = mainViewModel.preferencesState.collectAsStateWithLifecycle().value.isDark
             ) {
+                val windowInfo = rememberWindowInfo()
                 val permissionsResultLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.RequestMultiplePermissions(),
                     onResult = {
@@ -64,6 +66,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Surface {
                     RootNavigationGraph(
+                        windowInfo = { windowInfo },
                         navController = rememberNavController(),
                         mainViewModel = mainViewModel,
                         requestPermissions = { permissionsResultLauncher.launch(permissionsToRequest()) }

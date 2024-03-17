@@ -17,6 +17,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.presentation.MainViewModel
 import com.personal.weathering.presentation.ui.screens.aq.AqScreen
 import com.personal.weathering.presentation.ui.screens.search.SearchScreen
@@ -26,6 +27,7 @@ import com.personal.weathering.presentation.ui.screens.weather_details.WeatherDe
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootNavigationGraph(
+    windowInfo: () -> WindowInfo,
     navController: NavHostController,
     mainViewModel: MainViewModel,
     requestPermissions: () -> Unit
@@ -41,6 +43,7 @@ fun RootNavigationGraph(
             exitTransition = { scaleOut(targetScale = .98f) }
         ) {
             WeatherScreen(
+                windowInfo = windowInfo,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
                 weatherState = mainViewModel::weatherState,

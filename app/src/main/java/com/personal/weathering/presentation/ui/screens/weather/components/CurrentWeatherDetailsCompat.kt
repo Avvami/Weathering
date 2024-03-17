@@ -38,7 +38,7 @@ import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
 @Composable
-fun WeatherDetails(
+fun CurrentWeatherDetailsCompat(
     preferencesState: State<PreferencesState>,
     weatherInfo: () -> WeatherInfo,
     aqState: () -> AqState,

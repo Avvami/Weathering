@@ -61,6 +61,7 @@ import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.domain.util.C
+import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.domain.util.findActivity
 import com.personal.weathering.domain.util.shimmerEffect
 import com.personal.weathering.presentation.MainActivity
@@ -70,9 +71,12 @@ import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
-import com.personal.weathering.presentation.ui.screens.weather.components.WeatherDetails
-import com.personal.weathering.presentation.ui.screens.weather.components.WeatherShimmer
-import com.personal.weathering.presentation.ui.screens.weather.components.WeatherTemperatureInfo
+import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherDetailsCompat
+import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherDetailsExpanded
+import com.personal.weathering.presentation.ui.screens.weather.components.WeatherShimmerCompact
+import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherTemperatureInfoCompact
+import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherTemperatureInfoExpanded
+import com.personal.weathering.presentation.ui.screens.weather.components.WeatherShimmerExpanded
 import com.personal.weathering.presentation.ui.screens.weather.components.WeatherWeeklyForecast
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
@@ -84,6 +88,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherScreen(
+    windowInfo: () -> WindowInfo,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
@@ -225,11 +230,19 @@ fun WeatherScreen(
                 ) {
                     if (weatherState().weatherInfo == null && weatherState().error == null && weatherState().isLoading) {
                         item {
-                            WeatherShimmer(
-                                radialGradient = radialGradient,
-                                innerPadding = innerPadding,
-                                navigateToAqScreen = navigateToAqScreen
-                            )
+                            if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                WeatherShimmerCompact(
+                                    radialGradient = radialGradient,
+                                    innerPadding = innerPadding,
+                                    navigateToAqScreen = navigateToAqScreen
+                                )
+                            } else {
+                                WeatherShimmerExpanded(
+                                    radialGradient = radialGradient,
+                                    innerPadding = innerPadding,
+                                    navigateToAqScreen = navigateToAqScreen
+                                )
+                            }
                         }
                     } else {
                         item {
@@ -259,17 +272,33 @@ fun WeatherScreen(
                                     )
                                 }
                                 weatherState().weatherInfo?.let { weatherInfo ->
-                                    WeatherTemperatureInfo(
-                                        preferencesState = preferencesState,
-                                        weatherInfo = { weatherInfo }
-                                    )
+                                    if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                        CurrentWeatherTemperatureInfoCompact(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo }
+                                        )
+                                    } else {
+                                        CurrentWeatherTemperatureInfoExpanded(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo }
+                                        )
+                                    }
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    WeatherDetails(
-                                        preferencesState = preferencesState,
-                                        weatherInfo = { weatherInfo },
-                                        aqState = aqState,
-                                        navigateToAqScreen = navigateToAqScreen
-                                    )
+                                    if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                        CurrentWeatherDetailsCompat(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo },
+                                            aqState = aqState,
+                                            navigateToAqScreen = navigateToAqScreen
+                                        )
+                                    } else {
+                                        CurrentWeatherDetailsExpanded(
+                                            preferencesState = preferencesState,
+                                            weatherInfo = { weatherInfo },
+                                            aqState = aqState,
+                                            navigateToAqScreen = navigateToAqScreen
+                                        )
+                                    }
                                 }
                             }
                         }
