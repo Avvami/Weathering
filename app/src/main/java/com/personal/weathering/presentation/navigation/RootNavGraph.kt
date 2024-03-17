@@ -10,8 +10,8 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -41,8 +41,8 @@ fun RootNavigationGraph(
             exitTransition = { scaleOut(targetScale = .98f) }
         ) {
             WeatherScreen(
-                preferencesState = mainViewModel.preferencesState.collectAsState(),
-                favoritesState = mainViewModel.favoritesState.collectAsState(),
+                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
+                favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
@@ -60,7 +60,7 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
             WeatherDetailsScreen(
-                preferencesState = mainViewModel.preferencesState.collectAsState(),
+                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
                 weatherState = mainViewModel::weatherState
             )
@@ -81,7 +81,7 @@ fun RootNavigationGraph(
             }
         ) {
             AqScreen(
-                preferencesState = mainViewModel.preferencesState.collectAsState(),
+                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
@@ -94,8 +94,8 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 200)) + scaleOut(targetScale = .9f) }
         ) {
             SearchScreen(
-                preferencesState = mainViewModel.preferencesState.collectAsState(),
-                favoritesState = mainViewModel.favoritesState.collectAsState(),
+                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
+                favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
                 uiEvent = mainViewModel::uiEvent
             )

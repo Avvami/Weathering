@@ -18,10 +18,10 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.personal.weathering.R
 import com.personal.weathering.WeatheringApp
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             WeatheringTheme(
-                darkTheme = mainViewModel.preferencesState.collectAsState().value.isDark
+                darkTheme = mainViewModel.preferencesState.collectAsStateWithLifecycle().value.isDark
             ) {
                 val permissionsResultLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.RequestMultiplePermissions(),
