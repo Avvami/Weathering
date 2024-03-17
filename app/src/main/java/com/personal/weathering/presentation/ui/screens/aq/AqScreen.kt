@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.presentation.UiEvent
@@ -63,6 +64,7 @@ fun AqScreen(
     navigateBack: () -> Unit,
     uiEvent: (UiEvent) -> Unit
 ) {
+    val aqViewModel: AqViewModel = viewModel()
     val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val lazyListState = rememberLazyListState()
     val isScrolledToTop by remember {
@@ -77,32 +79,6 @@ fun AqScreen(
             else
                 uiEvent(UiEvent.UpdateAqInfo(preferencesState.value.selectedCityLat, preferencesState.value.selectedCityLon))
         }
-    }
-    val radialGradient by remember(aqState().aqInfo) {
-        mutableStateOf(
-            object : ShaderBrush() {
-                override fun createShader(size: Size): Shader {
-                    val biggerDimension = maxOf(size.height, size.width)
-                    return RadialGradientShader(
-                        colors = if (aqState().aqInfo == null)
-                            listOf(drizzlePrimary, drizzleSecondary)
-                        else {
-                            if (preferencesState.value.useUSaq)
-                                listOf(
-                                    aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary,
-                                    aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
-                                ) else
-                                listOf(
-                                    aqState().aqInfo!!.currentAqData.euAqiType.gradientPrimary,
-                                    aqState().aqInfo!!.currentAqData.euAqiType.gradientSecondary
-                                )
-                        },
-                        center = Offset(size.width, 0f),
-                        radius = biggerDimension
-                    )
-                }
-            }
-        )
     }
 
     Scaffold(
@@ -144,6 +120,32 @@ fun AqScreen(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) { innerPadding ->
+        val radialGradient by remember(aqState().aqInfo) {
+            mutableStateOf(
+                object : ShaderBrush() {
+                    override fun createShader(size: Size): Shader {
+                        val biggerDimension = maxOf(size.height, size.width)
+                        return RadialGradientShader(
+                            colors = if (aqState().aqInfo == null)
+                                listOf(drizzlePrimary, drizzleSecondary)
+                            else {
+                                if (preferencesState.value.useUSaq)
+                                    listOf(
+                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary,
+                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
+                                    ) else
+                                    listOf(
+                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientPrimary,
+                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientSecondary
+                                    )
+                            },
+                            center = Offset(size.width, 0f),
+                            radius = biggerDimension
+                        )
+                    }
+                }
+            )
+        }
         Box {
             LazyColumn(
                 modifier = Modifier
@@ -169,7 +171,7 @@ fun AqScreen(
                                         bottomEnd = 28.dp
                                     )
                                 )
-                                .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
+                                .padding(top = innerPadding.calculateTopPadding())
                         ) {
                             aqState().error?.let { error ->
                                 Text(
@@ -185,7 +187,9 @@ fun AqScreen(
                             aqState().aqInfo?.let { aqInfo ->
                                 CurrentAqInfo(
                                     preferencesState = preferencesState,
-                                    aqInfo = { aqInfo }
+                                    aqInfo = { aqInfo },
+                                    aqDetailsExpanded = aqViewModel::aqDetailsExpanded,
+                                    aqUiEvent = aqViewModel::aqUiEvent
                                 )
                             }
                         }

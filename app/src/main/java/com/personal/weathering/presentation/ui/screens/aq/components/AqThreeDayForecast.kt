@@ -94,16 +94,16 @@ fun AqThreeDayForecast(
                         ) {
                             Text(
                                 modifier = Modifier.weight(weight = .8f),
-                                text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqIndexRes) else
-                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqIndexRes),
+                                text = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqiType.aqValue }.usAqiType.aqIndexRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.euAqiType.aqValue }.euAqiType.aqIndexRes),
                                 style = MaterialTheme.typography.titleSmall,
                                 textAlign = TextAlign.End
                             )
                             Icon(
-                                painter = if (preferencesState.value.useUSaq) painterResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.iconSmallRes) else
-                                    painterResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.iconSmallRes),
-                                contentDescription = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqi }.usAqiType.aqIndexRes) else
-                                    stringResource(id = hourlyAqData.maxBy { it.europeanAqi }.europeanAqiType.aqIndexRes),
+                                painter = if (preferencesState.value.useUSaq) painterResource(id = hourlyAqData.maxBy { it.usAqiType.aqValue }.usAqiType.iconSmallRes) else
+                                    painterResource(id = hourlyAqData.maxBy { it.euAqiType.aqValue }.euAqiType.iconSmallRes),
+                                contentDescription = if (preferencesState.value.useUSaq) stringResource(id = hourlyAqData.maxBy { it.usAqiType.aqValue }.usAqiType.aqIndexRes) else
+                                    stringResource(id = hourlyAqData.maxBy { it.euAqiType.aqValue }.euAqiType.aqIndexRes),
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -119,8 +119,8 @@ fun AqThreeDayForecast(
                                 )
                             }
                             Text(
-                                text = if (preferencesState.value.useUSaq) hourlyAqData.maxBy { it.usAqi }.usAqi.toString() else
-                                    hourlyAqData.maxBy { it.europeanAqi }.europeanAqi.toString(),
+                                text = if (preferencesState.value.useUSaq) hourlyAqData.maxBy { it.usAqiType.aqValue }.usAqiType.aqValue.toString() else
+                                    hourlyAqData.maxBy { it.euAqiType.aqValue }.euAqiType.aqValue.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium
                             )
@@ -137,8 +137,8 @@ fun AqThreeDayForecast(
                                 )
                             }
                             Text(
-                                text = if (preferencesState.value.useUSaq) hourlyAqData.minBy { it.usAqi }.usAqi.toString() else
-                                    hourlyAqData.minBy { it.europeanAqi }.europeanAqi.toString(),
+                                text = if (preferencesState.value.useUSaq) hourlyAqData.minBy { it.usAqiType.aqValue }.usAqiType.aqValue.toString() else
+                                    hourlyAqData.minBy { it.euAqiType.aqValue }.euAqiType.aqValue.toString(),
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant

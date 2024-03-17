@@ -4,9 +4,7 @@ import java.time.LocalDateTime
 
 data class CurrentAqData(
     val time: LocalDateTime,
-    val euAqi: Int,
     val euAqiType: EuAqType,
-    val usAqi: Int,
     val usAqiType: UsAqType,
     val particulateMatter10: Double,
     val particulateMatter25: Double,

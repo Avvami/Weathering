@@ -12,7 +12,7 @@ data class AqDto(
 data class CurrentAqDto(
     val time: String,
     @field:Json(name = "european_aqi")
-    val europeanAqi: Int,
+    val euAqi: Int,
     @field:Json(name = "us_aqi")
     val usAqi: Int,
     @field:Json(name = "pm10")
@@ -31,7 +31,7 @@ data class CurrentAqDto(
 data class HourlyAqDto(
     val time: List<String>,
     @field:Json(name = "european_aqi")
-    val europeanAqies: List<Int>,
+    val euAqies: List<Int>,
     @field:Json(name = "us_aqi")
     val usAqies: List<Int>,
     @field:Json(name = "pm10")
@@ -45,5 +45,27 @@ data class HourlyAqDto(
     @field:Json(name = "sulphur_dioxide")
     val sulphurDioxides: List<Double>,
     @field:Json(name = "ozone")
-    val ozones: List<Double>
+    val ozones: List<Double>,
+    @field:Json(name = "us_aqi_pm10")
+    val usAqiParticulateMatters10: List<Int>,
+    @field:Json(name = "us_aqi_pm2_5")
+    val usAqiParticulateMatters25: List<Int>,
+    @field:Json(name = "us_aqi_carbon_monoxide")
+    val usAqiCarbonMonoxides: List<Int>,
+    @field:Json(name = "us_aqi_nitrogen_dioxide")
+    val usAqiNitrogenDioxides: List<Int>,
+    @field:Json(name = "us_aqi_sulphur_dioxide")
+    val usAqiSulphurDioxides: List<Int>,
+    @field:Json(name = "us_aqi_ozone")
+    val usAqiOzones: List<Int>,
+    @field:Json(name = "european_aqi_pm10")
+    val euAqiParticulateMatters10: List<Int>,
+    @field:Json(name = "european_aqi_pm2_5")
+    val euAqiParticulateMatters25: List<Int>,
+    @field:Json(name = "european_aqi_nitrogen_dioxide")
+    val euAqiNitrogenDioxides: List<Int>,
+    @field:Json(name = "european_aqi_sulphur_dioxide")
+    val euAqiSulphurDioxides: List<Int>,
+    @field:Json(name = "european_aqi_ozone")
+    val euAqiOzones: List<Int>
 )

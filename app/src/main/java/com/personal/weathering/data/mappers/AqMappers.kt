@@ -18,7 +18,7 @@ private data class IndexedHourlyAq(
 
 fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
     return time.mapIndexed { index, time ->
-        val europeanAqi = europeanAqies[index]
+        val euAqi = euAqies[index]
         val usAqi = usAqies[index]
         val particulateMatter10 = particulateMatters10[index]
         val particulateMatter25 = particulateMatters25[index]
@@ -26,20 +26,40 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
         val nitrogenDioxide = nitrogenDioxides[index]
         val sulphurDioxide = sulphurDioxides[index]
         val ozone = ozones[index]
+        val usAqiParticulateMatter10 = usAqiParticulateMatters10[index]
+        val usAqiParticulateMatter25 = usAqiParticulateMatters25[index]
+        val usAqiCarbonMonoxide = usAqiCarbonMonoxides[index]
+        val usAqiNitrogenDioxide = usAqiNitrogenDioxides[index]
+        val usAqiSulphurDioxide = usAqiSulphurDioxides[index]
+        val usAqiOzone = usAqiOzones[index]
+        val euAqiParticulateMatter10 = euAqiParticulateMatters10[index]
+        val euAqiParticulateMatter25 = euAqiParticulateMatters25[index]
+        val euAqiNitrogenDioxide = euAqiNitrogenDioxides[index]
+        val euAqiSulphurDioxide = euAqiSulphurDioxides[index]
+        val euAqiOzone = euAqiOzones[index]
         IndexedHourlyAq(
             index = index,
             data = HourlyAqData(
                 time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-                europeanAqi = europeanAqi,
-                europeanAqiType = EuAqType.fromAQI(europeanAqi),
-                usAqi = usAqi,
+                euAqiType = EuAqType.fromAQI(euAqi),
                 usAqiType = UsAqType.fromAQI(usAqi),
                 particulateMatter10 = particulateMatter10,
                 particulateMatter25 = particulateMatter25,
                 carbonMonoxide = carbonMonoxide,
                 nitrogenDioxide = nitrogenDioxide,
                 sulphurDioxide = sulphurDioxide,
-                ozone = ozone
+                ozone = ozone,
+                usAqiParticulateMatter10Type = UsAqType.fromAQI(usAqiParticulateMatter10),
+                usAqiParticulateMatter25Type = UsAqType.fromAQI(usAqiParticulateMatter25),
+                usAqiCarbonMonoxideType = UsAqType.fromAQI(usAqiCarbonMonoxide),
+                usAqiNitrogenDioxideType = UsAqType.fromAQI(usAqiNitrogenDioxide),
+                usAqiSulphurDioxideType = UsAqType.fromAQI(usAqiSulphurDioxide),
+                usAqiOzoneType = UsAqType.fromAQI(usAqiOzone),
+                euAqiParticulateMatter10Type = EuAqType.fromAQI(euAqiParticulateMatter10),
+                euAqiParticulateMatter25Type = EuAqType.fromAQI(euAqiParticulateMatter25),
+                euAqiNitrogenDioxideType = EuAqType.fromAQI(euAqiNitrogenDioxide),
+                euAqiSulphurDioxideType = EuAqType.fromAQI(euAqiSulphurDioxide),
+                euAqiOzoneType = EuAqType.fromAQI(euAqiOzone)
             )
         )
     }.groupBy{ indexedData ->
@@ -52,9 +72,7 @@ fun HourlyAqDto.toHourlyAqData(): Map<Int, List<HourlyAqData>> {
 fun CurrentAqDto.toCurrentAqData(): CurrentAqData {
     return CurrentAqData(
         time = LocalDateTime.parse(time, DateTimeFormatter.ISO_DATE_TIME),
-        euAqi = europeanAqi,
-        euAqiType = EuAqType.fromAQI(europeanAqi),
-        usAqi = usAqi,
+        euAqiType = EuAqType.fromAQI(euAqi),
         usAqiType = UsAqType.fromAQI(usAqi),
         particulateMatter10 = particulateMatter10,
         particulateMatter25 = particulateMatter25,

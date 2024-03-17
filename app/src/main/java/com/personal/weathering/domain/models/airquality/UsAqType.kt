@@ -18,6 +18,7 @@ import com.personal.weathering.presentation.ui.theme.aqiVeryUnhealthyPrimary
 import com.personal.weathering.presentation.ui.theme.aqiVeryUnhealthySecondary
 
 sealed class UsAqType(
+    val aqValue: Int,
     @StringRes val aqIndexRes: Int,
     @StringRes val aqDescRes: Int,
     @DrawableRes val iconSmallRes: Int,
@@ -25,7 +26,8 @@ sealed class UsAqType(
     val gradientPrimary: Color,
     val gradientSecondary: Color
 ) {
-    data object Good: UsAqType(
+    data class Good(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.good,
         aqDescRes = R.string.us_good_aqi_description,
         iconSmallRes = R.drawable.icon_eco_fill1_wght400,
@@ -33,7 +35,8 @@ sealed class UsAqType(
         gradientPrimary = aqiGoodPrimary,
         gradientSecondary = aqiGoodSecondary
     )
-    data object Moderate: UsAqType(
+    data class Moderate(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.moderate,
         aqDescRes = R.string.us_moderate_aqi_description,
         iconSmallRes = R.drawable.icon_sentiment_neutral_fill1_wght400,
@@ -41,7 +44,8 @@ sealed class UsAqType(
         gradientPrimary = aqiModeratePrimary,
         gradientSecondary = aqiModerateSecondary
     )
-    data object UnhealthyForSensitiveGroups: UsAqType(
+    data class UnhealthyForSensitiveGroups(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.unhealthy_for_sensitive,
         aqDescRes = R.string.us_unhealthy_sensitive_groups_description,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
@@ -49,7 +53,8 @@ sealed class UsAqType(
         gradientPrimary = aqiSensitivePrimary,
         gradientSecondary = aqiSensitiveSecondary
     )
-    data object Unhealthy: UsAqType(
+    data class Unhealthy(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.unhealthy,
         aqDescRes = R.string.us_unhealthy_aqi_description,
         iconSmallRes = R.drawable.icon_masks_fill1_wght400,
@@ -57,7 +62,8 @@ sealed class UsAqType(
         gradientPrimary = aqiUnhealthyPrimary,
         gradientSecondary = aqiUnhealthySecondary
     )
-    data object VeryUnhealthy: UsAqType(
+    data class VeryUnhealthy(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.very_unhealthy,
         aqDescRes = R.string.us_very_unhealthy_aqi_description,
         iconSmallRes = R.drawable.icon_sentiment_very_dissatisfied_fill1_wght400,
@@ -65,7 +71,8 @@ sealed class UsAqType(
         gradientPrimary = aqiVeryUnhealthyPrimary,
         gradientSecondary = aqiVeryUnhealthySecondary
     )
-    data object Hazardous: UsAqType(
+    data class Hazardous(val value: Int): UsAqType(
+        aqValue = value,
         aqIndexRes = R.string.hazardous,
         aqDescRes = R.string.us_hazardous_aqi_description,
         iconSmallRes = R.drawable.icon_skull_fill1_wght400,
@@ -75,14 +82,14 @@ sealed class UsAqType(
     )
 
     companion object {
-        fun fromAQI(code: Int): UsAqType {
-            return when(code) {
-                in 0 until 51 -> Good
-                in 51 until 101 -> Moderate
-                in 101 until 151 -> UnhealthyForSensitiveGroups
-                in 151 until 201 -> Unhealthy
-                in 201 until 301 -> VeryUnhealthy
-                else -> Hazardous
+        fun fromAQI(value: Int): UsAqType {
+            return when(value) {
+                in 0 until 51 -> Good(value)
+                in 51 until 101 -> Moderate(value)
+                in 101 until 151 -> UnhealthyForSensitiveGroups(value)
+                in 151 until 201 -> Unhealthy(value)
+                in 201 until 301 -> VeryUnhealthy(value)
+                else -> Hazardous(value)
             }
         }
     }
