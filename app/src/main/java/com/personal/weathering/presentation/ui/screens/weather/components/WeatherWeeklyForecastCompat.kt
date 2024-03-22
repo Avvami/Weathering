@@ -69,7 +69,7 @@ fun WeatherWeeklyForecastCompat(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier.weight(.52f)
+                        modifier = Modifier.weight(.6f)
                     ) {
                         Text(
                             text = weatherData.time.format(DateTimeFormatter.ofPattern("d MMMM")),
@@ -86,12 +86,12 @@ fun WeatherWeeklyForecastCompat(
                         )
                     }
                     Row(
-                        modifier = Modifier.weight(.48f),
+                        modifier = Modifier.weight(.4f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(
-                            modifier = Modifier.weight(1f).size(28.dp),
+                            modifier = Modifier.weight(1f).size(22.dp),
                             painter = painterResource(id = weatherData.weatherType.iconSmallRes),
                             contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
                         )
@@ -112,8 +112,7 @@ fun WeatherWeeklyForecastCompat(
                                     if (preferencesState.value.useCelsius) weatherData.temperatureMax.roundToInt() else
                                         UnitsConverter.toFahrenheit(weatherData.temperatureMax).roundToInt()
                                 ),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium
+                                style = MaterialTheme.typography.titleMedium
                             )
                         }
                         Column(
@@ -133,8 +132,7 @@ fun WeatherWeeklyForecastCompat(
                                     if (preferencesState.value.useCelsius) weatherData.temperatureMin.roundToInt() else
                                         UnitsConverter.toFahrenheit(weatherData.temperatureMin).roundToInt()
                                 ),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
+                                style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }

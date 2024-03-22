@@ -66,7 +66,7 @@ fun AqThreeDayForecast(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier.weight(.25f)
+                        modifier = Modifier.weight(.26f)
                     ) {
                         Text(
                             text = hourlyAqData[0].time.format(DateTimeFormatter.ofPattern("d MMMM")),
@@ -83,7 +83,7 @@ fun AqThreeDayForecast(
                         )
                     }
                     Row(
-                        modifier = Modifier.weight(.75f),
+                        modifier = Modifier.weight(.74f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -121,8 +121,7 @@ fun AqThreeDayForecast(
                             Text(
                                 text = if (preferencesState.value.useUSaq) hourlyAqData.maxBy { it.usAqiType.aqValue }.usAqiType.aqValue.toString() else
                                     hourlyAqData.maxBy { it.euAqiType.aqValue }.euAqiType.aqValue.toString(),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium
+                                style = MaterialTheme.typography.titleMedium
                             )
                         }
                         Column(
@@ -139,8 +138,7 @@ fun AqThreeDayForecast(
                             Text(
                                 text = if (preferencesState.value.useUSaq) hourlyAqData.minBy { it.usAqiType.aqValue }.usAqiType.aqValue.toString() else
                                     hourlyAqData.minBy { it.euAqiType.aqValue }.euAqiType.aqValue.toString(),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
+                                style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }

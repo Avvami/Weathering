@@ -70,7 +70,7 @@ fun WeatherWeeklyForecastExtended(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier.weight(.4f)
+                        modifier = Modifier.weight(.6f)
                     ) {
                         Text(
                             text = weatherData.time.format(DateTimeFormatter.ofPattern("d MMMM")),
@@ -87,7 +87,7 @@ fun WeatherWeeklyForecastExtended(
                         )
                     }
                     Row(
-                        modifier = Modifier.weight(.6f, false),
+                        modifier = Modifier.weight(.4f, false),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -134,7 +134,7 @@ fun WeatherWeeklyForecastExtended(
                         Icon(
                             modifier = Modifier
                                 .weight(.2f)
-                                .size(28.dp),
+                                .size(22.dp),
                             painter = painterResource(id = weatherData.weatherType.iconSmallRes),
                             contentDescription = stringResource(id = weatherData.weatherType.weatherDescRes)
                         )
@@ -155,8 +155,7 @@ fun WeatherWeeklyForecastExtended(
                                     if (preferencesState.value.useCelsius) weatherData.temperatureMax.roundToInt() else
                                         UnitsConverter.toFahrenheit(weatherData.temperatureMax).roundToInt()
                                 ),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium
+                                style = MaterialTheme.typography.titleMedium
                             )
                         }
                         Column(
@@ -176,8 +175,7 @@ fun WeatherWeeklyForecastExtended(
                                     if (preferencesState.value.useCelsius) weatherData.temperatureMin.roundToInt() else
                                         UnitsConverter.toFahrenheit(weatherData.temperatureMin).roundToInt()
                                 ),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
+                                style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
