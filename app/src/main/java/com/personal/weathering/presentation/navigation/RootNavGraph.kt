@@ -64,6 +64,7 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
             WeatherDetailsScreen(
+                windowInfo = windowInfo,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
                 weatherState = mainViewModel::weatherState

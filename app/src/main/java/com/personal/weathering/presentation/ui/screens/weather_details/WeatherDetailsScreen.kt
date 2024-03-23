@@ -4,29 +4,20 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,7 +31,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -51,16 +41,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.TabItem
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
+import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
-import com.personal.weathering.presentation.ui.components.CustomPrimaryScrollableTabRow
-import com.personal.weathering.presentation.ui.components.TabRowDefaults
-import com.personal.weathering.presentation.ui.components.TabRowDefaults.tabIndicatorOffset
+import com.personal.weathering.presentation.ui.screens.weather_details.components.CustomScrollableTabRow
+import com.personal.weathering.presentation.ui.screens.weather_details.components.CustomTabRow
 import com.personal.weathering.presentation.ui.screens.weather_details.components.HumidityDetails
 import com.personal.weathering.presentation.ui.screens.weather_details.components.PressureDetails
 import com.personal.weathering.presentation.ui.screens.weather_details.components.SunDetails
@@ -69,14 +58,12 @@ import com.personal.weathering.presentation.ui.screens.weather_details.component
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
 import com.personal.weathering.presentation.ui.theme.drizzleSecondary
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
-import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
-import com.personal.weathering.presentation.ui.theme.surfaceLight
-import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun WeatherDetailsScreen(
+    windowInfo: () -> WindowInfo,
     preferencesState: State<PreferencesState>,
     weatherState: () -> WeatherState,
     navigateBack: () -> Unit
@@ -158,58 +145,18 @@ fun WeatherDetailsScreen(
             CompositionLocalProvider(
                 LocalOverscrollConfiguration provides null
             ) {
-                CustomPrimaryScrollableTabRow(
-                    selectedTabIndex = weatherDetailsViewModel.selectedDayOfWeek,
-                    minItemWidth = 64.dp,
-                    edgePadding = 0.dp,
-                    containerColor = Color.Transparent,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.PrimaryIndicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[weatherDetailsViewModel.selectedDayOfWeek]),
-                            color = onSurfaceLight,
-                            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp, bottomStart = 0.dp, bottomEnd = 0.dp)
-                        )
-                    },
-                    divider = {
-                        HorizontalDivider(color = surfaceLight30p)
-                    }
-                ) {
-                    tabItems.fastForEachIndexed { index, item ->
-                        Tab(
-                            modifier = Modifier.clip(MaterialTheme.shapes.small),
-                            selected = index == weatherDetailsViewModel.selectedDayOfWeek,
-                            onClick = {
-                                weatherDetailsViewModel.weatherDetailsUiEvent(WeatherDetailsUiEvent.SetSelectedDayOfWeek(index))
-                            },
-                            selectedContentColor = onSurfaceLight,
-                            unselectedContentColor = onSurfaceLight70p
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .then(
-                                        if (index == weatherDetailsViewModel.selectedDayOfWeek)
-                                            Modifier.background(color = onSurfaceLight)
-                                        else Modifier
-                                    )
-                                    .align(Alignment.CenterHorizontally),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = item.dayOfMonth.toString(),
-                                    style = MaterialTheme.typography.labelLarge,
-                                    color = if (index == weatherDetailsViewModel.selectedDayOfWeek) surfaceLight else onSurfaceLight70p
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = item.dayOfWeek,
-                                style = MaterialTheme.typography.labelLarge
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                        }
-                    }
+                if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                    CustomScrollableTabRow(
+                        selectedDayOfWeek = weatherDetailsViewModel::selectedDayOfWeek,
+                        tabItems = { tabItems },
+                        weatherDetailsUiEvent = weatherDetailsViewModel::weatherDetailsUiEvent
+                    )
+                } else {
+                    CustomTabRow(
+                        selectedDayOfWeek = weatherDetailsViewModel::selectedDayOfWeek,
+                        tabItems = { tabItems },
+                        weatherDetailsUiEvent = weatherDetailsViewModel::weatherDetailsUiEvent
+                    )
                 }
             }
             HorizontalPager(
