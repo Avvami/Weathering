@@ -146,4 +146,6 @@
         \n\nCarbon monoxide (CO) is a colorless, odorless gas.
         \n\nNitrogen Dioxide (NO2) is a pungent gas that, along with fine airborne particulate matter, contributes to the reddish-brown haze characteristic of smoggy air.
         \n\nSulfur dioxide (SO2) is comprised of one atom of sulfur and two atoms of oxygen, and is a gas at ambient temperatures. It has a pungent, irritating odor.</string>
+    <string name="offline">You\'re offline</string>
+    <string name="no_internet">No internet</string>
 </resources>

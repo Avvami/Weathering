@@ -1,6 +1,8 @@
 package com.personal.weathering.presentation.ui.screens.weather
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -52,6 +54,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,6 +64,7 @@ import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.domain.util.C
+import com.personal.weathering.domain.util.UiText
 import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.domain.util.findActivity
 import com.personal.weathering.domain.util.shimmerEffect
@@ -70,6 +74,7 @@ import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.FavoritesState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.state.WeatherState
+import com.personal.weathering.presentation.ui.components.NetworkConnection
 import com.personal.weathering.presentation.ui.components.PullToRefresh
 import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherDetailsCompat
 import com.personal.weathering.presentation.ui.screens.weather.components.CurrentWeatherDetailsExpanded
@@ -82,6 +87,7 @@ import com.personal.weathering.presentation.ui.screens.weather.components.Weathe
 import com.personal.weathering.presentation.ui.screens.weather.components.modal.ModalDrawer
 import com.personal.weathering.presentation.ui.theme.drizzlePrimary
 import com.personal.weathering.presentation.ui.theme.drizzleSecondary
+import com.personal.weathering.presentation.ui.theme.errorContainerLight
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight70p
 import kotlinx.coroutines.launch
@@ -90,6 +96,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun WeatherScreen(
     windowInfo: () -> WindowInfo,
+    isNetworkConnected: () -> Boolean,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
     weatherState: () -> WeatherState,
@@ -262,15 +269,36 @@ fun WeatherScreen(
                                     )
                             ) {
                                 weatherState().error?.let { error ->
-                                    Text(
-                                        text = error,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = onSurfaceLight70p,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(start = 16.dp, top = 16.dp, end = 16.dp)
-                                    )
+                                    if (weatherState().weatherInfo == null && error.contains(UiText.StringResource(R.string.api_call_error).asString())) {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Icon(
+                                                modifier = Modifier.size(150.dp),
+                                                painter = painterResource(id = R.drawable.icon_dino_offline),
+                                                contentDescription = stringResource(id = R.string.no_internet),
+                                                tint = onSurfaceLight
+                                            )
+                                            Text(
+                                                text = stringResource(id = R.string.no_internet).uppercase(),
+                                                style = MaterialTheme.typography.titleMedium,
+                                                fontStyle = FontStyle.Italic,
+                                                color = onSurfaceLight
+                                            )
+                                        }
+                                    } else {
+                                        Text(
+                                            text = error,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            color = onSurfaceLight70p,
+                                            textAlign = TextAlign.Center,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                                        )
+                                    }
                                 }
                                 weatherState().weatherInfo?.let { weatherInfo ->
                                     if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
@@ -368,6 +396,20 @@ fun WeatherScreen(
                         .padding(top = innerPadding.calculateTopPadding())
                         .align(Alignment.TopCenter)
                 )
+                AnimatedVisibility(
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    visible = !isNetworkConnected(),
+                    enter = slideInVertically(initialOffsetY = { it }),
+                    exit = slideOutVertically(targetOffsetY = { it })
+                ) {
+                    NetworkConnection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = innerPadding.calculateBottomPadding())
+                            .background(errorContainerLight)
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    )
+                }
             }
         }
     }

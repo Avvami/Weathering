@@ -12,6 +12,7 @@ import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.models.airquality.AqInfo
 import com.personal.weathering.domain.models.weather.WeatherInfo
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.ConnectivityRepository
 import com.personal.weathering.domain.repository.GeocodingRepository
 import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.WeatherRepository
@@ -26,6 +27,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,8 +39,22 @@ class MainViewModel(
     private val aqRepository: AqRepository,
     private val locationClient: LocationClient,
     private val localRepository: LocalRepository,
-    private val geocodingRepository: GeocodingRepository
+    private val geocodingRepository: GeocodingRepository,
+    private val connectivityRepository: ConnectivityRepository
 ): ViewModel() {
+
+    init {
+        observeNetworkChanges()
+    }
+
+    var isNetworkConnected by mutableStateOf(connectivityRepository.getCurrentNetworkStatus())
+        private set
+
+    private fun observeNetworkChanges() {
+        connectivityRepository.observe().onEach { isAvailable ->
+            isNetworkConnected = isAvailable
+        }.launchIn(viewModelScope)
+    }
 
     var pullToRefreshState by mutableStateOf(PullToRefreshState(150f))
 
@@ -111,6 +128,10 @@ class MainViewModel(
     }
 
     private fun loadWeatherInfo(useLocation: Boolean, lat: Double, lon: Double) {
+        if (!isNetworkConnected && pullToRefreshState.isRefreshing) {
+            pullToRefreshState.endRefresh()
+            return
+        }
         if (preferencesState.value.selectedCity == "" && !useLocation) return
         viewModelScope.launch {
             weatherState = weatherState.copy(
@@ -215,6 +236,10 @@ class MainViewModel(
     }
 
     private fun loadAqInfo(lat: Double, lon: Double) {
+        if (!isNetworkConnected && pullToRefreshState.isRefreshing) {
+            pullToRefreshState.endRefresh()
+            return
+        }
         viewModelScope.launch {
             aqState = aqState.copy(
                 isLoading = true,

@@ -2,11 +2,13 @@ package com.personal.weathering.presentation.ui.screens.aq
 
 import android.graphics.Shader
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,13 +38,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RadialGradientShader
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
+import com.personal.weathering.domain.util.UiText
 import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
@@ -186,15 +191,43 @@ fun AqScreen(
                                 .padding(top = innerPadding.calculateTopPadding())
                         ) {
                             aqState().error?.let { error ->
-                                Text(
-                                    text = error,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = onSurfaceLight70p,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp)
-                                )
+                                if (aqState().aqInfo == null && error.contains(UiText.StringResource(R.string.api_call_error).asString())) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp),
+                                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(150.dp),
+                                            painter = painterResource(id = R.drawable.icon_dino_offline),
+                                            contentDescription = stringResource(id = R.string.no_internet),
+                                            tint = onSurfaceLight
+                                        )
+                                        Text(
+                                            text = stringResource(id = R.string.no_internet).uppercase(),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontStyle = FontStyle.Italic,
+                                            color = onSurfaceLight
+                                        )
+                                    }
+                                } else {
+                                    Text(
+                                        text = error,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = onSurfaceLight70p,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(
+                                                start = 16.dp,
+                                                top = 16.dp,
+                                                end = 16.dp,
+                                                bottom = 16.dp
+                                            )
+                                    )
+                                }
                             }
                             aqState().aqInfo?.let { aqInfo ->
                                 if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {

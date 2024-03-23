@@ -10,12 +10,14 @@ import com.personal.weathering.data.remote.GeocodingApi
 import com.personal.weathering.data.remote.SearchApi
 import com.personal.weathering.data.remote.WeatherApi
 import com.personal.weathering.data.repository.AqRepositoryImpl
+import com.personal.weathering.data.repository.ConnectivityRepositoryImpl
 import com.personal.weathering.data.repository.GeocodingRepositoryImpl
 import com.personal.weathering.data.repository.LocalRepositoryImpl
 import com.personal.weathering.data.repository.SearchRepositoryImpl
 import com.personal.weathering.data.repository.WeatherRepositoryImpl
 import com.personal.weathering.domain.location.LocationClient
 import com.personal.weathering.domain.repository.AqRepository
+import com.personal.weathering.domain.repository.ConnectivityRepository
 import com.personal.weathering.domain.repository.GeocodingRepository
 import com.personal.weathering.domain.repository.LocalRepository
 import com.personal.weathering.domain.repository.SearchRepository
@@ -36,6 +38,7 @@ interface AppModule {
     val localRepository: LocalRepository
     val geocodingApi: GeocodingApi
     val geocodingRepository: GeocodingRepository
+    val connectivityRepository: ConnectivityRepository
 }
 
 class AppModuleImpl(private val appContext: Context): AppModule {
@@ -100,5 +103,9 @@ class AppModuleImpl(private val appContext: Context): AppModule {
     }
     override val geocodingRepository: GeocodingRepository by lazy {
         GeocodingRepositoryImpl(geocodingApi, appContext)
+    }
+
+    override val connectivityRepository: ConnectivityRepository by lazy {
+        ConnectivityRepositoryImpl(appContext)
     }
 }

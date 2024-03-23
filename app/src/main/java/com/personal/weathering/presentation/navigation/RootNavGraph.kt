@@ -44,6 +44,7 @@ fun RootNavigationGraph(
         ) {
             WeatherScreen(
                 windowInfo = windowInfo,
+                isNetworkConnected = mainViewModel::isNetworkConnected,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
                 weatherState = mainViewModel::weatherState,

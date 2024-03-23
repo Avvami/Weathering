@@ -40,7 +40,8 @@ class MainActivity : ComponentActivity() {
                 aqRepository = WeatheringApp.appModule.aqRepository,
                 locationClient = WeatheringApp.appModule.locationClient,
                 localRepository = WeatheringApp.appModule.localRepository,
-                geocodingRepository = WeatheringApp.appModule.geocodingRepository
+                geocodingRepository = WeatheringApp.appModule.geocodingRepository,
+                connectivityRepository = WeatheringApp.appModule.connectivityRepository
             )
         }
     }
@@ -89,6 +90,17 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(mainViewModel.locationError) {
                 mainViewModel.locationError.collectLatest { message ->
                     Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            if (mainViewModel.isNetworkConnected) {
+                LaunchedEffect(true) {
+                    if (mainViewModel.weatherState.weatherInfo == null) {
+                        mainViewModel.uiEvent(UiEvent.LoadWeatherInfo(
+                            mainViewModel.preferencesState.value.useLocation,
+                            mainViewModel.preferencesState.value.selectedCityLat,
+                            mainViewModel.preferencesState.value.selectedCityLon
+                        ))
+                    }
                 }
             }
         }
