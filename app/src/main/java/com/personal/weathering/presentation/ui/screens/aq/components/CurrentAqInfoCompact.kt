@@ -1,6 +1,7 @@
 package com.personal.weathering.presentation.ui.screens.aq.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -119,12 +120,11 @@ fun CurrentAqInfoCompact(
             onClick = { aqUiEvent(AqUiEvent.SetAqDetailsExpanded) },
             colors = IconButtonDefaults.iconButtonColors(contentColor = onSurfaceLight)
         ) {
+            val rotation by animateIntAsState(targetValue = if (aqDetailsExpanded()) 90 else -90, label = "Rotation animation")
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                 contentDescription = "Expand more",
-                modifier = Modifier.then(
-                    if (aqDetailsExpanded()) Modifier.rotate(90f) else Modifier.rotate(-90f)
-                )
+                modifier = Modifier.rotate(rotation.toFloat())
             )
         }
     }
