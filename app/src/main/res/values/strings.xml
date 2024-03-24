@@ -120,18 +120,30 @@
     <string name="fetching_location_error">Error fetching location</string>
 
     <string name="us_good_aqi_description">Air quality is satisfactory, and air pollution poses little or no risk.</string>
+    <string name="us_good_aqi_range">0–50</string>
     <string name="us_moderate_aqi_description">Air quality is acceptable. However, there may be a risk for some people, particularly those who are unusually sensitive to air pollution.</string>
-    <string name="us_unhealthy_sensitive_groups_description">Members of sensitive groups may experience health effects. The general public is less likely to be affected.</string>
+    <string name="us_moderate_aqi_range">51–100</string>
+    <string name="us_unhealthy_sensitive_groups_aqi_description">Members of sensitive groups may experience health effects. The general public is less likely to be affected.</string>
+    <string name="us_unhealthy_sensitive_groups_aqi_range">101–150</string>
     <string name="us_unhealthy_aqi_description">Some members of the general public may experience health effects; members of sensitive groups may experience more serious health effects.</string>
+    <string name="us_unhealthy_aqi_range">151–200</string>
     <string name="us_very_unhealthy_aqi_description">Health alert: The risk of health effects is increased for everyone.</string>
+    <string name="us_very_unhealthy_aqi_range">201–300</string>
     <string name="us_hazardous_aqi_description">Health warning of emergency conditions: everyone is more likely to be affected.</string>
+    <string name="us_hazardous_aqi_range">301–500</string>
 
     <string name="eu_good_aqi_general_description">The air quality is good. Enjoy your usual outdoor activities.</string>
-    <string name="eu_fair_aqi_general_description">Enjoy your usual outdoor activities</string>
-    <string name="eu_moderate_aqi_general_description">Enjoy your usual outdoor activities</string>
-    <string name="eu_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat</string>
-    <string name="eu_very_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat</string>
+    <string name="eu_good_aqi_range">0–20</string>
+    <string name="eu_fair_aqi_general_description">Enjoy your usual outdoor activities.</string>
+    <string name="eu_fair_aqi_range">20–40</string>
+    <string name="eu_moderate_aqi_general_description">Enjoy your usual outdoor activities.</string>
+    <string name="eu_moderate_aqi_range">40–60</string>
+    <string name="eu_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat.</string>
+    <string name="eu_poor_aqi_range">60–80</string>
+    <string name="eu_very_poor_aqi_general_description">Consider reducing intense activities outdoors, if you experience symptoms such as sore eyes, a cough or sore throat.</string>
+    <string name="eu_very_poor_aqi_range">80–100</string>
     <string name="eu_extremely_poor_aqi_general_description">Reduce physical activities outdoors.</string>
+    <string name="eu_extremely_poor_aqi_range">100+</string>
 
     <string name="location_permission">Please allow location access to receive real-time weather information tailored to where you are.</string>
     <string name="location_permission_declined">It seems you have permanently declined location permission. Please enable it in the app settings.</string>
@@ -148,4 +160,14 @@
         \n\nSulfur dioxide (SO2) is comprised of one atom of sulfur and two atoms of oxygen, and is a gas at ambient temperatures. It has a pungent, irritating odor.</string>
     <string name="offline">You\'re offline</string>
     <string name="no_internet">No internet</string>
+
+    <string name="pollutants">Pollutants</string>
+    <string name="us_aq_scale">Air quality scale (US)</string>
+    <string name="eu_aq_scale">Air quality scale (EU)</string>
+    <string name="pm25_desc">Fine Particulate Matter are inhalable pollutant particles with a diameter less than 2.5 micrometers that can enter the lungs and bloodstream, resulting in serious health issues. The most severe impacts are on the lungs and heart. Exposure can result in coughing or difficulty breathing, aggravated asthma, and the development of chronic respiratory disease.</string>
+    <string name="pm10_desc">Particulate Matter are inhalable pollutant particles with a diameter less than 10 micrometers. Particles that are larger than 2.5 micrometers can be deposited in airways, resulting in health issues. Exposure can result in eye and throat irritation, coughing or difficulty breathing, and aggravated asthma. More frequent and excessive exposure can result in more serious health effects.</string>
+    <string name="no2_desc">Breathing in high levels of Nitrogen Dioxide increases the risk of respiratory problems. Coughing and difficulty breathing are common and more serious health issues such as respiratory infections can occur with longer exposure.</string>
+    <string name="o3_desc">Ground-level Ozone can aggravate existing respiratory diseases and also lead to throat irritation, headaches, and chest pain.</string>
+    <string name="so2_desc">Exposure to Sulfur Dioxide can lead to throat and eye irritation and aggravate asthma as well as chronic bronchitis.</string>
+    <string name="co_desc">Carbon Monoxide is a colorless and odorless gas and when inhaled at high levels can cause headache, nausea, dizziness, and vomiting. Repeated long-term exposure can lead to heart disease.</string>
 </resources>

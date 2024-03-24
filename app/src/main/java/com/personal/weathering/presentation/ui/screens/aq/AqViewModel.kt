@@ -10,9 +10,25 @@ class AqViewModel: ViewModel() {
     var aqDetailsExpanded by mutableStateOf(false)
         private set
 
+    var isBottomSheetShown by mutableStateOf(false)
+        private set
+
+    var isPollutantsExpanded by mutableStateOf(true)
+        private set
+
+    var isUsAqScaleExpanded by mutableStateOf(false)
+        private set
+
+    var isEuAqScaleExpanded by mutableStateOf(false)
+        private set
+
     fun aqUiEvent(event: AqUiEvent) {
         when (event) {
             AqUiEvent.SetAqDetailsExpanded -> { aqDetailsExpanded = !aqDetailsExpanded }
+            AqUiEvent.SetBottomSheetShown -> { isBottomSheetShown = !isBottomSheetShown }
+            AqUiEvent.SetPollutantsExpanded -> { isPollutantsExpanded = !isPollutantsExpanded }
+            AqUiEvent.SetEuAqScaleExpanded -> { isEuAqScaleExpanded = !isEuAqScaleExpanded }
+            AqUiEvent.SetUsAqScaleExpanded -> { isUsAqScaleExpanded = !isUsAqScaleExpanded }
         }
     }
 }

@@ -47,7 +47,7 @@ sealed class UsAqType(
     data class UnhealthyForSensitiveGroups(val value: Int): UsAqType(
         aqValue = value,
         aqIndexRes = R.string.unhealthy_for_sensitive,
-        aqDescRes = R.string.us_unhealthy_sensitive_groups_description,
+        aqDescRes = R.string.us_unhealthy_sensitive_groups_aqi_description,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
         iconLargeRes = R.drawable.icon_ecg_heart_fill0_wght200,
         gradientPrimary = aqiSensitivePrimary,

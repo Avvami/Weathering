@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.shimmerEffect
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,7 @@ fun AqShimmerCompact(
                     bottomEnd = 28.dp
                 )
             )
-            .padding(top = innerPadding.calculateTopPadding(), bottom = 16.dp)
+            .padding(top = innerPadding.calculateTopPadding())
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -124,37 +125,42 @@ fun AqShimmerCompact(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        repeat(2) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .clip(MaterialTheme.shapes.large)
-                    .shimmerEffect()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    Box(modifier = Modifier.size(20.dp))
-                    Spacer(modifier = Modifier.height(4.dp))
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            repeat(2) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .clip(MaterialTheme.shapes.large)
+                        .shimmerEffect()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        Box(modifier = Modifier.size(20.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(id = R.string.aq_units),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Transparent
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(id = R.string.aq_units),
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(id = R.string.aqi_rate),
+                        textAlign = TextAlign.End,
+                        style = MaterialTheme.typography.titleMedium,
                         color = Color.Transparent
                     )
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(id = R.string.aqi_rate),
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Transparent
-                )
             }
         }
         Box(
-            modifier = Modifier.size(48.dp),
+            modifier = Modifier.fillMaxWidth().size(48.dp),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -189,7 +195,7 @@ fun AqShimmerCompact(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .shimmerEffect()
+                        .shimmerEffect(primaryColor = ExtendedTheme.colorScheme.surfaceContainerHighest, secondaryColor = ExtendedTheme.colorScheme.surfaceContainerLow)
                         .padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically

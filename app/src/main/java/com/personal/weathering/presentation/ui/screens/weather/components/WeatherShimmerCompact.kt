@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.shimmerEffect
+import com.personal.weathering.presentation.ui.theme.ExtendedTheme
 import com.personal.weathering.presentation.ui.theme.onSurfaceLight
 import com.personal.weathering.presentation.ui.theme.surfaceLight30p
 
@@ -259,7 +260,7 @@ fun WeatherShimmerCompact(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .shimmerEffect()
+                        .shimmerEffect(primaryColor = ExtendedTheme.colorScheme.surfaceContainerHighest, secondaryColor = ExtendedTheme.colorScheme.surfaceContainerLow)
                         .padding(horizontal = 16.dp, vertical = 6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically

@@ -53,6 +53,7 @@ import com.personal.weathering.presentation.UiEvent
 import com.personal.weathering.presentation.state.AqState
 import com.personal.weathering.presentation.state.PreferencesState
 import com.personal.weathering.presentation.ui.components.PullToRefresh
+import com.personal.weathering.presentation.ui.screens.aq.components.bottom_sheet.AqBottomSheet
 import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmerCompact
 import com.personal.weathering.presentation.ui.screens.aq.components.AqShimmerExpanded
 import com.personal.weathering.presentation.ui.screens.aq.components.AqThreeDayForecast
@@ -121,6 +122,11 @@ fun AqScreen(
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
                         Icon(imageVector = Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { aqViewModel.aqUiEvent(AqUiEvent.SetBottomSheetShown) }) {
+                        Icon(painter = painterResource(id = R.drawable.icon_info_fill0_wght400), contentDescription = "Info")
                     }
                 },
                 scrollBehavior = topAppBarScrollBehavior
@@ -256,6 +262,13 @@ fun AqScreen(
                     }
                 }
             }
+            AqBottomSheet(
+                isBottomSheetShown = aqViewModel::isBottomSheetShown,
+                isPollutantsExpanded = aqViewModel::isPollutantsExpanded,
+                isUsAqScaleExpanded = aqViewModel::isUsAqScaleExpanded,
+                isEuAqScaleExpanded = aqViewModel::isEuAqScaleExpanded,
+                aqUiEvent = aqViewModel::aqUiEvent
+            )
             PullToRefresh(
                 pullToRefreshState = pullToRefreshState,
                 modifier = Modifier
