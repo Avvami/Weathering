@@ -128,7 +128,7 @@ class MainViewModel(
     }
 
     private fun loadWeatherInfo(useLocation: Boolean, lat: Double, lon: Double) {
-        if (!isNetworkConnected && pullToRefreshState.isRefreshing) {
+        if (!isNetworkConnected) {
             pullToRefreshState.endRefresh()
             return
         }

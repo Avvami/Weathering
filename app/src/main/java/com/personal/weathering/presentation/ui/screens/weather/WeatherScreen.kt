@@ -64,7 +64,6 @@ import com.personal.weathering.BuildConfig
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
 import com.personal.weathering.domain.util.C
-import com.personal.weathering.domain.util.UiText
 import com.personal.weathering.domain.util.WindowInfo
 import com.personal.weathering.domain.util.findActivity
 import com.personal.weathering.domain.util.shimmerEffect
@@ -268,37 +267,36 @@ fun WeatherScreen(
                                         bottom = 16.dp
                                     )
                             ) {
-                                weatherState().error?.let { error ->
-                                    if (weatherState().weatherInfo == null && error.contains(UiText.StringResource(R.string.api_call_error).asString())) {
-                                        Column(
-                                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            Icon(
-                                                modifier = Modifier.size(150.dp),
-                                                painter = painterResource(id = R.drawable.icon_dino_offline),
-                                                contentDescription = stringResource(id = R.string.no_internet),
-                                                tint = onSurfaceLight
-                                            )
-                                            Text(
-                                                text = stringResource(id = R.string.no_internet).uppercase(),
-                                                style = MaterialTheme.typography.titleMedium,
-                                                fontStyle = FontStyle.Italic,
-                                                color = onSurfaceLight
-                                            )
-                                        }
-                                    } else {
+                                if (weatherState().weatherInfo == null && weatherState().error == null) {
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(150.dp),
+                                            painter = painterResource(id = R.drawable.icon_dino_offline),
+                                            contentDescription = stringResource(id = R.string.no_internet),
+                                            tint = onSurfaceLight
+                                        )
                                         Text(
-                                            text = error,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            color = onSurfaceLight70p,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                                            text = stringResource(id = R.string.no_internet).uppercase(),
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontStyle = FontStyle.Italic,
+                                            color = onSurfaceLight
                                         )
                                     }
+                                }
+                                weatherState().error?.let { error ->
+                                    Text(
+                                        text = error,
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = onSurfaceLight70p,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                                    )
                                 }
                                 weatherState().weatherInfo?.let { weatherInfo ->
                                     if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
