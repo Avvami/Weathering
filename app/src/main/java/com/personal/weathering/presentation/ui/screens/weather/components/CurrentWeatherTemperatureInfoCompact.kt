@@ -58,7 +58,7 @@ fun CurrentWeatherTemperatureInfoCompact(
                         if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
                             UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
                     ),
-                    fontSize = 82.sp,
+                    fontSize = 68.sp,
                     color = onSurfaceLight
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -96,7 +96,7 @@ fun CurrentWeatherTemperatureInfoCompact(
             tint = onSurfaceLight,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .size(200.dp)
+                .size(160.dp)
                 .align(Alignment.CenterHorizontally),
         )
         CompositionLocalProvider(

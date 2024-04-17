@@ -67,7 +67,7 @@ fun WeatherShimmerCompact(
             Column {
                 Text(
                     text = stringResource(id = R.string.temperature),
-                    fontSize = 82.sp,
+                    fontSize = 68.sp,
                     color = Color.Transparent,
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.large)
@@ -111,7 +111,7 @@ fun WeatherShimmerCompact(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .clip(MaterialTheme.shapes.large)
-                .size(200.dp)
+                .size(160.dp)
                 .shimmerEffect()
                 .align(Alignment.CenterHorizontally),
         )

@@ -51,7 +51,7 @@ fun CurrentAqInfoExpanded(
             ) {
                 Text(
                     text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqiType.aqValue.toString() else aqInfo().currentAqData.euAqiType.aqValue.toString(),
-                    fontSize = 82.sp,
+                    fontSize = 68.sp,
                     color = onSurfaceLight
                 )
                 Icon(

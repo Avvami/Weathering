@@ -72,7 +72,7 @@ fun WeatherShimmerExpanded(
                 ) {
                     Text(
                         text = stringResource(id = R.string.temperature),
-                        fontSize = 82.sp,
+                        fontSize = 68.sp,
                         color = Color.Transparent,
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.large)

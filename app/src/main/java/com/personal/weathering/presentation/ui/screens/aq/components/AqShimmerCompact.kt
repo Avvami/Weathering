@@ -64,7 +64,7 @@ fun AqShimmerCompact(
         ) {
             Text(
                 text = "00",
-                fontSize = 82.sp,
+                fontSize = 68.sp,
                 color = Color.Transparent,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
@@ -101,7 +101,7 @@ fun AqShimmerCompact(
         Box(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .size(200.dp)
+                .size(160.dp)
                 .align(Alignment.CenterHorizontally)
                 .clip(MaterialTheme.shapes.large)
                 .shimmerEffect()

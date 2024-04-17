@@ -64,7 +64,7 @@ fun CurrentWeatherTemperatureInfoExpanded(
                             if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
                                 UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
                         ),
-                        fontSize = 82.sp,
+                        fontSize = 68.sp,
                         color = onSurfaceLight
                     )
                     Icon(

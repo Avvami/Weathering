@@ -70,7 +70,7 @@ fun AqShimmerExpanded(
             ) {
                 Text(
                     text = "00",
-                    fontSize = 82.sp,
+                    fontSize = 68.sp,
                     color = Color.Transparent,
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.large)

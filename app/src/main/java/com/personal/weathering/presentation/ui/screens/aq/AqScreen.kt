@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.ApplySystemBarsTheme
@@ -102,7 +103,13 @@ fun AqScreen(
             else
                 ApplySystemBarsTheme(applyLightStatusBars = preferencesState.value.isDark)
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.aqi), fontWeight = FontWeight.Medium) },
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.aqi),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                },
                 colors = if (!isScrolledToTop && preferencesState.value.isDark) {
                     TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = Color.Transparent,

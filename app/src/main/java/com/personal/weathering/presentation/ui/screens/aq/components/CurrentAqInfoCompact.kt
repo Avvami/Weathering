@@ -55,7 +55,7 @@ fun CurrentAqInfoCompact(
             Text(
                 modifier = Modifier.weight(.45f),
                 text = if (preferencesState.value.useUSaq) aqInfo().currentAqData.usAqiType.aqValue.toString() else aqInfo().currentAqData.euAqiType.aqValue.toString(),
-                fontSize = 82.sp,
+                fontSize = 68.sp,
                 color = onSurfaceLight
             )
             Column(
@@ -90,7 +90,7 @@ fun CurrentAqInfoCompact(
             tint = onSurfaceLight,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .size(200.dp)
+                .size(160.dp)
                 .align(Alignment.CenterHorizontally)
         )
         Row(

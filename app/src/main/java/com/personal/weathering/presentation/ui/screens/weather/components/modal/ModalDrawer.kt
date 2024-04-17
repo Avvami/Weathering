@@ -33,7 +33,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
 import com.personal.weathering.domain.util.LocationPermissionProvider
 import com.personal.weathering.domain.util.findActivity
@@ -88,7 +90,8 @@ fun ModalDrawer(
                         }
                         Text(
                             text = stringResource(id = R.string.settings),
-                            style = MaterialTheme.typography.titleLarge
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                     AnimatedContent(
