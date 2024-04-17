@@ -13,7 +13,7 @@ class AqViewModel: ViewModel() {
     var isBottomSheetShown by mutableStateOf(false)
         private set
 
-    var isPollutantsExpanded by mutableStateOf(true)
+    var isPollutantsExpanded by mutableStateOf(false)
         private set
 
     var isUsAqScaleExpanded by mutableStateOf(false)

@@ -57,7 +57,7 @@ fun AqEuScale(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = stringResource(id = R.string.us_aq_scale),
+            text = stringResource(id = R.string.eu_aq_scale),
             style = MaterialTheme.typography.titleMedium
         )
         Box(

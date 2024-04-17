@@ -10,6 +10,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.presentation.ui.screens.aq.AqUiEvent
 
@@ -29,6 +30,7 @@ fun AqBottomSheet(
             onDismissRequest = { aqUiEvent(AqUiEvent.SetBottomSheetShown) },
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
+            scrimColor = Color.Transparent,
             tonalElevation = 0.dp,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ) {
