@@ -155,7 +155,7 @@ fun WeatherScreen(
                             AnimatedVisibility(visible = preferencesState.value.useLocation) {
                                 Text(
                                     text = stringResource(id = R.string.current_location),
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
                             if (weatherState().retrievingLocation) {
@@ -164,13 +164,15 @@ fun WeatherScreen(
                                         .clip(MaterialTheme.shapes.small)
                                         .shimmerEffect(),
                                     text = "Great London",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    textAlign = TextAlign.Center,
                                     color = Color.Transparent
                                 )
                             } else {
                                 Text(
                                     text = if (preferencesState.value.useLocation) preferencesState.value.currentLocationCity else preferencesState.value.selectedCity,
-                                    fontSize = 20.sp,
+                                    fontSize = 18.sp,
                                     fontWeight = FontWeight.Medium,
                                     textAlign = TextAlign.Center,
                                     maxLines = 2,
