@@ -41,6 +41,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.domain.models.TabItem
@@ -78,7 +79,11 @@ fun WeatherDetailsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.weekly_forecast), fontWeight = FontWeight.Medium)
+                    Text(
+                        text = stringResource(id = R.string.weekly_forecast),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
