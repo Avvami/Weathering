@@ -61,34 +61,34 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.BuildConfig
-import com.personal.weathering.R
-import com.personal.weathering.core.util.ApplySystemBarsTheme
-import com.personal.weathering.core.util.C
-import com.personal.weathering.core.util.WindowInfo
-import com.personal.weathering.core.util.findActivity
-import com.personal.weathering.core.util.shimmerEffect
 import com.personal.weathering.MainActivity
+import com.personal.weathering.R
 import com.personal.weathering.UiEvent
 import com.personal.weathering.aq.presentation.AqState
 import com.personal.weathering.core.presentation.FavoritesState
 import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.presentation.components.NetworkConnection
 import com.personal.weathering.core.presentation.components.PullToRefresh
+import com.personal.weathering.core.util.ApplySystemBarsTheme
+import com.personal.weathering.core.util.C
+import com.personal.weathering.core.util.WindowInfo
+import com.personal.weathering.core.util.findActivity
+import com.personal.weathering.core.util.shimmerEffect
+import com.personal.weathering.ui.theme.errorContainerLight
+import com.personal.weathering.ui.theme.nothingPrimary
+import com.personal.weathering.ui.theme.nothingSecondary
+import com.personal.weathering.ui.theme.onSurfaceLight
+import com.personal.weathering.ui.theme.onSurfaceLight70p
+import com.personal.weathering.weather.presenation.WeatherState
 import com.personal.weathering.weather.presenation.weather.components.CurrentWeatherDetailsCompat
 import com.personal.weathering.weather.presenation.weather.components.CurrentWeatherDetailsExpanded
-import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerCompact
 import com.personal.weathering.weather.presenation.weather.components.CurrentWeatherTemperatureInfoCompact
 import com.personal.weathering.weather.presenation.weather.components.CurrentWeatherTemperatureInfoExpanded
+import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerCompact
 import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerExpanded
 import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastCompat
 import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastExtended
 import com.personal.weathering.weather.presenation.weather.components.modal.ModalDrawer
-import com.personal.weathering.ui.theme.drizzlePrimary
-import com.personal.weathering.ui.theme.drizzleSecondary
-import com.personal.weathering.ui.theme.errorContainerLight
-import com.personal.weathering.ui.theme.onSurfaceLight
-import com.personal.weathering.ui.theme.onSurfaceLight70p
-import com.personal.weathering.weather.presenation.WeatherState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -220,9 +220,9 @@ fun WeatherScreen(
                             val biggerDimension = maxOf(size.height, size.width)
                             return RadialGradientShader(
                                 colors = if (weatherState().weatherInfo != null) listOf(
-                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary,
-                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary
-                                ) else listOf(drizzlePrimary, drizzleSecondary),
+                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientSecondary,
+                                    weatherState().weatherInfo!!.currentWeatherData.weatherType.gradientPrimary
+                                ) else listOf(nothingSecondary, nothingPrimary),
                                 center = Offset(size.width, 0f),
                                 radius = biggerDimension
                             )

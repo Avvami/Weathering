@@ -45,9 +45,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.personal.weathering.R
 import com.personal.weathering.core.domain.models.TabItem
+import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.ApplySystemBarsTheme
 import com.personal.weathering.core.util.WindowInfo
-import com.personal.weathering.core.presentation.PreferencesState
+import com.personal.weathering.ui.theme.nothingPrimary
+import com.personal.weathering.ui.theme.nothingSecondary
+import com.personal.weathering.ui.theme.onSurfaceLight
 import com.personal.weathering.weather.presenation.WeatherState
 import com.personal.weathering.weather.presenation.weather_details.components.CustomScrollableTabRow
 import com.personal.weathering.weather.presenation.weather_details.components.CustomTabRow
@@ -56,9 +59,6 @@ import com.personal.weathering.weather.presenation.weather_details.components.Pr
 import com.personal.weathering.weather.presenation.weather_details.components.SunDetails
 import com.personal.weathering.weather.presenation.weather_details.components.TemperatureDetails
 import com.personal.weathering.weather.presenation.weather_details.components.WindDetails
-import com.personal.weathering.ui.theme.drizzlePrimary
-import com.personal.weathering.ui.theme.drizzleSecondary
-import com.personal.weathering.ui.theme.onSurfaceLight
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -109,8 +109,8 @@ fun WeatherDetailsScreen(
                         val biggerDimension = maxOf(size.height, size.width)
                         return RadialGradientShader(
                             colors = listOf(
-                                weatherState().weatherInfo?.dailyWeatherData?.get(weatherDetailsViewModel.selectedDayOfWeek)?.weatherType?.gradientPrimary ?: drizzlePrimary,
-                                weatherState().weatherInfo?.dailyWeatherData?.get(weatherDetailsViewModel.selectedDayOfWeek)?.weatherType?.gradientSecondary ?: drizzleSecondary
+                                weatherState().weatherInfo?.dailyWeatherData?.get(weatherDetailsViewModel.selectedDayOfWeek)?.weatherType?.gradientSecondary ?: nothingSecondary,
+                                weatherState().weatherInfo?.dailyWeatherData?.get(weatherDetailsViewModel.selectedDayOfWeek)?.weatherType?.gradientPrimary ?: nothingPrimary
                             ),
                             center = Offset(size.width, 0f),
                             radius = biggerDimension
