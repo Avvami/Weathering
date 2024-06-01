@@ -161,9 +161,9 @@ fun ModalDrawer(
             if (favoritesState.value.isNotEmpty()) {
                 items(
                     count = favoritesState.value.size,
-                    key = { favoritesState.value.reversed()[it].cityId }
+                    key = { favoritesState.value[it].cityId }
                 ) { index ->
-                    val favorite = favoritesState.value.reversed()[index]
+                    val favorite = favoritesState.value[index]
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -191,6 +191,7 @@ fun ModalDrawer(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
+                            modifier = Modifier.weight(weight = 1f, fill = false),
                             text = favorite.city,
                             style = MaterialTheme.typography.titleMedium
                         )

@@ -168,8 +168,8 @@ fun SearchScreen(
             }
             AnimatedVisibility(
                 visible = searchViewModel.searchState.searchInfo != null,
-                enter = scaleIn() + fadeIn(),
-                exit = scaleOut() + fadeOut()
+                enter = scaleIn(initialScale = .8f) + fadeIn(),
+                exit = scaleOut(targetScale = .8f) + fadeOut()
             ) {
                 SearchResults(
                     favoritesState = favoritesState,

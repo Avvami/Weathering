@@ -1,8 +1,6 @@
 package com.personal.weathering.core.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,9 +15,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.MainViewModel
 import com.personal.weathering.aq.presentation.AqScreen
+import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.search.presentation.SearchScreen
 import com.personal.weathering.weather.presenation.weather.WeatherScreen
 import com.personal.weathering.weather.presenation.weather_details.WeatherDetailsScreen
@@ -73,16 +71,10 @@ fun RootNavigationGraph(
         composable(
             route = RootNavGraph.AQ,
             enterTransition = {
-                slideIntoContainer(
-                    animationSpec = tween(350, easing = EaseIn),
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start
-                )
+                slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start)
             },
             exitTransition = {
-                slideOutOfContainer(
-                    animationSpec = tween(350, easing = EaseOut),
-                    towards = AnimatedContentTransitionScope.SlideDirection.End
-                )
+                slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.End)
             }
         ) {
             AqScreen(
@@ -97,7 +89,7 @@ fun RootNavigationGraph(
         composable(
             route = RootNavGraph.SEARCH,
             enterTransition = { fadeIn() + scaleIn(initialScale = .9f) },
-            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 200)) + scaleOut(targetScale = .9f) }
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
             SearchScreen(
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
