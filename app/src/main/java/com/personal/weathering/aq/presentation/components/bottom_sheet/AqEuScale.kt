@@ -30,16 +30,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.R
 import com.personal.weathering.aq.presentation.AqUiEvent
-import com.personal.weathering.ui.theme.aqiGoodPrimary
-import com.personal.weathering.ui.theme.aqiGoodSecondary
-import com.personal.weathering.ui.theme.aqiHazardousPrimary
-import com.personal.weathering.ui.theme.aqiHazardousSecondary
-import com.personal.weathering.ui.theme.aqiModeratePrimary
-import com.personal.weathering.ui.theme.aqiModerateSecondary
-import com.personal.weathering.ui.theme.aqiUnhealthyPrimary
-import com.personal.weathering.ui.theme.aqiUnhealthySecondary
-import com.personal.weathering.ui.theme.aqiVeryUnhealthyPrimary
-import com.personal.weathering.ui.theme.aqiVeryUnhealthySecondary
+import com.personal.weathering.ui.theme.aqiEuExtremelyPoorUsHazardousPrimary
+import com.personal.weathering.ui.theme.aqiEuExtremelyPoorUsHazardousSecondary
+import com.personal.weathering.ui.theme.aqiEuFairUsGoodPrimary
+import com.personal.weathering.ui.theme.aqiEuFairUsGoodSecondary
+import com.personal.weathering.ui.theme.aqiEuGoodPrimary
+import com.personal.weathering.ui.theme.aqiEuGoodSecondary
+import com.personal.weathering.ui.theme.aqiEuPoorUsUnhealthyPrimary
+import com.personal.weathering.ui.theme.aqiEuPoorUsUnhealthySecondary
+import com.personal.weathering.ui.theme.aqiEuUsModeratePrimary
+import com.personal.weathering.ui.theme.aqiEuUsModerateSecondary
+import com.personal.weathering.ui.theme.aqiEuVeryPoorUsVeryUnhealthyPrimary
+import com.personal.weathering.ui.theme.aqiEuVeryPoorUsVeryUnhealthySecondary
 
 @Composable
 fun AqEuScale(
@@ -103,7 +105,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiGoodPrimary, aqiGoodSecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuGoodPrimary, aqiEuGoodSecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )
@@ -134,7 +136,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiGoodPrimary, aqiGoodSecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuFairUsGoodPrimary, aqiEuFairUsGoodSecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )
@@ -165,7 +167,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiModeratePrimary, aqiModerateSecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuUsModeratePrimary, aqiEuUsModerateSecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )
@@ -196,7 +198,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiUnhealthyPrimary, aqiUnhealthySecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuPoorUsUnhealthyPrimary, aqiEuPoorUsUnhealthySecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )
@@ -227,7 +229,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiVeryUnhealthyPrimary, aqiVeryUnhealthySecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuVeryPoorUsVeryUnhealthyPrimary, aqiEuVeryPoorUsVeryUnhealthySecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )
@@ -258,7 +260,7 @@ fun AqEuScale(
                         .height(4.dp)
                         .width(64.dp)
                         .background(
-                            brush = Brush.linearGradient(listOf(aqiHazardousPrimary, aqiHazardousSecondary)),
+                            brush = Brush.linearGradient(listOf(aqiEuExtremelyPoorUsHazardousPrimary, aqiEuExtremelyPoorUsHazardousSecondary)),
                             shape = MaterialTheme.shapes.large
                         )
                 )

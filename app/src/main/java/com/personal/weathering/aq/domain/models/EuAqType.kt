@@ -4,18 +4,18 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.personal.weathering.R
-import com.personal.weathering.ui.theme.aqiGoodPrimary
-import com.personal.weathering.ui.theme.aqiGoodSecondary
-import com.personal.weathering.ui.theme.aqiHazardousPrimary
-import com.personal.weathering.ui.theme.aqiHazardousSecondary
-import com.personal.weathering.ui.theme.aqiModeratePrimary
-import com.personal.weathering.ui.theme.aqiModerateSecondary
-import com.personal.weathering.ui.theme.aqiSensitivePrimary
-import com.personal.weathering.ui.theme.aqiSensitiveSecondary
-import com.personal.weathering.ui.theme.aqiUnhealthyPrimary
-import com.personal.weathering.ui.theme.aqiUnhealthySecondary
-import com.personal.weathering.ui.theme.aqiVeryUnhealthyPrimary
-import com.personal.weathering.ui.theme.aqiVeryUnhealthySecondary
+import com.personal.weathering.ui.theme.aqiEuExtremelyPoorUsHazardousPrimary
+import com.personal.weathering.ui.theme.aqiEuExtremelyPoorUsHazardousSecondary
+import com.personal.weathering.ui.theme.aqiEuFairUsGoodPrimary
+import com.personal.weathering.ui.theme.aqiEuFairUsGoodSecondary
+import com.personal.weathering.ui.theme.aqiEuGoodPrimary
+import com.personal.weathering.ui.theme.aqiEuGoodSecondary
+import com.personal.weathering.ui.theme.aqiEuPoorUsUnhealthyPrimary
+import com.personal.weathering.ui.theme.aqiEuPoorUsUnhealthySecondary
+import com.personal.weathering.ui.theme.aqiEuUsModeratePrimary
+import com.personal.weathering.ui.theme.aqiEuUsModerateSecondary
+import com.personal.weathering.ui.theme.aqiEuVeryPoorUsVeryUnhealthyPrimary
+import com.personal.weathering.ui.theme.aqiEuVeryPoorUsVeryUnhealthySecondary
 
 sealed class EuAqType(
     val aqValue: Int,
@@ -32,8 +32,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_good_aqi_general_description,
         iconSmallRes = R.drawable.icon_eco_fill1_wght400,
         iconLargeRes = R.drawable.icon_eco_fill0_wght200,
-        gradientPrimary = aqiGoodPrimary,
-        gradientSecondary = aqiGoodSecondary
+        gradientPrimary = aqiEuGoodPrimary,
+        gradientSecondary = aqiEuGoodSecondary
     )
     data class Fair(val value: Int): EuAqType(
         aqValue = value,
@@ -41,8 +41,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_fair_aqi_general_description,
         iconSmallRes = R.drawable.icon_sentiment_neutral_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_neutral_fill0_wght200,
-        gradientPrimary = aqiModeratePrimary,
-        gradientSecondary = aqiModerateSecondary
+        gradientPrimary = aqiEuFairUsGoodPrimary,
+        gradientSecondary = aqiEuFairUsGoodSecondary
     )
     data class Moderate(val value: Int): EuAqType(
         aqValue = value,
@@ -50,8 +50,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_moderate_aqi_general_description,
         iconSmallRes = R.drawable.icon_ecg_heart_fill1_wght400,
         iconLargeRes = R.drawable.icon_ecg_heart_fill0_wght200,
-        gradientPrimary = aqiSensitivePrimary,
-        gradientSecondary = aqiSensitiveSecondary
+        gradientPrimary = aqiEuUsModeratePrimary,
+        gradientSecondary = aqiEuUsModerateSecondary
     )
     data class Poor(val value: Int): EuAqType(
         aqValue = value,
@@ -59,8 +59,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_masks_fill1_wght400,
         iconLargeRes = R.drawable.icon_masks_fill0_wght200,
-        gradientPrimary = aqiUnhealthyPrimary,
-        gradientSecondary = aqiUnhealthySecondary
+        gradientPrimary = aqiEuPoorUsUnhealthyPrimary,
+        gradientSecondary = aqiEuPoorUsUnhealthySecondary
     )
     data class VeryPoor(val value: Int): EuAqType(
         aqValue = value,
@@ -68,8 +68,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_very_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_sentiment_very_dissatisfied_fill1_wght400,
         iconLargeRes = R.drawable.icon_sentiment_very_dissatisfied_fill0_wght200,
-        gradientPrimary = aqiVeryUnhealthyPrimary,
-        gradientSecondary = aqiVeryUnhealthySecondary
+        gradientPrimary = aqiEuVeryPoorUsVeryUnhealthyPrimary,
+        gradientSecondary = aqiEuVeryPoorUsVeryUnhealthySecondary
     )
     data class ExtremelyPoor(val value: Int): EuAqType(
         aqValue = value,
@@ -77,8 +77,8 @@ sealed class EuAqType(
         aqDescRes = R.string.eu_extremely_poor_aqi_general_description,
         iconSmallRes = R.drawable.icon_skull_fill1_wght400,
         iconLargeRes = R.drawable.icon_skull_fill0_wght200,
-        gradientPrimary = aqiHazardousPrimary,
-        gradientSecondary = aqiHazardousSecondary
+        gradientPrimary = aqiEuExtremelyPoorUsHazardousPrimary,
+        gradientSecondary = aqiEuExtremelyPoorUsHazardousSecondary
     )
 
     companion object {

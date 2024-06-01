@@ -152,12 +152,12 @@ fun AqScreen(
                             else {
                                 if (preferencesState.value.useUSaq)
                                     listOf(
-                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary,
-                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary
+                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientSecondary,
+                                        aqState().aqInfo!!.currentAqData.usAqiType.gradientPrimary
                                     ) else
                                     listOf(
-                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientPrimary,
-                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientSecondary
+                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientSecondary,
+                                        aqState().aqInfo!!.currentAqData.euAqiType.gradientPrimary
                                     )
                             },
                             center = Offset(size.width, 0f),
