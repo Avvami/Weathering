@@ -1,8 +1,8 @@
 package com.personal.weathering
 
 import android.app.Application
-import com.personal.weathering.di.AppModule
-import com.personal.weathering.di.AppModuleImpl
+import com.personal.weathering.core.di.AppModule
+import com.personal.weathering.core.di.AppModuleImpl
 
 class WeatheringApp: Application() {
 
