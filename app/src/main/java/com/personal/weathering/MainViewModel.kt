@@ -7,20 +7,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.personal.weathering.aq.domain.models.AqInfo
+import com.personal.weathering.aq.domain.repository.AqRepository
+import com.personal.weathering.aq.presentation.AqState
 import com.personal.weathering.core.data.local.FavoriteEntity
 import com.personal.weathering.core.domain.location.LocationClient
-import com.personal.weathering.aq.domain.models.AqInfo
-import com.personal.weathering.weather.domain.models.WeatherInfo
-import com.personal.weathering.aq.domain.repository.AqRepository
 import com.personal.weathering.core.domain.repository.ConnectivityRepository
 import com.personal.weathering.core.domain.repository.GeocodingRepository
 import com.personal.weathering.core.domain.repository.LocalRepository
-import com.personal.weathering.weather.domain.repository.WeatherRepository
-import com.personal.weathering.core.util.Resource
-import com.personal.weathering.aq.presentation.AqState
 import com.personal.weathering.core.presentation.FavoritesState
 import com.personal.weathering.core.presentation.MessageDialogState
 import com.personal.weathering.core.presentation.PreferencesState
+import com.personal.weathering.core.util.Resource
+import com.personal.weathering.weather.domain.models.WeatherInfo
+import com.personal.weathering.weather.domain.repository.WeatherRepository
 import com.personal.weathering.weather.presenation.WeatherState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -108,7 +108,7 @@ class MainViewModel(
         viewModelScope.launch {
             localRepository.getPreferences()
                 .distinctUntilChangedBy {
-                    listOf(it.useLocation, it.searchLanguageCode, it.isDark, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq)
+                    listOf(it.useLocation, it.searchLanguageCode, it.isDark, it.useCelsius, it.useKmPerHour, it.useHpa, it.useUSaq, it.use12hour)
                 }
                 .collect { preferencesEntity ->
                     _preferencesState.update {
@@ -120,6 +120,7 @@ class MainViewModel(
                             useKmPerHour = preferencesEntity.useKmPerHour,
                             useHpa = preferencesEntity.useHpa,
                             useUSaq = preferencesEntity.useUSaq,
+                            use12hour = preferencesEntity.use12hour
                         )
                     }
                 }
@@ -332,6 +333,11 @@ class MainViewModel(
             is UiEvent.SetAqiUnit -> {
                 viewModelScope.launch {
                     localRepository.setUseUSaq(event.useUSaq)
+                }
+            }
+            is UiEvent.SetTimeFormat -> {
+                viewModelScope.launch {
+                    localRepository.setUse12hour(event.use12hour)
                 }
             }
             is UiEvent.UpdateAqInfo -> {

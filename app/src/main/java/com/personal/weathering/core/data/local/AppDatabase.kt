@@ -50,6 +50,7 @@ abstract class AppDatabase: RoomDatabase() {
                     put("useKmPerHour", true)
                     put("useHpa", true)
                     put("useUSaq", true)
+                    put("use12hour", true)
                 }
                 db.insert("preferencesentity", SQLiteDatabase.CONFLICT_REPLACE, defaultPreferences)
             }

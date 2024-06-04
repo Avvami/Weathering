@@ -36,4 +36,7 @@ interface PreferencesDao {
 
     @Query("UPDATE preferencesentity SET useUSaq = :useUSaq")
     suspend fun setUseUSaq(useUSaq: Boolean)
+
+    @Query("UPDATE preferencesentity SET use12hour = :use12hour")
+    suspend fun setUse12hour(use12hour: Boolean)
 }

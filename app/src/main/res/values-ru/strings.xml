@@ -113,6 +113,9 @@
     <string name="settings">Настройки</string>
     <string name="language">Язык</string>
     <string name="current_language">Русский</string>
+    <string name="time_format">Формат времени</string>
+    <string name="twenty_four_hour">24-часа</string>
+    <string name="twelve_hour">12-часов</string>
 
     <!--Wind directions-->
     <string name="north">С</string>

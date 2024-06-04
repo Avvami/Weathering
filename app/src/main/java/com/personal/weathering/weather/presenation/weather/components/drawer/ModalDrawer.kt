@@ -127,7 +127,10 @@ fun ModalDrawer(
                 AQI(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
-                Language(modifier = Modifier.padding(horizontal = 16.dp))
+                Language(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
+            }
+            item {
+                TimeFormat(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp), preferencesState = preferencesState, uiEvent = uiEvent)
             }
             item {
                 val activity = LocalContext.current.findActivity() as MainActivity

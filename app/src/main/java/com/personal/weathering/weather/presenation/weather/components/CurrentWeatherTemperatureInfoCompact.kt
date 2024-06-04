@@ -76,7 +76,7 @@ fun CurrentWeatherTemperatureInfoCompact(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = stringResource(id = R.string.today_time, timeFormat(time = weatherInfo().currentWeatherData.time)),
+                    text = stringResource(id = R.string.today_time, timeFormat(time = weatherInfo().currentWeatherData.time, use12hour = preferencesState.value.use12hour)),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.End,
                     color = onSurfaceLight
@@ -117,9 +117,9 @@ fun CurrentWeatherTemperatureInfoCompact(
                     ) {
                         Text(
                             text = when {
-                                weatherData.sunrise != null -> timeFormat(time = weatherData.sunrise)
-                                weatherData.sunset != null -> timeFormat(time = weatherData.sunset)
-                                else -> timeFormat(time = weatherData.time)
+                                weatherData.sunrise != null -> timeFormat(time = weatherData.sunrise, use12hour = preferencesState.value.use12hour)
+                                weatherData.sunset != null -> timeFormat(time = weatherData.sunset, use12hour = preferencesState.value.use12hour)
+                                else -> timeFormat(time = weatherData.time, use12hour = preferencesState.value.use12hour)
                             },
                             style = MaterialTheme.typography.bodyMedium,
                             color = onSurfaceLight70p

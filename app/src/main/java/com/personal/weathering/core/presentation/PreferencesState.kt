@@ -14,5 +14,6 @@ data class PreferencesState(
     val useCelsius: Boolean = true,
     val useKmPerHour: Boolean = true,
     val useHpa: Boolean = true,
-    val useUSaq: Boolean = true
+    val useUSaq: Boolean = true,
+    val use12hour: Boolean = true
 )

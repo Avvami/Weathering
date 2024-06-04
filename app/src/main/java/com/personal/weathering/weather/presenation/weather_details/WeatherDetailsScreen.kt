@@ -208,6 +208,7 @@ fun WeatherDetailsScreen(
                             }
                             item {
                                 SunDetails(
+                                    preferencesState = preferencesState,
                                     dailyWeatherData = weatherInfo.dailyWeatherData[index]
                                 )
                             }

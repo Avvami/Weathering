@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
+import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.timeFormat
 import com.personal.weathering.ui.theme.onSurfaceLight70p
 import com.personal.weathering.ui.theme.surfaceLight30p
@@ -29,6 +31,7 @@ import java.util.Locale
 
 @Composable
 fun SunDetails(
+    preferencesState: State<PreferencesState>,
     dailyWeatherData: DailyWeatherData
 ) {
     Column(
@@ -82,7 +85,7 @@ fun SunDetails(
                     color = onSurfaceLight70p
                 )
                 Text(
-                    text = timeFormat(time = dailyWeatherData.sunrise),
+                    text = timeFormat(time = dailyWeatherData.sunrise, use12hour = preferencesState.value.use12hour),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -107,7 +110,7 @@ fun SunDetails(
                     color = onSurfaceLight70p
                 )
                 Text(
-                    text = timeFormat(time = dailyWeatherData.sunset),
+                    text = timeFormat(time = dailyWeatherData.sunset, use12hour = preferencesState.value.use12hour),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium
                 )

@@ -38,6 +38,7 @@ class LocalRepositoryImpl(
     override suspend fun setUseHpa(useHpa: Boolean) = preferencesDao.setUseHpa(useHpa)
 
     override suspend fun setUseUSaq(useUSaq: Boolean) = preferencesDao.setUseUSaq(useUSaq)
+    override suspend fun setUse12hour(use12hour: Boolean) = preferencesDao.setUse12hour(use12hour)
 
     override suspend fun addToHistory(searchResult: SearchResultEntity) = searchHistoryDao.addToHistory(searchResult)
 

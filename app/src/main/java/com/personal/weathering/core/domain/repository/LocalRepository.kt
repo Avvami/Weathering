@@ -32,6 +32,8 @@ interface LocalRepository {
 
     suspend fun setUseUSaq(useUSaq: Boolean)
 
+    suspend fun setUse12hour(use12hour: Boolean)
+
     suspend fun addToHistory(searchResult: SearchResultEntity)
 
     suspend fun removeFromHistory(searchResult: SearchResultEntity)

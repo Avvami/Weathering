@@ -114,6 +114,9 @@
     <string name="current_language">English</string>
     <string name="en" translatable="false">English</string>
     <string name="ru" translatable="false">Русский</string>
+    <string name="time_format">Time format</string>
+    <string name="twenty_four_hour">24-hour</string>
+    <string name="twelve_hour">12-hour</string>
 
     <!--Wind directions-->
     <string name="north">N</string>

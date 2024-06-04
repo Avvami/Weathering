@@ -67,7 +67,7 @@ fun CurrentAqInfoExpanded(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = stringResource(id = R.string.today_time, timeFormat(time = aqInfo().currentAqData.time)),
+                    text = stringResource(id = R.string.today_time, timeFormat(time = aqInfo().currentAqData.time, use12hour = preferencesState.value.use12hour)),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.End,
                     color = onSurfaceLight

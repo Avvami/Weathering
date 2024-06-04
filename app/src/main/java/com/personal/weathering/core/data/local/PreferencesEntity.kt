@@ -19,5 +19,6 @@ data class PreferencesEntity(
     val useCelsius: Boolean,
     val useKmPerHour: Boolean,
     val useHpa: Boolean,
-    val useUSaq: Boolean
+    val useUSaq: Boolean,
+    val use12hour: Boolean
 )
