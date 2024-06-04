@@ -8,12 +8,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.Surface
@@ -23,13 +23,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.personal.weathering.core.util.rememberWindowInfo
 import com.personal.weathering.core.navigation.RootNavigationGraph
 import com.personal.weathering.core.presentation.components.MessageDialog
+import com.personal.weathering.core.util.rememberWindowInfo
 import com.personal.weathering.ui.theme.WeatheringTheme
 import kotlinx.coroutines.flow.collectLatest
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels {
         viewModelFactory {

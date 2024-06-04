@@ -93,14 +93,14 @@ fun CurrentWeatherDetailsExpanded(
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                        contentDescription = weatherInfo().currentWeatherData.windDirectionType.direction,
+                        contentDescription = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
                         tint = onSurfaceLight,
                         modifier = Modifier
                             .size(12.dp)
                             .rotate(degrees = (weatherInfo().currentWeatherData.windDirection + 180) % 360)
                     )
                     Text(
-                        text = weatherInfo().currentWeatherData.windDirectionType.direction,
+                        text = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
                         style = MaterialTheme.typography.bodySmall,
                         color = onSurfaceLight
                     )

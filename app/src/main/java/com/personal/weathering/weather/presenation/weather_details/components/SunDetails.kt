@@ -21,10 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
-import com.personal.weathering.weather.domain.models.DailyWeatherData
 import com.personal.weathering.core.util.timeFormat
 import com.personal.weathering.ui.theme.onSurfaceLight70p
 import com.personal.weathering.ui.theme.surfaceLight30p
+import com.personal.weathering.weather.domain.models.DailyWeatherData
+import java.util.Locale
 
 @Composable
 fun SunDetails(
@@ -72,7 +73,11 @@ fun SunDetails(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Sunrise",
+                    text = stringResource(id = R.string.sunrise).replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    },
                     style = MaterialTheme.typography.bodyLarge,
                     color = onSurfaceLight70p
                 )
@@ -93,7 +98,11 @@ fun SunDetails(
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "Sunset",
+                    text = stringResource(id = R.string.sunset).replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    },
                     style = MaterialTheme.typography.bodyLarge,
                     color = onSurfaceLight70p
                 )

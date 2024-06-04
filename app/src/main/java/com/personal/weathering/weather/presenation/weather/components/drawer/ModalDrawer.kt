@@ -1,4 +1,4 @@
-package com.personal.weathering.weather.presenation.weather.components.modal
+package com.personal.weathering.weather.presenation.weather.components.drawer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -125,6 +125,9 @@ fun ModalDrawer(
             }
             item {
                 AQI(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
+            }
+            item {
+                Language(modifier = Modifier.padding(horizontal = 16.dp))
             }
             item {
                 val activity = LocalContext.current.findActivity() as MainActivity

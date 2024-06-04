@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.9.0"
 androidGradlePlugin = "8.4.0"
+appcompatVersion = "1.7.0"
 browser = "1.8.0"
 composeBom = "2024.05.00"
 coreKtx = "1.13.1"
@@ -38,6 +39,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 converter-moshi = { group = "com.squareup.retrofit2", name ="converter-moshi", version.ref = "retrofit" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 junit = { module = "junit:junit", version.ref = "junit" }

@@ -1,32 +1,35 @@
 package com.personal.weathering.weather.domain.models
 
+import androidx.annotation.StringRes
+import com.personal.weathering.R
+
 sealed class WindDirectionType(
-    val direction: String
+    @StringRes val directionRes: Int
 ) {
     data object N: WindDirectionType(
-        direction = "N"
+        directionRes = R.string.north
     )
     data object NE: WindDirectionType(
-        direction = "NE"
+        directionRes = R.string.north_east
     )
     data object E: WindDirectionType(
-        direction = "E"
+        directionRes = R.string.east
     )
     data object SE: WindDirectionType(
-        direction = "SE"
+        directionRes = R.string.south_east
     )
     data object S: WindDirectionType(
-        direction = "S"
+        directionRes = R.string.south
     )
     data object SW: WindDirectionType(
-        direction = "SW"
+        directionRes = R.string.south_west
     )
     data object W: WindDirectionType(
-        direction = "W"
+        directionRes = R.string.west
     )
 
     data object NW: WindDirectionType(
-        direction = "NW"
+        directionRes = R.string.north_west
     )
 
     companion object {

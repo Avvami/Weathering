@@ -60,6 +60,7 @@ import com.personal.weathering.weather.presenation.weather_details.components.Su
 import com.personal.weathering.weather.presenation.weather_details.components.TemperatureDetails
 import com.personal.weathering.weather.presenation.weather_details.components.WindDetails
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -129,7 +130,11 @@ fun WeatherDetailsScreen(
                     weatherState().weatherInfo?.dailyWeatherData?.map { dailyWeatherData ->
                         TabItem(
                             dayOfMonth = dailyWeatherData.time.dayOfMonth,
-                            dayOfWeek = dailyWeatherData.time.format(DateTimeFormatter.ofPattern("EEE"))
+                            dayOfWeek = dailyWeatherData.time.format(DateTimeFormatter.ofPattern("EEE")).replaceFirstChar {
+                                if (it.isLowerCase()) it.titlecase(
+                                    Locale.getDefault()
+                                ) else it.toString()
+                            }
                         )
                     } ?: listOf()
                 }

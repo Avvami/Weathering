@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weathering</string>
+    <string name="app_version">для Android %s (%d)</string>
+    <string name="ok">Ок</string>
+    <string name="unknown_error">Произошла неизвестная ошибка</string>
+    <string name="api_call_error">Не удалось получить ответ от сервера</string>
+    <string name="temperature">%d°</string>
+    <string name="apparent_temperature">Ощущается как %d°</string>
+    <string name="feels_like">Ощущается как</string>
+    <string name="today_time">Сегодня %s</string>
+    <string name="daylight_duration">Световой день</string>
+    <string name="hours_minutes">%d ч %d мин</string>
+    <string name="wind">Ветер</string>
+    <string name="km_per_hour">%.1f км/ч</string>
+    <string name="m_per_second">%.1f м/с</string>
+    <string name="pressure">Давление</string>
+    <string name="hPa">%.1f гПа</string>
+    <string name="mmHg">%.1f мм рт.ст.</string>
+    <string name="humidity">Влажность</string>
+    <string name="percent">%d%%</string>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="weekly_forecast">Прогноз на неделю</string>
+    <string name="max">Макс</string>
+    <string name="min">Мин</string>
+    <string name="aqi">AQI</string>
+    <string name="aqi_rate">%s - %s</string>
+    <string name="three_day_forecast">Прогноз на 3 дня</string>
+    <string name="search_placeholder">Город</string>
+    <string name="search_result">%s, %s</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="sunrise">восход</string>
+    <string name="sunset">закат</string>
+    <string name="search_history">История поиска</string>
+    <string name="empty">Пусто</string>
+    <string name="open_meteo">Данные о погоде от Open-Meteo</string>
+    <string name="morning">Утро</string>
+    <string name="day">День</string>
+    <string name="evening">Вечер</string>
+    <string name="night">Ночь</string>
+    <string name="aq_units">%.1f мкг/м³</string>
+
+    <!--AQI types-->
+    <string name="good">Хорошо</string>
+    <string name="fair">Удовлетворительно</string>
+    <string name="moderate">Умеренно</string>
+    <string name="unhealthy_for_sensitive">Вредно для чувствительных групп</string>
+    <string name="poor">Плохо</string>
+    <string name="unhealthy">Вредно</string>
+    <string name="very_poor">Очень плохо</string>
+    <string name="very_unhealthy">Очень вредно</string>
+    <string name="extremely_poor">Крайне плохо</string>
+    <string name="hazardous">Опасно</string>
+
+    <!--Weather types-->
+    <string name="clear_sky">Ясное небо</string>
+    <string name="mainly_clear">Преимущественно ясно</string>
+    <string name="partly_cloudy">Переменная облачность</string>
+    <string name="overcast">Пасмурно</string>
+    <string name="foggy">Туман</string>
+    <string name="depositing_rime_fog">Изморозь</string>
+    <string name="light_drizzle">Слабая морось</string>
+    <string name="moderate_drizzle">Морось</string>
+    <string name="dense_drizzle">Сильная морось</string>
+    <string name="light_freezing_drizzle">Слабая переохлажденная морось</string>
+    <string name="dense_freezing_drizzle">Сильная переохлажденная морось</string>
+    <string name="slight_rain">Слабый дождь</string>
+    <string name="moderate_rain">Дождь</string>
+    <string name="heavy_rain">Сильный дождь</string>
+    <string name="heavy_freezing_rain">Сильный переохлажденный дождь</string>
+    <string name="slight_snow_fall">Слабый снегопад</string>
+    <string name="moderate_snow_fall">Умеренный снегопад</string>
+    <string name="heavy_snow_fall">Сильный снегопад</string>
+    <string name="snow_grains">Крупный снегопад</string>
+    <string name="slight_rain_showers">Слабый ливень</string>
+    <string name="moderate_rain_showers">Ливень</string>
+    <string name="violent_rain_showers">Сильный ливень</string>
+    <string name="slight_snow_showers">Слабый снегопад</string>
+    <string name="heavy_snow_showers">Сильный снегопад</string>
+    <string name="moderate_thunderstorm">Гроза</string>
+    <string name="slight_hail_thunderstorm">Гроза с небольшим градом</string>
+    <string name="heavy_hail_thunderstorm">Гроза с сильным градом</string>
+
+    <!--Languages-->
+    <string name="english">Английский</string>
+    <string name="german">Немецкий</string>
+    <string name="french">Французский</string>
+    <string name="spanish">Испанский</string>
+    <string name="italian">Итальянский</string>
+    <string name="portuguese">Португальский</string>
+    <string name="russian">Русский</string>
+    <string name="turkish">Турецкий</string>
+    <string name="hindi">Хинди</string>
+
+    <!--Modal drawer sheet-->
+    <string name="measurement_units">Единицы измерения</string>
+    <string name="temperature_units">Температура</string>
+    <string name="fahrenheit_unit">°F</string>
+    <string name="celsius_unit">°C</string>
+    <string name="wind_speed_units">Скорость ветра</string>
+    <string name="m_per_second_unit">м/с</string>
+    <string name="km_per_hour_unit">км/ч</string>
+    <string name="pressure_units">Давление</string>
+    <string name="mmHg_unit">мм рт.ст.</string>
+    <string name="hPa_unit">гПа</string>
+    <string name="air_quality_index">Индекс качества воздуха (AQI)</string>
+    <string name="european_aqi">Европейский AQI</string>
+    <string name="us_aqi">Американский AQI</string>
+    <string name="my_cities">Мои города</string>
+    <string name="current_location">Текущее местоположение</string>
+    <string name="use_my_location">Использовать мое местоположение</string>
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="current_language">Русский</string>
+
+    <!--Wind directions-->
+    <string name="north">С</string>
+    <string name="north_east">СЗ</string>
+    <string name="east">З</string>
+    <string name="south_east">ЮЗ</string>
+    <string name="south">Ю</string>
+    <string name="south_west">ЮВ</string>
+    <string name="west">В</string>
+    <string name="north_west">СВ</string>
+
+    <string name="permission_error">Доступ к местоположению отклонен</string>
+    <string name="gps_error">GPS отключен</string>
+    <string name="location_error">Не удалось получить местоположение</string>
+    <string name="fetching_location_error">Ошибка получения местоположения</string>
+
+    <string name="us_good_aqi_description">Качество воздуха удовлетворительное, загрязнение воздуха представляет небольшой или не представляет никакой угрозы.</string>
+    <string name="us_good_aqi_range">0–50</string>
+    <string name="us_moderate_aqi_description">Качество воздуха приемлемое. Однако некоторые люди, особенно те, кто чувствителен к загрязнению воздуха, могут быть подвергнуты риску для здоровья.</string>
+    <string name="us_moderate_aqi_range">51–100</string>
+    <string name="us_unhealthy_sensitive_groups_aqi_description">Члены чувствительных групп могут испытывать воздействие на здоровье. Для широкой общественности риск меньше.</string>
+    <string name="us_unhealthy_sensitive_groups_aqi_range">101–150</string>
+    <string name="us_unhealthy_aqi_description">Некоторые члены широкой общественности могут испытывать воздействие на здоровье; члены чувствительных групп могут испытывать более серьезные последствия для здоровья.</string>
+    <string name="us_unhealthy_aqi_range">151–200</string>
+    <string name="us_very_unhealthy_aqi_description">Предупреждение о здоровье: риск воздействия на здоровье увеличивается для всех.</string>
+    <string name="us_very_unhealthy_aqi_range">201–300</string>
+    <string name="us_hazardous_aqi_description">Предупреждение о чрезвычайных условиях: все, вероятно, будут затронуты.</string>
+    <string name="us_hazardous_aqi_range">301–500</string>
+
+    <string name="eu_good_aqi_general_description">Качество воздуха хорошее. Наслаждайтесь своими обычными занятиями на открытом воздухе.</string>
+    <string name="eu_good_aqi_range">0–20</string>
+    <string name="eu_fair_aqi_general_description">Наслаждайтесь своими обычными занятиями на открытом воздухе.</string>
+    <string name="eu_fair_aqi_range">20–40</string>
+    <string name="eu_moderate_aqi_general_description">Наслаждайтесь своими обычными занятиями на открытом воздухе.</string>
+    <string name="eu_moderate_aqi_range">40–60</string>
+    <string name="eu_poor_aqi_general_description">Рассмотрите возможность уменьшения интенсивных занятий на открытом воздухе, если у вас возникают такие симптомы, как боль в глазах, кашель или боль в горле.</string>
+    <string name="eu_poor_aqi_range">60–80</string>
+    <string name="eu_very_poor_aqi_general_description">Рассмотрите возможность уменьшения интенсивных занятий на открытом воздухе, если у вас возникают такие симптомы, как боль в глазах, кашель или боль в горле.</string>
+    <string name="eu_very_poor_aqi_range">80–100</string>
+    <string name="eu_extremely_poor_aqi_general_description">Уменьшите физическую активность на открытом воздухе.</string>
+    <string name="eu_extremely_poor_aqi_range">100+</string>
+
+    <string name="location_permission">Пожалуйста, разрешите доступ к местоположению, чтобы получать информацию о погоде в реальном времени, адаптированную к вашему местоположению.</string>
+    <string name="location_permission_declined">Похоже, вы несколько раз отклонили разрешение на доступ к местоположению. Пожалуйста, включите его в настройках приложения.</string>
+    <string name="not_now">Не сейчас</string>
+    <string name="grant">Разрешить</string>
+    <string name="open_settings">Открыть настройки</string>
+
+    <string name="offline">Вы офлайн</string>
+    <string name="no_internet">Нет интернета</string>
+
+    <string name="pollutants">Загрязнители</string>
+    <string name="us_aq_scale">Шкала качества воздуха (США)</string>
+    <string name="eu_aq_scale">Шкала качества воздуха (ЕС)</string>
+    <string name="pm25_desc">Мелкие твердые частицы (PM2.5) - это вдыхаемые загрязняющие частицы с диаметром менее 2,5 микрометра, которые могут проникать в легкие и кровоток, вызывая серьезные проблемы со здоровьем. Наиболее серьезное воздействие оказывается на легкие и сердце. Воздействие может вызвать кашель или затрудненное дыхание, усугубление астмы и развитие хронических респираторных заболеваний.</string>
+    <string name="pm10_desc">Твердые частицы (PM10) - это вдыхаемые загрязняющие частицы с диаметром менее 10 микрометров. Частицы, которые больше 2,5 микрометров, могут откладываться в дыхательных путях, вызывая проблемы со здоровьем. Воздействие может вызвать раздражение глаз и горла, кашель или затрудненное дыхание и усугубление астмы. Более частое и чрезмерное воздействие может привести к более серьезным последствиям для здоровья.</string>
+    <string name="no2_desc">Вдыхание высоких уровней диоксида азота увеличивает риск респираторных проблем. Кашель и затрудненное дыхание являются обычными явлениями, а более серьезные проблемы со здоровьем, такие как респираторные инфекции, могут возникнуть при длительном воздействии.</string>
+    <string name="o3_desc">Озон на уровне земли может усугублять существующие респираторные заболевания, а также вызывать раздражение горла, головные боли и боль в груди.</string>
+    <string name="so2_desc">Воздействие диоксида серы может вызвать раздражение горла и глаз, а также усугубить астму и хронический бронхит.</string>
+    <string name="co_desc">Угарный газ - это бесцветный и без запаха газ, и при вдыхании в высоких концентрациях он может вызвать головную боль, тошноту, головокружение и рвоту. Повторное длительное воздействие может привести к заболеваниям сердца.</string>
+</resources>

@@ -40,7 +40,14 @@ fun CustomDropdownMenu(
                                 }
                             }
                         },
-                        text = { Text(text = stringResource(id = item.textRes)) },
+                        text = {
+                            item.text?.let {
+                                Text(text = it)
+                            }
+                            item.textRes?.let {
+                                Text(text = stringResource(id = it))
+                            }
+                        },
                         onClick = { item.onItemClick() },
                         colors = MenuDefaults.itemColors(textColor = MaterialTheme.colorScheme.onSurface, leadingIconColor = MaterialTheme.colorScheme.onSurface)
                     )

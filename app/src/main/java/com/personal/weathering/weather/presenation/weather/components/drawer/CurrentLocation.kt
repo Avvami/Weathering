@@ -1,4 +1,4 @@
-package com.personal.weathering.weather.presenation.weather.components.modal
+package com.personal.weathering.weather.presenation.weather.components.drawer
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn

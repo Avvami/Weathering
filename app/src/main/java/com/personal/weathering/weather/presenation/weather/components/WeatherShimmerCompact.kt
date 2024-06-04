@@ -97,7 +97,7 @@ fun WeatherShimmerCompact(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = stringResource(id = R.string.clear_day_sky),
+                    text = stringResource(id = R.string.clear_sky),
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.End,
                     color = Color.Transparent,

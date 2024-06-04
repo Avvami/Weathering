@@ -53,26 +53,23 @@
     <string name="hazardous">Hazardous</string>
 
     <!--Weather types-->
-    <string name="clear_night_sky">Clear sky</string>
-    <string name="clear_day_sky">Clear sky</string>
-    <string name="mainly_night_clear">Mainly clear</string>
-    <string name="mainly_day_clear">Mainly clear</string>
-    <string name="partly_night_cloudy">Partly cloudy</string>
-    <string name="partly_day_cloudy">Partly cloudy</string>
+    <string name="clear_sky">Clear sky</string>
+    <string name="mainly_clear">Mainly clear</string>
+    <string name="partly_cloudy">Partly cloudy</string>
     <string name="overcast">Overcast</string>
     <string name="foggy">Foggy</string>
     <string name="depositing_rime_fog">Depositing rime fog</string>
     <string name="light_drizzle">Light drizzle</string>
-    <string name="moderate_drizzle">Moderate drizzle</string>
+    <string name="moderate_drizzle">Drizzle</string>
     <string name="dense_drizzle">Dense drizzle</string>
     <string name="light_freezing_drizzle">Slight freezing drizzle</string>
     <string name="dense_freezing_drizzle">Dense freezing drizzle</string>
     <string name="slight_rain">Slight rain</string>
-    <string name="moderate_rain">Rainy</string>
+    <string name="moderate_rain">Rain</string>
     <string name="heavy_rain">Heavy rain</string>
     <string name="heavy_freezing_rain">Heavy freezing rain</string>
     <string name="slight_snow_fall">Slight snow fall</string>
-    <string name="moderate_snow_fall">Moderate snow fall</string>
+    <string name="moderate_snow_fall">Snow fall</string>
     <string name="heavy_snow_fall">Heavy snow fall</string>
     <string name="snow_grains">Snow grains</string>
     <string name="slight_rain_showers">Slight rain showers</string>
@@ -113,6 +110,20 @@
     <string name="current_location">Current location</string>
     <string name="use_my_location">Use my location</string>
     <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="current_language">English</string>
+    <string name="en" translatable="false">English</string>
+    <string name="ru" translatable="false">Русский</string>
+
+    <!--Wind directions-->
+    <string name="north">N</string>
+    <string name="north_east">NE</string>
+    <string name="east">E</string>
+    <string name="south_east">SE</string>
+    <string name="south">S</string>
+    <string name="south_west">SW</string>
+    <string name="west">W</string>
+    <string name="north_west">NW</string>
 
     <string name="permission_error">Location permission denied</string>
     <string name="gps_error">GPS is disabled</string>

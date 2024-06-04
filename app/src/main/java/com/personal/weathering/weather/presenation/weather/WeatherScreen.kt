@@ -88,7 +88,7 @@ import com.personal.weathering.weather.presenation.weather.components.WeatherShi
 import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerExpanded
 import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastCompat
 import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastExtended
-import com.personal.weathering.weather.presenation.weather.components.modal.ModalDrawer
+import com.personal.weathering.weather.presenation.weather.components.drawer.ModalDrawer
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

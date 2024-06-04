@@ -31,6 +31,7 @@ import com.personal.weathering.core.util.UnitsConverter
 import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.ui.theme.ExtendedTheme
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +82,11 @@ fun WeatherWeeklyForecastExtended(
                             text = when (index) {
                                 0 -> stringResource(id = R.string.today)
                                 1 -> stringResource(id = R.string.tomorrow)
-                                else -> weatherData.time.format(DateTimeFormatter.ofPattern("EEEE"))
+                                else -> weatherData.time.format(DateTimeFormatter.ofPattern("EEEE")).replaceFirstChar {
+                                    if (it.isLowerCase()) it.titlecase(
+                                        Locale.getDefault()
+                                    ) else it.toString()
+                                }
                             },
                             style = MaterialTheme.typography.titleMedium
                         )
@@ -98,14 +103,14 @@ fun WeatherWeeklyForecastExtended(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                                contentDescription = weatherData.dominantWindDirectionType.direction,
+                                contentDescription = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier
                                     .size(18.dp)
                                     .rotate(degrees = (weatherData.dominantWindDirection + 180) % 360)
                             )
                             Text(
-                                text = weatherData.dominantWindDirectionType.direction,
+                                text = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

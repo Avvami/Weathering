@@ -49,42 +49,42 @@ sealed class WeatherType(
     val gradientSecondary: Color
 ) {
     data object ClearNightSky : WeatherType(
-        weatherDescRes = R.string.clear_night_sky,
+        weatherDescRes = R.string.clear_sky,
         iconSmallRes = R.drawable.icon_bedtime_fill1_wght400,
         iconLargeRes = R.drawable.icon_bedtime_fill0_wght200,
         gradientPrimary = clearNightSkyPrimary,
         gradientSecondary = clearNightSkySecondary
     )
     data object ClearDaySky : WeatherType(
-        weatherDescRes = R.string.clear_day_sky,
+        weatherDescRes = R.string.clear_sky,
         iconSmallRes = R.drawable.icon_clear_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_clear_day_fill0_wght200,
         gradientPrimary = clearDaySkyPrimary,
         gradientSecondary = clearDaySkySecondary
     )
     data object MainlyNightClear : WeatherType(
-        weatherDescRes = R.string.mainly_night_clear,
+        weatherDescRes = R.string.mainly_clear,
         iconSmallRes = R.drawable.icon_partly_cloudy_night_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_night_fill0_wght200,
         gradientPrimary = clearNightSkyPrimary,
         gradientSecondary = clearNightSkySecondary
     )
     data object MainlyDayClear : WeatherType(
-        weatherDescRes = R.string.mainly_day_clear,
+        weatherDescRes = R.string.mainly_clear,
         iconSmallRes = R.drawable.icon_partly_cloudy_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_day_fill0_wght200,
         gradientPrimary = clearDaySkyPrimary,
         gradientSecondary = clearDaySkySecondary
     )
     data object PartlyNightCloudy : WeatherType(
-        weatherDescRes = R.string.partly_night_cloudy,
+        weatherDescRes = R.string.partly_cloudy,
         iconSmallRes = R.drawable.icon_partly_cloudy_night_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_night_fill0_wght200,
         gradientPrimary = clearNightSkyPrimary,
         gradientSecondary = clearNightSkySecondary
     )
     data object PartlyDayCloudy : WeatherType(
-        weatherDescRes = R.string.partly_day_cloudy,
+        weatherDescRes = R.string.partly_cloudy,
         iconSmallRes = R.drawable.icon_partly_cloudy_day_fill1_wght400,
         iconLargeRes = R.drawable.icon_partly_cloudy_day_fill0_wght200,
         gradientPrimary = partlyCloudyPrimary,

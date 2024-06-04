@@ -95,14 +95,14 @@ fun WindDetails(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                            contentDescription = data.weatherSummary.windDirectionType.direction,
+                            contentDescription = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
                             tint = onSurfaceLight70p,
                             modifier = Modifier
                                 .size(12.dp)
                                 .rotate(degrees = (data.weatherSummary.windDirection + 180) % 360)
                         )
                         Text(
-                            text = data.weatherSummary.windDirectionType.direction,
+                            text = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
                             style = MaterialTheme.typography.bodySmall,
                             color = onSurfaceLight70p
                         )
