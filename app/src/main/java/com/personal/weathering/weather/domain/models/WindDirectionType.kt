@@ -36,13 +36,13 @@ sealed class WindDirectionType(
         fun fromDegree(degree: Int): WindDirectionType {
             return when(degree) {
                 in 0 until 23 -> N
-                in 23 until 67 -> NE
-                in 67 until 112 -> E
-                in 112 until 157 -> SE
+                in 23 until 67 -> NW
+                in 67 until 112 -> W
+                in 112 until 157 -> SW
                 in 157 until 202 -> S
-                in 202 until 247 -> SW
-                in 247 until 292 -> W
-                in 292 until 337 -> NW
+                in 202 until 247 -> SE
+                in 247 until 292 -> E
+                in 292 until 337 -> NE
                 in 337 until 361 -> N
                 else -> N
             }

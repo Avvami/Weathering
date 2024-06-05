@@ -68,7 +68,7 @@ fun HumidityDetails(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = data.period,
+                        text = stringResource(id = data.periodRes),
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(

@@ -76,7 +76,7 @@ fun WindDetails(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = data.period,
+                        text = stringResource(id = data.periodRes),
                         style = MaterialTheme.typography.labelLarge
                     )
                     Spacer(modifier = Modifier.height(12.dp))

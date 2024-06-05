@@ -103,14 +103,14 @@ fun WeatherWeeklyForecastExtended(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                                contentDescription = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
+                                contentDescription = stringResource(id = weatherData.dominantWindDirectionType.directionRes),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier
                                     .size(18.dp)
                                     .rotate(degrees = (weatherData.dominantWindDirection + 180) % 360)
                             )
                             Text(
-                                text = stringResource(id = weatherInfo().currentWeatherData.windDirectionType.directionRes),
+                                text = stringResource(id = weatherData.dominantWindDirectionType.directionRes),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

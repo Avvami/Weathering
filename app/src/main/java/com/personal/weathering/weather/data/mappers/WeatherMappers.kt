@@ -1,6 +1,5 @@
 package com.personal.weathering.weather.data.mappers
 
-import android.content.Context
 import com.personal.weathering.R
 import com.personal.weathering.weather.data.models.CurrentWeatherDto
 import com.personal.weathering.weather.data.models.DailyWeatherDto
@@ -16,7 +15,6 @@ import com.personal.weathering.weather.domain.models.WeatherInfo
 import com.personal.weathering.weather.domain.models.WeatherSummaryData
 import com.personal.weathering.weather.domain.models.WeatherType
 import com.personal.weathering.weather.domain.models.WindDirectionType
-import com.personal.weathering.core.util.UiText
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -103,18 +101,18 @@ fun DailyWeatherDto.toDailyWeatherData(): List<DailyWeatherData> {
     }
 }
 
-private fun Map<Int, List<HourlyWeatherData>>.toWeatherByTimePeriods(context: Context): Map<Int, List<DailyWeatherSummaryData>> {
+private fun Map<Int, List<HourlyWeatherData>>.toWeatherByTimePeriods(): Map<Int, List<DailyWeatherSummaryData>> {
     val timeRanges = mapOf(
-        UiText.StringResource(R.string.morning).asString(context) to (6..11),
-        UiText.StringResource(R.string.day).asString(context) to (12..17),
-        UiText.StringResource(R.string.evening).asString(context) to (18..23),
-        UiText.StringResource(R.string.night).asString(context) to (0..5)
+        R.string.morning to (6..11),
+        R.string.day to (12..17),
+        R.string.evening to (18..23),
+        R.string.night to (0..5)
     )
     return this.mapValues { (_, hourlyData) ->
-        timeRanges.map { (rangeName, timeRange) ->
+        timeRanges.map { (rangeRes, timeRange) ->
             val periodWeatherData = hourlyData.filter { it.time.hour in timeRange }
             DailyWeatherSummaryData(
-                period = rangeName,
+                periodRes = rangeRes,
                 weatherSummary = periodWeatherData.toOverallWeather()
             )
         }
@@ -122,6 +120,7 @@ private fun Map<Int, List<HourlyWeatherData>>.toWeatherByTimePeriods(context: Co
 }
 
 private fun List<HourlyWeatherData>.toOverallWeather(): WeatherSummaryData {
+    val windDirection = averageBy { it.windDirection.toDouble() }.toFloat()
     return WeatherSummaryData(
         temperature = averageBy { it.temperature },
         apparentTemperature = averageBy { it.apparentTemperature },
@@ -130,8 +129,8 @@ private fun List<HourlyWeatherData>.toOverallWeather(): WeatherSummaryData {
         weatherType = mostCommonBy { it.weatherType },
         pressure = averageBy { it.pressure },
         windSpeed = averageBy { it.windSpeed },
-        windDirection = averageBy { it.windDirection.toDouble() }.toFloat(),
-        windDirectionType = mostCommonBy { it.windDirectionType }
+        windDirection = windDirection,
+        windDirectionType = WindDirectionType.fromDegree(windDirection.roundToInt())
     )
 }
 
@@ -143,7 +142,7 @@ private fun <T> List<HourlyWeatherData>.mostCommonBy(selector: (HourlyWeatherDat
     return groupingBy(selector).eachCount().maxBy { it.value }.key
 }
 
-fun WeatherDto.toWeatherInfo(context: Context): WeatherInfo {
+fun WeatherDto.toWeatherInfo(): WeatherInfo {
     val now = LocalDateTime.now(ZoneId.ofOffset("UTC", ZoneOffset.ofTotalSeconds(utcOffset)))
     val hourlyWeatherData = hourlyWeather.toHourlyWeatherData()
     val flattenHourlyWeatherData = hourlyWeatherData.values.flatten()
@@ -185,6 +184,6 @@ fun WeatherDto.toWeatherInfo(context: Context): WeatherInfo {
         twentyFourHoursWeatherData = twentyFourHoursWeatherData.sortedBy { it.time },
         hourlyWeatherData = hourlyWeatherData,
         dailyWeatherData = dailyWeatherData,
-        dailyWeatherSummaryData = hourlyWeatherData.toWeatherByTimePeriods(context)
+        dailyWeatherSummaryData = hourlyWeatherData.toWeatherByTimePeriods()
     )
 }

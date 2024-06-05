@@ -186,6 +186,7 @@ fun WeatherDetailsScreen(
                         weatherInfo.dailyWeatherSummaryData[index]?.let { dailyWeatherSummaryData ->
                             item {
                                 TemperatureDetails(
+                                    preferencesState = preferencesState,
                                     summaryData = dailyWeatherSummaryData
                                 )
                             }

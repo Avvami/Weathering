@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,6 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.personal.weathering.R
+import com.personal.weathering.core.presentation.PreferencesState
+import com.personal.weathering.core.util.UnitsConverter
 import com.personal.weathering.weather.domain.models.DailyWeatherSummaryData
 import com.personal.weathering.ui.theme.onSurfaceLight70p
 import com.personal.weathering.ui.theme.surfaceLight30p
@@ -26,6 +29,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun TemperatureDetails(
+    preferencesState: State<PreferencesState>,
     summaryData: List<DailyWeatherSummaryData>
 ) {
     Column(
@@ -45,7 +49,7 @@ fun TemperatureDetails(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = data.period,
+                        text = stringResource(id = data.periodRes),
                         style = MaterialTheme.typography.labelLarge
                     )
                     Icon(
@@ -55,7 +59,9 @@ fun TemperatureDetails(
                     Text(
                         text = stringResource(
                             id = R.string.temperature,
-                            data.weatherSummary.temperature.roundToInt()
+                            if (preferencesState.value.useCelsius) data.weatherSummary.temperature.roundToInt() else
+                                UnitsConverter.toFahrenheit(data.weatherSummary.temperature).roundToInt()
+
                         ),
                         style = MaterialTheme.typography.labelLarge
                     )
@@ -84,7 +90,8 @@ fun TemperatureDetails(
                     modifier = Modifier.weight(1f),
                     text = stringResource(
                         id = R.string.temperature,
-                        data.weatherSummary.apparentTemperature.roundToInt()
+                        if (preferencesState.value.useCelsius) data.weatherSummary.apparentTemperature.roundToInt() else
+                            UnitsConverter.toFahrenheit(data.weatherSummary.apparentTemperature).roundToInt()
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = onSurfaceLight70p,
