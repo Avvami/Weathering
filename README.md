@@ -3,7 +3,7 @@ Weathering is a comprehensive weather app that provides real-time weather update
 
 The application was built using Jetpack Compose, Room database and Retrofit.
 
-![Thumbnail](https://github.com/Avvami/Weathering/assets/104052661/2c759c7e-8bc0-4fe8-aac4-94e3d22a0ade)
+![Thumbnail](https://github.com/Avvami/Weathering/assets/104052661/1dea550c-03e2-425b-ae84-8eb614e157d7)
 
 ## Features
 - **Real-Time Weather Updates:** Get current weather conditions, including temperature, humidity, and wind speed.
