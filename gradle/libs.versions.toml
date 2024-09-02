@@ -1,21 +1,23 @@
 [versions]
-activityCompose = "1.9.0"
-androidGradlePlugin = "8.4.0"
+activityCompose = "1.9.1"
+androidGradlePlugin = "8.5.0"
 appcompatVersion = "1.7.0"
 browser = "1.8.0"
-composeBom = "2024.05.00"
+composeBom = "2024.08.00"
+converterMoshi = "2.11.0"
 coreKtx = "1.13.1"
 coreSplashscreen = "1.0.1"
-devtoolsKsp = "1.9.20-1.0.14"
-desugar_jdk_libs = "2.0.4"
-espressoCore = "3.5.1"
-jetbrainsKotlin = "1.9.20"
+devtoolsKsp = "2.0.20-1.0.24"
+desugar_jdk_libs = "2.1.1"
+espressoCore = "3.6.1"
+jetbrainsKotlin = "2.0.20"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-lifecycle = "2.7.0"
+junitVersion = "1.2.1"
+lifecycle = "2.8.4"
+moshi = "1.15.1"
 navigationCompose = "2.7.7"
 playServicesLocation = "21.3.0"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 room = "2.6.1"
 
 [libraries]
@@ -40,11 +42,14 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
-converter-moshi = { group = "com.squareup.retrofit2", name ="converter-moshi", version.ref = "retrofit" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 junit = { module = "junit:junit", version.ref = "junit" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [bundles]
 compose = [
@@ -63,4 +68,5 @@ lifecycle = [
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin"}
 jetbrains-kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "jetbrainsKotlin"}
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrainsKotlin" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "devtoolsKsp"}

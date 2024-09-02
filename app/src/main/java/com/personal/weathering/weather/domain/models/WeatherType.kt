@@ -260,7 +260,7 @@ sealed class WeatherType(
     )
 
     companion object {
-        fun fromWMO(code: Int, isDay: Boolean): WeatherType {
+        fun fromWMO(code: Int?, isDay: Boolean): WeatherType {
             return when(code) {
                 0 -> if (isDay) ClearDaySky else ClearNightSky
                 1 -> if (isDay) MainlyDayClear else MainlyNightClear

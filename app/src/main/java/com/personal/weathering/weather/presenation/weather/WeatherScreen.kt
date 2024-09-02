@@ -86,9 +86,9 @@ import com.personal.weathering.weather.presenation.weather.components.CurrentWea
 import com.personal.weathering.weather.presenation.weather.components.CurrentWeatherTemperatureInfoExpanded
 import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerCompact
 import com.personal.weathering.weather.presenation.weather.components.WeatherShimmerExpanded
-import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastCompat
-import com.personal.weathering.weather.presenation.weather.components.WeatherWeeklyForecastExtended
 import com.personal.weathering.weather.presenation.weather.components.drawer.ModalDrawer
+import com.personal.weathering.weather.presenation.weather.components.weatherWeeklyForecastCompat
+import com.personal.weathering.weather.presenation.weather.components.weatherWeeklyForecastExtended
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -331,61 +331,62 @@ fun WeatherScreen(
                                 }
                             }
                         }
+                        weatherState().weatherInfo?.let { weatherInfo ->
+                            if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
+                                weatherWeeklyForecastCompat(
+                                    preferencesState = preferencesState,
+                                    weatherInfo = { weatherInfo },
+                                    navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
+                                )
+                            } else {
+                                weatherWeeklyForecastExtended(
+                                    preferencesState = preferencesState,
+                                    weatherInfo = { weatherInfo },
+                                    navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
+                                )
+                            }
+                        }
                         item {
-                            weatherState().weatherInfo?.let { weatherInfo ->
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                val activity = LocalContext.current.findActivity() as MainActivity
                                 Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null
+                                        ) {
+                                            activity.openCustomWebTab(C.OM_URL)
+                                        },
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    if (windowInfo().screenWidthInfo is WindowInfo.WindowType.Compact) {
-                                        WeatherWeeklyForecastCompat(
-                                            preferencesState = preferencesState,
-                                            weatherInfo = { weatherInfo },
-                                            navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
-                                        )
-                                    } else {
-                                        WeatherWeeklyForecastExtended(
-                                            preferencesState = preferencesState,
-                                            weatherInfo = { weatherInfo },
-                                            navigateToWeatherDetailsScreen = navigateToWeatherDetailsScreen
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    val activity = LocalContext.current.findActivity() as MainActivity
-                                    Column(
-                                        modifier = Modifier
-                                            .padding(horizontal = 16.dp)
-                                            .clickable(
-                                                interactionSource = remember { MutableInteractionSource() },
-                                                indication = null
-                                            ) {
-                                                activity.openCustomWebTab(C.OM_URL)
-                                            },
-                                        horizontalAlignment = Alignment.CenterHorizontally,
-                                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(id = R.drawable.icon_open_meteo),
-                                            contentDescription = stringResource(id = R.string.open_meteo),
-                                            modifier = Modifier.size(54.dp)
-                                        )
-                                        Text(
-                                            text = stringResource(id = R.string.open_meteo),
-                                            style = MaterialTheme.typography.titleMedium
-                                        )
-                                    }
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.icon_open_meteo),
+                                        contentDescription = stringResource(id = R.string.open_meteo),
+                                        modifier = Modifier.size(54.dp)
+                                    )
                                     Text(
-                                        text = stringResource(
-                                            id = R.string.app_version,
-                                            BuildConfig.VERSION_NAME,
-                                            BuildConfig.VERSION_CODE
-                                        ),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.outline,
-                                        textAlign = TextAlign.Center,
-                                        modifier = Modifier
-                                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                                        text = stringResource(id = R.string.open_meteo),
+                                        style = MaterialTheme.typography.titleMedium
                                     )
                                 }
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.app_version,
+                                        BuildConfig.VERSION_NAME,
+                                        BuildConfig.VERSION_CODE
+                                    ),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.outline,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                                )
                             }
                         }
                     }

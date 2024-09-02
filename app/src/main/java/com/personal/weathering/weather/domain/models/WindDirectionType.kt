@@ -33,7 +33,7 @@ sealed class WindDirectionType(
     )
 
     companion object {
-        fun fromDegree(degree: Int): WindDirectionType {
+        fun fromDegree(degree: Int?): WindDirectionType {
             return when(degree) {
                 in 0 until 23 -> N
                 in 23 until 67 -> NW

@@ -127,16 +127,22 @@ fun WeatherDetailsScreen(
         ) {
             val tabItems by remember {
                 derivedStateOf {
-                    weatherState().weatherInfo?.dailyWeatherData?.map { dailyWeatherData ->
-                        TabItem(
-                            dayOfMonth = dailyWeatherData.time.dayOfMonth,
-                            dayOfWeek = dailyWeatherData.time.format(DateTimeFormatter.ofPattern("EEE")).replaceFirstChar {
-                                if (it.isLowerCase()) it.titlecase(
-                                    Locale.getDefault()
-                                ) else it.toString()
+                    buildList {
+                        weatherState().weatherInfo?.dailyWeatherData?.map { dailyWeatherData ->
+                            dailyWeatherData.time?.let {
+                                add(
+                                    TabItem(
+                                        dayOfMonth = dailyWeatherData.time.dayOfMonth,
+                                        dayOfWeek = dailyWeatherData.time.format(DateTimeFormatter.ofPattern("EEE")).replaceFirstChar {
+                                            if (it.isLowerCase()) it.titlecase(
+                                                Locale.getDefault()
+                                            ) else it.toString()
+                                        }
+                                    )
+                                )
                             }
-                        )
-                    } ?: listOf()
+                        }
+                    }
                 }
             }
             val horizontalPagerState = rememberPagerState(

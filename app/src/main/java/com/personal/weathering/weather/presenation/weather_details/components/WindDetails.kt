@@ -71,41 +71,45 @@ fun WindDetails(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             summaryData.fastForEach { data ->
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(id = data.periodRes),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = stringResource(
-                            id = if (preferencesState.value.useKmPerHour) R.string.km_per_hour else R.string.m_per_second,
-                            if (preferencesState.value.useKmPerHour) data.weatherSummary.windSpeed else
-                                UnitsConverter.toMetersPerSecond(data.weatherSummary.windSpeed)
-                        ),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                data.weatherSummary.windSpeed?.let { windSpeed ->
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
-                            contentDescription = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
-                            tint = onSurfaceLight70p,
-                            modifier = Modifier
-                                .size(12.dp)
-                                .rotate(degrees = (data.weatherSummary.windDirection + 180) % 360)
-                        )
                         Text(
-                            text = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = onSurfaceLight70p
+                            text = stringResource(id = data.periodRes),
+                            style = MaterialTheme.typography.labelLarge
                         )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = stringResource(
+                                id = if (preferencesState.value.useKmPerHour) R.string.km_per_hour else R.string.m_per_second,
+                                if (preferencesState.value.useKmPerHour) windSpeed else
+                                    UnitsConverter.toMetersPerSecond(windSpeed)
+                            ),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            data.weatherSummary.windDirection?.let { windDirection ->
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_navigation_fill1_wght400),
+                                    contentDescription = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
+                                    tint = onSurfaceLight70p,
+                                    modifier = Modifier
+                                        .size(12.dp)
+                                        .rotate(degrees = (windDirection + 180) % 360)
+                                )
+                            }
+                            Text(
+                                text = stringResource(id = data.weatherSummary.windDirectionType.directionRes),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = onSurfaceLight70p
+                            )
+                        }
                     }
                 }
             }

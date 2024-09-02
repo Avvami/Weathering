@@ -21,7 +21,7 @@ sealed class HumidityType(
     )
 
     companion object {
-        fun fromPercentage(humidity: Int): HumidityType {
+        fun fromPercentage(humidity: Int?): HumidityType {
             return when(humidity) {
                 in 0 until 21 -> Low
                 in 21 until 81 -> Middle

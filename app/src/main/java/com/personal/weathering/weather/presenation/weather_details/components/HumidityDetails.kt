@@ -62,19 +62,21 @@ fun HumidityDetails(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             summaryData.fastForEach { data ->
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = data.periodRes),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Text(
-                        text = stringResource(id = R.string.percent, data.weatherSummary.humidity),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                data.weatherSummary.humidity?.let { humidity ->
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = data.periodRes),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Text(
+                            text = stringResource(id = R.string.percent, humidity),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
         }

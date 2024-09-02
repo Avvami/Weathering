@@ -2,10 +2,9 @@ package com.personal.weathering.weather.presenation.weather.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,7 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,18 +22,19 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.personal.weathering.R
-import com.personal.weathering.weather.domain.models.WeatherInfo
+import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.UnitsConverter
 import com.personal.weathering.core.util.timeFormat
-import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.ui.theme.onSurfaceLight
 import com.personal.weathering.ui.theme.onSurfaceLight70p
+import com.personal.weathering.weather.domain.models.WeatherInfo
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -58,15 +59,17 @@ fun CurrentWeatherTemperatureInfoExpanded(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = stringResource(
-                            id = R.string.temperature,
-                            if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.temperature.roundToInt() else
-                                UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.temperature).roundToInt()
-                        ),
-                        fontSize = 68.sp,
-                        color = onSurfaceLight
-                    )
+                    weatherInfo().currentWeatherData.temperature?.let { temperature ->
+                        Text(
+                            text = stringResource(
+                                id = R.string.temperature,
+                                if (preferencesState.value.useCelsius) temperature.roundToInt() else
+                                    UnitsConverter.toFahrenheit(temperature).roundToInt()
+                            ),
+                            fontSize = 68.sp,
+                            color = onSurfaceLight
+                        )
+                    }
                     Icon(
                         painter = painterResource(id = weatherInfo().currentWeatherData.weatherType.iconSmallRes),
                         contentDescription = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
@@ -75,25 +78,29 @@ fun CurrentWeatherTemperatureInfoExpanded(
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(
-                        id = R.string.apparent_temperature,
-                        if (preferencesState.value.useCelsius) weatherInfo().currentWeatherData.apparentTemperature.roundToInt() else
-                            UnitsConverter.toFahrenheit(weatherInfo().currentWeatherData.apparentTemperature).roundToInt()
-                    ),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = onSurfaceLight70p
-                )
+                weatherInfo().currentWeatherData.apparentTemperature?.let { apparentTemperature ->
+                    Text(
+                        text = stringResource(
+                            id = R.string.apparent_temperature,
+                            if (preferencesState.value.useCelsius) apparentTemperature.roundToInt() else
+                                UnitsConverter.toFahrenheit(apparentTemperature).roundToInt()
+                        ),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = onSurfaceLight70p
+                    )
+                }
             }
             Column(
                 horizontalAlignment = Alignment.End
             ) {
-                Text(
-                    text = stringResource(id = R.string.today_time, timeFormat(time = weatherInfo().currentWeatherData.time, use12hour = preferencesState.value.use12hour)),
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.End,
-                    color = onSurfaceLight
-                )
+                weatherInfo().currentWeatherData.time?.let { time ->
+                    Text(
+                        text = stringResource(id = R.string.today_time, timeFormat(time = time, use12hour = preferencesState.value.use12hour)),
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.End,
+                        color = onSurfaceLight
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(id = weatherInfo().currentWeatherData.weatherType.weatherDescRes),
@@ -106,33 +113,33 @@ fun CurrentWeatherTemperatureInfoExpanded(
         CompositionLocalProvider(
             LocalOverscrollConfiguration provides null
         ) {
-            Row(
-                modifier = Modifier
-                    .horizontalScroll(rememberScrollState())
-                    .height(intrinsicSize = IntrinsicSize.Max)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                weatherInfo().twentyFourHoursWeatherData.forEachIndexed { index, weatherData ->
+                items(
+                    items = weatherInfo().twentyFourHoursWeatherData,
+                    key = { it.uniqueKey }
+                ) { weatherData ->
                     Column(
-                        verticalArrangement = Arrangement.SpaceBetween,
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxHeight()
                     ) {
-                        Text(
-                            text = when {
-                                weatherData.sunrise != null -> timeFormat(time = weatherData.sunrise, use12hour = preferencesState.value.use12hour)
-                                weatherData.sunset != null -> timeFormat(time = weatherData.sunset, use12hour = preferencesState.value.use12hour)
-                                else -> timeFormat(time = weatherData.time, use12hour = preferencesState.value.use12hour)
-                            },
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = onSurfaceLight70p
-                        )
-                        if (weatherData.time.hour == 0) {
+                        weatherData.time?.let { time ->
+                            Text(
+                                text = when {
+                                    weatherData.sunrise != null -> timeFormat(time = weatherData.sunrise, use12hour = preferencesState.value.use12hour)
+                                    weatherData.sunset != null -> timeFormat(time = weatherData.sunset, use12hour = preferencesState.value.use12hour)
+                                    else -> timeFormat(time = time, use12hour = preferencesState.value.use12hour)
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = onSurfaceLight70p
+                            )
                             Text(
                                 text = weatherData.time.format(DateTimeFormatter.ofPattern("dd MMM")),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = onSurfaceLight70p
+                                color = if (weatherData.time.hour == 0) onSurfaceLight70p else Color.Transparent
                             )
                         }
                         Icon(
@@ -148,29 +155,26 @@ fun CurrentWeatherTemperatureInfoExpanded(
                             },
                             tint = onSurfaceLight
                         )
-                        Text(
-                            text = when {
-                                weatherData.sunrise != null -> stringResource(id = R.string.sunrise)
-                                weatherData.sunset != null -> stringResource(id = R.string.sunset)
-                                else -> stringResource(
-                                    id = R.string.temperature,
-                                    if (preferencesState.value.useCelsius) weatherData.temperature.roundToInt() else
-                                        UnitsConverter.toFahrenheit(weatherData.temperature).roundToInt()
-                                )
-                            },
-                            style = MaterialTheme.typography.titleMedium,
-                            color = onSurfaceLight
-                        )
-                    }
-                    if (index != weatherInfo().twentyFourHoursWeatherData.lastIndex) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_fiber_manual_record_fill1_wght400),
-                            contentDescription = "Divider",
-                            tint = onSurfaceLight,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .size(8.dp)
-                        )
+                        weatherData.temperature?.let { temperature ->
+                            Text(
+                                text = "dd MMM",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Transparent
+                            )
+                            Text(
+                                text = when {
+                                    weatherData.sunrise != null -> stringResource(id = R.string.sunrise)
+                                    weatherData.sunset != null -> stringResource(id = R.string.sunset)
+                                    else -> stringResource(
+                                        id = R.string.temperature,
+                                        if (preferencesState.value.useCelsius) temperature.roundToInt() else
+                                            UnitsConverter.toFahrenheit(temperature).roundToInt()
+                                    )
+                                },
+                                style = MaterialTheme.typography.titleMedium,
+                                color = onSurfaceLight
+                            )
+                        }
                     }
                 }
             }

@@ -41,79 +41,85 @@ fun SunDetails(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row {
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(id = R.string.daylight_duration),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = onSurfaceLight70p
-                )
-                Text(
-                    text = stringResource(
-                        id = R.string.hours_minutes,
-                        dailyWeatherData.daylightDuration.toHours(),
-                        dailyWeatherData.daylightDuration.toMinutesPart()
-                    ),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
+        dailyWeatherData.daylightDuration?.let { daylightDuration ->
+            Row {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.daylight_duration),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = onSurfaceLight70p
+                    )
+                    Text(
+                        text = stringResource(
+                            id = R.string.hours_minutes,
+                            daylightDuration.toHours(),
+                            daylightDuration.toMinutesPart()
+                        ),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = R.drawable.icon_wb_sunny_fill1_wght400),
-                    contentDescription = stringResource(id = R.string.sunrise)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = stringResource(id = R.string.sunrise).replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.getDefault()
-                        ) else it.toString()
-                    },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = onSurfaceLight70p
-                )
-                Text(
-                    text = timeFormat(time = dailyWeatherData.sunrise, use12hour = preferencesState.value.use12hour),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
+            dailyWeatherData.sunrise?.let { sunrise ->
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.icon_wb_sunny_fill1_wght400),
+                        contentDescription = stringResource(id = R.string.sunrise)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(id = R.string.sunrise).replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = onSurfaceLight70p
+                    )
+                    Text(
+                        text = timeFormat(time = sunrise, use12hour = preferencesState.value.use12hour),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = R.drawable.icon_wb_twilight_fill1_wght400),
-                    contentDescription = stringResource(id = R.string.sunset)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = stringResource(id = R.string.sunset).replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.getDefault()
-                        ) else it.toString()
-                    },
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = onSurfaceLight70p
-                )
-                Text(
-                    text = timeFormat(time = dailyWeatherData.sunset, use12hour = preferencesState.value.use12hour),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
+            dailyWeatherData.sunset?.let { sunset ->
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.icon_wb_twilight_fill1_wght400),
+                        contentDescription = stringResource(id = R.string.sunset)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(id = R.string.sunset).replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        },
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = onSurfaceLight70p
+                    )
+                    Text(
+                        text = timeFormat(time = sunset, use12hour = preferencesState.value.use12hour),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
             }
         }
     }

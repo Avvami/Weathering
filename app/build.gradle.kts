@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.devtools.ksp)
 }
 
@@ -77,6 +78,9 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)

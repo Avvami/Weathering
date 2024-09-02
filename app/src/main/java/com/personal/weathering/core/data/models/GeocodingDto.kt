@@ -1,23 +1,26 @@
 package com.personal.weathering.core.data.models
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class GeocodingDto(
-    @field:Json(name = "address")
+    @Json(name = "address")
     val address: AddressDto?,
-    @field:Json(name = "error")
-    val error: String
+    @Json(name = "error")
+    val error: String?
 )
 
+@JsonClass(generateAdapter = true)
 data class AddressDto(
-    @field:Json(name = "city")
+    @Json(name = "city")
     val city: String?,
-    @field:Json(name = "town")
+    @Json(name = "town")
     val town: String?,
-    @field:Json(name = "village")
+    @Json(name = "village")
     val village: String?,
-    @field:Json(name = "hamlet")
+    @Json(name = "hamlet")
     val hamlet: String?,
-    @field:Json(name = "municipality")
+    @Json(name = "municipality")
     val municipality: String?
 )

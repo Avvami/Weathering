@@ -69,26 +69,28 @@ fun PressureDetails(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             summaryData.fastForEach { data ->
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(id = data.periodRes),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = if (preferencesState.value.useHpa) "%.1f".format(data.weatherSummary.pressure) else
-                            "%.1f".format(UnitsConverter.toMetersPerSecond(data.weatherSummary.pressure)),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = stringResource(id = if (preferencesState.value.useHpa) R.string.hPa_unit else R.string.mmHg_unit),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = onSurfaceLight70p
-                    )
+                data.weatherSummary.pressure?.let { pressure ->
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(id = data.periodRes),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = if (preferencesState.value.useHpa) "%.1f".format(pressure) else
+                                "%.1f".format(UnitsConverter.toMmHg(pressure)),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = stringResource(id = if (preferencesState.value.useHpa) R.string.hPa_unit else R.string.mmHg_unit),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = onSurfaceLight70p
+                        )
+                    }
                 }
             }
         }

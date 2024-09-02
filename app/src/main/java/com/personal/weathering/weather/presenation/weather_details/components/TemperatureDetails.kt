@@ -43,28 +43,32 @@ fun TemperatureDetails(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             summaryData.fastForEach { data ->
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(id = data.periodRes),
-                        style = MaterialTheme.typography.labelLarge
-                    )
-                    Icon(
-                        painter = painterResource(id = data.weatherSummary.weatherType.iconSmallRes),
-                        contentDescription = stringResource(id = data.weatherSummary.weatherType.weatherDescRes)
-                    )
-                    Text(
-                        text = stringResource(
-                            id = R.string.temperature,
-                            if (preferencesState.value.useCelsius) data.weatherSummary.temperature.roundToInt() else
-                                UnitsConverter.toFahrenheit(data.weatherSummary.temperature).roundToInt()
+                data.weatherSummary.temperature?.let { temperature ->
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(id = data.periodRes),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                        data.weatherSummary.weatherType?.let { weatherType ->
+                            Icon(
+                                painter = painterResource(id = weatherType.iconSmallRes),
+                                contentDescription = stringResource(id = weatherType.weatherDescRes)
+                            )
+                        }
+                        Text(
+                            text = stringResource(
+                                id = R.string.temperature,
+                                if (preferencesState.value.useCelsius) temperature.roundToInt() else
+                                    UnitsConverter.toFahrenheit(temperature).roundToInt()
 
-                        ),
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                            ),
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
             }
         }
@@ -86,17 +90,19 @@ fun TemperatureDetails(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             summaryData.fastForEach { data ->
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = stringResource(
-                        id = R.string.temperature,
-                        if (preferencesState.value.useCelsius) data.weatherSummary.apparentTemperature.roundToInt() else
-                            UnitsConverter.toFahrenheit(data.weatherSummary.apparentTemperature).roundToInt()
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = onSurfaceLight70p,
-                    textAlign = TextAlign.Center
-                )
+                data.weatherSummary.apparentTemperature?.let { apparentTemperature ->
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(
+                            id = R.string.temperature,
+                            if (preferencesState.value.useCelsius) apparentTemperature.roundToInt() else
+                                UnitsConverter.toFahrenheit(apparentTemperature).roundToInt()
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = onSurfaceLight70p,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }

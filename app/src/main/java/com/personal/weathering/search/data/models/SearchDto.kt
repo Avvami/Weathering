@@ -1,25 +1,28 @@
 package com.personal.weathering.search.data.models
 
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class SearchDto(
-    @field:Json(name = "results")
+    @Json(name = "results")
     val searchResults: List<SearchResultDto>?
 )
 
+@JsonClass(generateAdapter = true)
 data class SearchResultDto(
-    @field:Json(name = "id")
+    @Json(name = "id")
     val id: Int,
-    @field:Json(name = "name")
+    @Json(name = "name")
     val name: String,
-    @field:Json(name = "latitude")
+    @Json(name = "latitude")
     val lat: Double,
-    @field:Json(name = "longitude")
+    @Json(name = "longitude")
     val lon: Double,
-    @field:Json(name = "country")
+    @Json(name = "country")
     val country: String?,
-    @field:Json(name = "country_code")
+    @Json(name = "country_code")
     val countryCode: String?,
-    @field:Json(name = "admin1")
+    @Json(name = "admin1")
     val adminLevel: String?,
 )
