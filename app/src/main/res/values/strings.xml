@@ -23,14 +23,14 @@
     <string name="weekly_forecast">Weekly forecast</string>
     <string name="max">Max</string>
     <string name="min">Min</string>
-    <string name="aqi">AQI</string>
+    <string name="aqi">AQI %d</string>
     <string name="aqi_rate">%s - %s</string>
     <string name="three_day_forecast">3 day forecast</string>
     <string name="search_placeholder">City</string>
     <string name="search_result">%s, %s</string>
     <string name="nothing_found">Nothing found</string>
-    <string name="sunrise">sunrise</string>
-    <string name="sunset">sunset</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="sunset">Sunset</string>
     <string name="search_history">Search history</string>
     <string name="empty">Empty</string>
     <string name="open_meteo">Weather data by Open-Meteo</string>
