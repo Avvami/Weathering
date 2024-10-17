@@ -23,3 +23,9 @@ fun convertStringToDate(dateString: String?): LocalDate? {
         null
     }
 }
+
+fun convertToMetersPerSecond(speedKmPerHour: Double): Double = speedKmPerHour / 3.6
+
+fun convertToMmHg(speedKmPerHour: Double): Double = speedKmPerHour / 3.6
+
+fun convertToFahrenheit(celsius: Double): Double = celsius * 9.0 / 5.0 + 32

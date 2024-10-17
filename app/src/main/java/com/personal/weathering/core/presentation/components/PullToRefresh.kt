@@ -8,7 +8,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.personal.weathering.ui.theme.ExtendedTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +21,7 @@ fun PullToRefresh(
         modifier = modifier
             .graphicsLayer(scaleX = scaleFraction, scaleY = scaleFraction),
         state = pullToRefreshState(),
-        containerColor = ExtendedTheme.colorScheme.surfaceContainerLow,
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         contentColor = MaterialTheme.colorScheme.onSurface
     )
 }

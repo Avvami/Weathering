@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.personal.weathering.aq.domain.models.AqInfo
 import com.personal.weathering.aq.domain.repository.AqRepository
-import com.personal.weathering.aq.presentation.AqState
+import com.personal.weathering.weather.presenation.AqState
 import com.personal.weathering.core.data.local.FavoriteEntity
 import com.personal.weathering.core.domain.location.LocationClient
 import com.personal.weathering.core.domain.repository.ConnectivityRepository
@@ -356,6 +356,11 @@ class MainViewModel(
                         FavoriteEntity(id = event.id, cityId = event.cityId, city = event.city, lat = event.lat, lon = event.lon)
                     )
                 }
+            }
+            UiEvent.ChangeAqCollapsedState -> {
+                aqState = aqState.copy(
+                    isCollapsed = !aqState.isCollapsed
+                )
             }
         }
     }

@@ -17,11 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import com.personal.weathering.ui.theme.surfaceLight
-import com.personal.weathering.ui.theme.surfaceLight30p
 
 fun Modifier.shimmerEffect(
     primaryColor: Color = surfaceLight,
-    secondaryColor: Color = surfaceLight30p
+    secondaryColor: Color = surfaceLight.copy(.3f)
 ): Modifier = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
