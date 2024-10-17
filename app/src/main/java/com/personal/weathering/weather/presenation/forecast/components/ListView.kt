@@ -278,36 +278,14 @@ fun ListView(
                         }
                     }
                     with(weatherState.weatherInfo.dailyWeatherData[index]) {
-                        Row(
+                        Column(
                             modifier = Modifier
                                 .fillMaxHeight()
                                 .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                                 .padding(16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
-                            verticalAlignment = Alignment.CenterVertically
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
                         ) {
-                            sunrise?.let { sunrise ->
-                                Column(
-                                    modifier = Modifier.padding(top = 8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(28.dp),
-                                        painter = painterResource(id = R.drawable.icon_wb_sunny_fill0_wght400),
-                                        contentDescription = stringResource(id = R.string.sunrise)
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = stringResource(id = R.string.sunrise),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(.7f)
-                                    )
-                                    Text(
-                                        text = timeFormat(time = sunrise, use12hour = preferencesState.value.use12hour),
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
-                            }
                             daylightDuration?.let { daylightDuration ->
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally
@@ -327,26 +305,51 @@ fun ListView(
                                     )
                                 }
                             }
-                            sunset?.let { sunset ->
-                                Column(
-                                    modifier = Modifier.padding(top = 8.dp),
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(28.dp),
-                                        painter = painterResource(id = R.drawable.icon_wb_twilight_fill0_wght400),
-                                        contentDescription = stringResource(id = R.string.sunset)
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-                                    Text(
-                                        text = stringResource(id = R.string.sunset),
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(.7f)
-                                    )
-                                    Text(
-                                        text = timeFormat(time = sunset, use12hour = preferencesState.value.use12hour),
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(48.dp)
+                            ) {
+                                sunrise?.let { sunrise ->
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(28.dp),
+                                            painter = painterResource(id = R.drawable.icon_wb_sunny_fill0_wght400),
+                                            contentDescription = stringResource(id = R.string.sunrise)
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = stringResource(id = R.string.sunrise),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurface.copy(.7f)
+                                        )
+                                        Text(
+                                            text = timeFormat(time = sunrise, use12hour = preferencesState.value.use12hour),
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
+                                }
+                                sunset?.let { sunset ->
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier.size(28.dp),
+                                            painter = painterResource(id = R.drawable.icon_wb_twilight_fill0_wght400),
+                                            contentDescription = stringResource(id = R.string.sunset)
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = stringResource(id = R.string.sunset),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurface.copy(.7f)
+                                        )
+                                        Text(
+                                            text = timeFormat(time = sunset, use12hour = preferencesState.value.use12hour),
+                                            style = MaterialTheme.typography.titleMedium
+                                        )
+                                    }
                                 }
                             }
                         }
