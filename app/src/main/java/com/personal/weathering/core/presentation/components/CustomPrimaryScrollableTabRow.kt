@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastForEachIndexed
 import com.personal.weathering.core.presentation.components.TabRowDefaults.tabIndicatorOffset
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -54,6 +55,7 @@ fun CustomPrimaryScrollableTabRow(
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     contentColor: Color = contentColorFor(containerColor),
     edgePadding: Dp = TabRowDefaults.ScrollableTabRowPadding,
+    tabPadding: Dp = 8.dp,
     indicator: @Composable (tabPositions: List<TabPosition>) -> Unit = @Composable { tabPositions ->
         TabRowDefaults.PrimaryIndicator(
             modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
@@ -90,6 +92,7 @@ fun CustomPrimaryScrollableTabRow(
             // 🔥 Change this to 0 or
             val minTabWidth = minItemWidth.roundToPx()
             val padding = edgePadding.roundToPx()
+            val tabPaddingPx = tabPadding.roundToPx()
             // 🔥or use constraints to measure each tab with its own width or
             // a another value instead of them having at least 90.dp
             val tabConstraints = constraints.copy(minWidth = minTabWidth)
@@ -99,9 +102,14 @@ fun CustomPrimaryScrollableTabRow(
 
             var layoutWidth = padding * 2
             var layoutHeight = 0
-            tabPlaceables.fastForEach {
-                layoutWidth += it.width
-                layoutHeight = maxOf(layoutHeight, it.height)
+            val tabCount = tabPlaceables.size
+
+            tabPlaceables.fastForEachIndexed { index, placeable ->
+                layoutWidth += placeable.width
+                if (index < tabCount - 1) {
+                    layoutWidth += tabPaddingPx
+                }
+                layoutHeight = maxOf(layoutHeight, placeable.height)
             }
 
             // Position the children.
@@ -109,10 +117,13 @@ fun CustomPrimaryScrollableTabRow(
                 // Place the tabs
                 val tabPositions = mutableListOf<TabPosition>()
                 var left = padding
-                tabPlaceables.fastForEach {
-                    it.placeRelative(left, 0)
-                    tabPositions.add(TabPosition(left = left.toDp(), width = it.width.toDp()))
-                    left += it.width
+                tabPlaceables.fastForEachIndexed { index, placeable ->
+                    placeable.placeRelative(left, 0)
+                    tabPositions.add(TabPosition(left = left.toDp(), width = placeable.width.toDp()))
+                    left += placeable.width
+                    if (index < tabCount - 1) {
+                        left += tabPaddingPx
+                    }
                 }
 
                 // The divider is measured with its own height, and width equal to the total width

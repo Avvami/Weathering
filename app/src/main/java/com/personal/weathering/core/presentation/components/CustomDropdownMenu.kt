@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.core.domain.models.DropdownItem
-import com.personal.weathering.ui.theme.ExtendedTheme
 
 @Composable
 fun CustomDropdownMenu(
@@ -28,7 +27,7 @@ fun CustomDropdownMenu(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
-            modifier = Modifier.background(ExtendedTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
         ) {
             dropDownItems.forEachIndexed { index, dropDownItem ->
                 dropDownItem?.let { item ->

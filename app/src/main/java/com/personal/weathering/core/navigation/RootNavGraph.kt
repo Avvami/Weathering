@@ -1,6 +1,5 @@
 package com.personal.weathering.core.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,11 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.personal.weathering.MainViewModel
-import com.personal.weathering.aq.presentation.AqScreen
 import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.search.presentation.SearchScreen
 import com.personal.weathering.weather.presenation.weather.WeatherScreen
-import com.personal.weathering.weather.presenation.weather_details.WeatherDetailsScreen
+import com.personal.weathering.weather.presenation.forecast.WeatherDetailsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,14 +40,12 @@ fun RootNavigationGraph(
         ) {
             WeatherScreen(
                 windowInfo = windowInfo,
-                isNetworkConnected = mainViewModel::isNetworkConnected,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
-                navigateToWeatherDetailsScreen = { dayOfWeek -> navController.navigate(RootNavGraph.WEATHER_DETAILS + "/$dayOfWeek") },
-                navigateToAqScreen = { navController.navigate(RootNavGraph.AQ) },
+                navigateToForecastScreen = { dayOfWeek -> navController.navigate(RootNavGraph.WEATHER_DETAILS + "/$dayOfWeek") },
                 navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
                 requestPermissions = requestPermissions,
                 uiEvent = mainViewModel::uiEvent
@@ -65,25 +61,7 @@ fun RootNavigationGraph(
                 windowInfo = windowInfo,
                 preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
                 navigateBack = { if (navController.canGoBack) navController.popBackStack() },
-                weatherState = mainViewModel::weatherState
-            )
-        }
-        composable(
-            route = RootNavGraph.AQ,
-            enterTransition = {
-                slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start)
-            },
-            exitTransition = {
-                slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.End)
-            }
-        ) {
-            AqScreen(
-                windowInfo = windowInfo,
-                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
-                aqState = mainViewModel::aqState,
-                pullToRefreshState = mainViewModel::pullToRefreshState,
-                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
-                uiEvent = mainViewModel::uiEvent
+                weatherState = mainViewModel.weatherState
             )
         }
         composable(
@@ -106,7 +84,6 @@ object RootNavGraph {
 
     const val WEATHER = "weather_screen"
     const val WEATHER_DETAILS = "weather_details_screen"
-    const val AQ = "aq_screen"
     const val SEARCH = "search_screen"
 }
 

@@ -15,7 +15,6 @@ import com.personal.weathering.weather.domain.models.CurrentWeatherData
 import com.personal.weathering.weather.domain.models.DailyWeatherData
 import com.personal.weathering.weather.domain.models.DailyWeatherSummaryData
 import com.personal.weathering.weather.domain.models.HourlyWeatherData
-import com.personal.weathering.weather.domain.models.HumidityType
 import com.personal.weathering.weather.domain.models.TwentyFourHoursWeatherData
 import com.personal.weathering.weather.domain.models.WeatherInfo
 import com.personal.weathering.weather.domain.models.WeatherSummaryData
@@ -40,7 +39,6 @@ fun CurrentWeatherDto.toCurrentWeatherData(): CurrentWeatherData {
         temperature = temperature,
         apparentTemperature = apparentTemperature,
         humidity = humidity,
-        humidityType = HumidityType.fromPercentage(humidity),
         weatherType = WeatherType.fromWMO(weatherCode, isDay?.toBoolean() ?: true),
         pressure = pressure,
         windSpeed = windSpeed,
@@ -65,7 +63,6 @@ fun HourlyWeatherDto.toHourlyWeatherData(): Map<Int, List<HourlyWeatherData>> {
                 temperature = temperature,
                 apparentTemperature = apparentTemperature,
                 humidity = humidity,
-                humidityType = HumidityType.fromPercentage(humidity),
                 weatherType = WeatherType.fromWMO(weatherCode, isDay?.toBoolean() ?: true),
                 pressure = pressure,
                 windSpeed = windSpeed,
@@ -129,7 +126,6 @@ private fun List<HourlyWeatherData>.toOverallWeather(): WeatherSummaryData {
         temperature = averageBy { it.temperature },
         apparentTemperature = averageBy { it.apparentTemperature },
         humidity = averageBy { it.humidity?.toDouble() }?.roundToInt(),
-        humidityType = mostCommonBy { it.humidityType },
         weatherType = mostCommonBy { it.weatherType },
         pressure = averageBy { it.pressure },
         windSpeed = averageBy { it.windSpeed },
