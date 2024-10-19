@@ -1,54 +1,55 @@
 package com.personal.weathering.weather.presenation.weather.components.drawer
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.personal.weathering.R
-import com.personal.weathering.core.util.LocationPermissionProvider
-import com.personal.weathering.core.util.findActivity
 import com.personal.weathering.MainActivity
+import com.personal.weathering.R
 import com.personal.weathering.UiEvent
-import com.personal.weathering.openAppSettings
 import com.personal.weathering.core.presentation.FavoritesState
 import com.personal.weathering.core.presentation.PreferencesState
+import com.personal.weathering.core.util.LocationPermissionProvider
+import com.personal.weathering.core.util.findActivity
+import com.personal.weathering.openAppSettings
 import com.personal.weathering.weather.presenation.WeatherState
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ModalDrawer(
+    navigateToSettingsScreen: () -> Unit,
     drawerState: DrawerState,
     preferencesState: State<PreferencesState>,
     favoritesState: State<List<FavoritesState>>,
@@ -64,74 +65,12 @@ fun ModalDrawer(
     }
     ModalDrawerSheet(
         drawerContentColor = MaterialTheme.colorScheme.onSurface,
-        drawerContainerColor = MaterialTheme.colorScheme.surface,
-        drawerShape = RectangleShape
+        drawerContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
     ) {
         LazyColumn(
+            modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(top = 8.dp, bottom = 16.dp)
         ) {
-            item {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 4.dp, end = 4.dp, bottom = 4.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        IconButton(onClick = { closeDrawer() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                                contentDescription = "Close drawer"
-                            )
-                        }
-                        Text(
-                            text = stringResource(id = R.string.settings),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-                    AnimatedContent(
-                        targetState = preferencesState.value.isDark,
-                        label = "Change theme anim",
-                        transitionSpec = {
-                            slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start, initialOffset = { it }) + scaleIn() togetherWith
-                                    slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Start) + scaleOut()
-                        }
-                    ) { targetState ->
-                        if (targetState) {
-                            IconButton(onClick = { uiEvent(UiEvent.SetDarkMode(false)) }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.icon_light_mode_fill1_wght400),
-                                    contentDescription = "Turn on light mode"
-                                )
-                            }
-                        } else {
-                            IconButton(onClick = { uiEvent(UiEvent.SetDarkMode(true)) }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.icon_dark_mode_fill1_wght400),
-                                    contentDescription = "Turn on dark mode"
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-            item {
-                Units(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
-            }
-            item {
-                AQI(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), preferencesState = preferencesState, uiEvent = uiEvent)
-            }
-            item {
-                Language(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
-            }
-            item {
-                TimeFormat(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp), preferencesState = preferencesState, uiEvent = uiEvent)
-            }
             item {
                 val activity = LocalContext.current.findActivity() as MainActivity
                 CurrentLocation(
@@ -146,21 +85,21 @@ fun ModalDrawer(
                         }
                         uiEvent(
                             UiEvent.ShowMessageDialog(
-                            iconRes = LocationPermissionProvider().getIcon(),
-                            messageRes = LocationPermissionProvider().getDescription(activity.shouldShowRationale()),
-                            dismissTextRes = R.string.not_now,
-                            onDismiss = { uiEvent(UiEvent.CloseMessageDialog) },
-                            confirmTextRes = if (activity.shouldShowRationale()) R.string.open_settings else R.string.grant,
-                            onConfirm = {
-                                if (activity.shouldShowRationale()) {
-                                    activity.openAppSettings()
-                                    uiEvent(UiEvent.CloseMessageDialog)
-                                } else {
-                                    requestPermissions()
-                                    uiEvent(UiEvent.CloseMessageDialog)
+                                iconRes = LocationPermissionProvider().getIcon(),
+                                messageRes = LocationPermissionProvider().getDescription(activity.shouldShowRationale()),
+                                dismissTextRes = R.string.not_now,
+                                onDismiss = { uiEvent(UiEvent.CloseMessageDialog) },
+                                confirmTextRes = if (activity.shouldShowRationale()) R.string.open_settings else R.string.grant,
+                                onConfirm = {
+                                    if (activity.shouldShowRationale()) {
+                                        activity.openAppSettings()
+                                        uiEvent(UiEvent.CloseMessageDialog)
+                                    } else {
+                                        requestPermissions()
+                                        uiEvent(UiEvent.CloseMessageDialog)
+                                    }
                                 }
-                            }
-                        ))
+                            ))
                     }
                 )
             }
@@ -205,12 +144,12 @@ fun ModalDrawer(
                             onClick = {
                                 uiEvent(
                                     UiEvent.RemoveFavorite(
-                                    id = favorite.id,
-                                    cityId = favorite.cityId,
-                                    city = favorite.city,
-                                    lat = favorite.lat,
-                                    lon = favorite.lon
-                                ))
+                                        id = favorite.id,
+                                        cityId = favorite.cityId,
+                                        city = favorite.city,
+                                        lat = favorite.lat,
+                                        lon = favorite.lon
+                                    ))
                             }
                         ) {
                             Icon(
@@ -222,5 +161,32 @@ fun ModalDrawer(
                 }
             }
         }
+        TopAppBar(
+            modifier = Modifier.clickable { navigateToSettingsScreen() },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.settings),
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
+            actions = {
+                Box(
+                    modifier = Modifier.minimumInteractiveComponentSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        modifier = Modifier.rotate(90f),
+                        imageVector = Icons.Rounded.MoreVert,
+                        contentDescription = "More"
+                    )
+                }
+            },
+            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
+        )
     }
 }

@@ -42,7 +42,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun WeatherDetailsScreen(
+fun WeeklyForecastScreen(
     windowInfo: () -> WindowInfo,
     preferencesState: State<PreferencesState>,
     weatherState: WeatherState,
@@ -56,13 +56,11 @@ fun WeatherDetailsScreen(
                 title = {
                     Text(
                         text = stringResource(id = R.string.weekly_forecast),
-                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Medium
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
                 ),
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {

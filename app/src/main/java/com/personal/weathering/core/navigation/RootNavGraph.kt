@@ -7,7 +7,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,8 +16,9 @@ import androidx.navigation.navArgument
 import com.personal.weathering.MainViewModel
 import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.search.presentation.SearchScreen
+import com.personal.weathering.settings.presentation.SettingsScreen
+import com.personal.weathering.weather.presenation.forecast.WeeklyForecastScreen
 import com.personal.weathering.weather.presenation.weather.WeatherScreen
-import com.personal.weathering.weather.presenation.forecast.WeatherDetailsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -28,6 +28,11 @@ fun RootNavigationGraph(
     mainViewModel: MainViewModel,
     requestPermissions: () -> Unit
 ) {
+    val navigateBack: () -> Unit = {
+        navController.navigateUp()
+    }
+    val preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle()
+    val favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle()
     NavHost(
         navController = navController,
         route = RootNavGraph.ROOT,
@@ -40,11 +45,12 @@ fun RootNavigationGraph(
         ) {
             WeatherScreen(
                 windowInfo = windowInfo,
-                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
-                favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
+                preferencesState = preferencesState,
+                favoritesState = favoritesState,
                 weatherState = mainViewModel::weatherState,
                 aqState = mainViewModel::aqState,
                 pullToRefreshState = mainViewModel::pullToRefreshState,
+                navigateToSettingsScreen = { navController.navigate(RootNavGraph.SETTINGS) },
                 navigateToForecastScreen = { dayOfWeek -> navController.navigate(RootNavGraph.WEATHER_DETAILS + "/$dayOfWeek") },
                 navigateToSearchScreen = { navController.navigate(RootNavGraph.SEARCH) },
                 requestPermissions = requestPermissions,
@@ -57,10 +63,10 @@ fun RootNavigationGraph(
             enterTransition = { fadeIn() + scaleIn(initialScale = .9f) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
-            WeatherDetailsScreen(
+            WeeklyForecastScreen(
                 windowInfo = windowInfo,
-                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
-                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
+                preferencesState = preferencesState,
+                navigateBack = navigateBack,
                 weatherState = mainViewModel.weatherState
             )
         }
@@ -70,9 +76,19 @@ fun RootNavigationGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 150)) + scaleOut(targetScale = .9f) }
         ) {
             SearchScreen(
-                preferencesState = mainViewModel.preferencesState.collectAsStateWithLifecycle(),
-                favoritesState = mainViewModel.favoritesState.collectAsStateWithLifecycle(),
-                navigateBack = { if (navController.canGoBack) navController.popBackStack() },
+                preferencesState = preferencesState,
+                favoritesState = favoritesState,
+                navigateBack = navigateBack,
+                uiEvent = mainViewModel::uiEvent
+            )
+        }
+        composable(
+            route = RootNavGraph.SETTINGS
+        ) {
+            SettingsScreen(
+                preferencesState = preferencesState,
+                windowInfo = windowInfo,
+                navigateBack = navigateBack,
                 uiEvent = mainViewModel::uiEvent
             )
         }
@@ -85,7 +101,5 @@ object RootNavGraph {
     const val WEATHER = "weather_screen"
     const val WEATHER_DETAILS = "weather_details_screen"
     const val SEARCH = "search_screen"
+    const val SETTINGS = "settings_screen"
 }
-
-val NavHostController.canGoBack: Boolean
-    get() = this.currentBackStackEntry?.lifecycle?.currentState == Lifecycle.State.RESUMED

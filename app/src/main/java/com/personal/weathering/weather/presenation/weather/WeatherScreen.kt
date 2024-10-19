@@ -71,6 +71,7 @@ fun WeatherScreen(
     weatherState: () -> WeatherState,
     aqState: () -> AqState,
     pullToRefreshState: () -> PullToRefreshState,
+    navigateToSettingsScreen: () -> Unit,
     navigateToForecastScreen: (dayOfWeek: Int) -> Unit,
     navigateToSearchScreen: () -> Unit,
     requestPermissions: () -> Unit,
@@ -90,6 +91,11 @@ fun WeatherScreen(
         gesturesEnabled = true,
         drawerContent = {
             ModalDrawer(
+                navigateToSettingsScreen = {
+                    scope.launch { drawerState.close() }.invokeOnCompletion {
+                        navigateToSettingsScreen()
+                    }
+                },
                 drawerState = drawerState,
                 preferencesState = preferencesState,
                 favoritesState = favoritesState,
