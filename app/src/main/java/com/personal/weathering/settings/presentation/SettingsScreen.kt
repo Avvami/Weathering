@@ -1,6 +1,7 @@
 package com.personal.weathering.settings.presentation
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,11 +16,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -213,8 +216,11 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /*TODO: Change time format*/ }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) { uiEvent(UiEvent.SetTimeFormat(use12hour = !preferencesState.value.use12hour)) }
+                            .padding(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -228,15 +234,13 @@ fun SettingsScreen(
                                 tint = MaterialTheme.colorScheme.outline
                             )
                             Text(
-                                text = stringResource(id = R.string.time_format),
+                                text = stringResource(id = R.string.use_twelve_hour),
                                 style = MaterialTheme.typography.bodyLarge
                             )
                         }
-                        Text(
-                            text = if (preferencesState.value.use12hour) stringResource(id = R.string.twelve_hour) else
-                                stringResource(id = R.string.twenty_four_hour),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline
+                        Switch(
+                            checked = preferencesState.value.use12hour,
+                            onCheckedChange = { uiEvent(UiEvent.SetTimeFormat(use12hour = !preferencesState.value.use12hour)) }
                         )
                     }
                     Row(
