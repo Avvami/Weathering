@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.personal.weathering.MainViewModel
+import com.personal.weathering.core.presentation.components.animatedComposable
 import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.search.presentation.SearchScreen
 import com.personal.weathering.settings.presentation.SettingsScreen
@@ -82,7 +83,7 @@ fun RootNavigationGraph(
                 uiEvent = mainViewModel::uiEvent
             )
         }
-        composable(
+        animatedComposable(
             route = RootNavGraph.SETTINGS
         ) {
             SettingsScreen(
