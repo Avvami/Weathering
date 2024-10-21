@@ -22,15 +22,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.personal.weathering.BuildConfig
+import com.personal.weathering.MainActivity
 import com.personal.weathering.R
 import com.personal.weathering.UiEvent
 import com.personal.weathering.core.presentation.PreferencesState
+import com.personal.weathering.core.util.C
 import com.personal.weathering.core.util.WindowInfo
+import com.personal.weathering.core.util.findActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +44,7 @@ fun SettingsScreen(
     preferencesState: State<PreferencesState>,
     uiEvent: (UiEvent) -> Unit
 ) {
+    val activity = LocalContext.current.findActivity() as MainActivity
     Scaffold(
         topBar = {
             TopAppBar(
@@ -309,7 +314,7 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /*TODO: Change time format*/ }
+                            .clickable { activity.openCustomWebTab(C.GITHUB) }
                             .padding(horizontal = 16.dp, vertical = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically

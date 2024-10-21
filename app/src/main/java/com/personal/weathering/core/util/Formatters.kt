@@ -21,3 +21,11 @@ fun hourFormat(time: LocalDateTime, use12hour: Boolean): String {
         time.format(DateTimeFormatter.ofPattern("hh a"))
     }
 }
+
+fun formatDoubleValue(value: Double): String {
+    val roundedValue = Math.round(value * 10) / 10.0
+    return when {
+        roundedValue % 1.0 == 0.0 -> roundedValue.toInt().toString()
+        else -> "%.1f".format(value)
+    }
+}

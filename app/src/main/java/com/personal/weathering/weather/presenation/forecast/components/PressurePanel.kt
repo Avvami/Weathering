@@ -21,6 +21,7 @@ import androidx.compose.ui.util.fastForEach
 import com.personal.weathering.R
 import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.convertToMmHg
+import com.personal.weathering.core.util.formatDoubleValue
 import com.personal.weathering.weather.domain.models.DailyWeatherSummaryData
 
 @Composable
@@ -59,7 +60,9 @@ fun PressurePanel(
                 data.weatherSummary.pressure?.let { pressure ->
                     Text(
                         modifier = Modifier.weight(1f),
-                        text = if (preferencesState.value.useHpa) "%.1f".format(pressure) else "%.1f".format(convertToMmHg(pressure)),
+                        text = formatDoubleValue(
+                            if (preferencesState.value.useHpa) pressure else convertToMmHg(pressure)
+                        ),
                         style = MaterialTheme.typography.labelLarge,
                         textAlign = TextAlign.Center
                     )

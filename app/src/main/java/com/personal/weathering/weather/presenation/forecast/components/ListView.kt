@@ -36,6 +36,7 @@ import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.convertToFahrenheit
 import com.personal.weathering.core.util.convertToMetersPerSecond
 import com.personal.weathering.core.util.convertToMmHg
+import com.personal.weathering.core.util.formatDoubleValue
 import com.personal.weathering.core.util.timeFormat
 import com.personal.weathering.weather.presenation.WeatherState
 import java.time.format.DateTimeFormatter
@@ -215,9 +216,7 @@ fun ListView(
                                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                                 ) {
                                                     Text(
-                                                        text = String.format(
-                                                            Locale.getDefault(),
-                                                            "%.1f",
+                                                        text = formatDoubleValue(
                                                             if (preferencesState.value.useKmPerHour) windSpeed else convertToMetersPerSecond(windSpeed)
                                                         ),
                                                         style = MaterialTheme.typography.titleMedium
@@ -249,7 +248,9 @@ fun ListView(
                                             pressure?.let { pressure ->
                                                 Text(
                                                     modifier = Modifier.weight(1f),
-                                                    text = if (preferencesState.value.useHpa) "%.1f".format(pressure) else "%.1f".format(convertToMmHg(pressure)),
+                                                    text = formatDoubleValue(
+                                                        if (preferencesState.value.useHpa) pressure else convertToMmHg(pressure)
+                                                    ),
                                                     style = MaterialTheme.typography.titleMedium
                                                 )
                                             }

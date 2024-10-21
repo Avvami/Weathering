@@ -24,8 +24,8 @@ import androidx.compose.ui.util.fastForEach
 import com.personal.weathering.R
 import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.convertToMetersPerSecond
+import com.personal.weathering.core.util.formatDoubleValue
 import com.personal.weathering.weather.domain.models.DailyWeatherSummaryData
-import java.util.Locale
 
 @Composable
 fun WindPanel(
@@ -67,9 +67,7 @@ fun WindPanel(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Text(
-                            text = String.format(
-                                Locale.getDefault(),
-                                "%.1f",
+                            text = formatDoubleValue(
                                 if (preferencesState.value.useKmPerHour) windSpeed else convertToMetersPerSecond(windSpeed)
                             ),
                             style = MaterialTheme.typography.labelLarge
