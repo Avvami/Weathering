@@ -281,21 +281,22 @@ class MainViewModel(
             is UiEvent.LoadWeatherInfo -> {
                 loadWeatherInfo(event.useLocation, event.lat, event.lon)
             }
-            is UiEvent.ShowMessageDialog -> {
+            is UiEvent.ShowDialog -> {
                 messageDialogState = messageDialogState.copy(
                     isShown = true,
                     iconRes = event.iconRes,
+                    content = event.content,
                     titleRes = event.titleRes,
                     messageRes = event.messageRes,
                     messageString = event.messageString,
                     dismissTextRes = event.dismissTextRes,
-                    onDismissRequest = { uiEvent(UiEvent.CloseMessageDialog) },
+                    onDismissRequest = { uiEvent(UiEvent.CloseDialog) },
                     onDismiss = event.onDismiss,
                     confirmTextRes = event.confirmTextRes,
-                    onConfirm = event.onConfirm ?: { uiEvent(UiEvent.CloseMessageDialog) }
+                    onConfirm = event.onConfirm ?: { uiEvent(UiEvent.CloseDialog) }
                 )
             }
-            UiEvent.CloseMessageDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
+            UiEvent.CloseDialog -> { messageDialogState = messageDialogState.copy(isShown = false) }
             is UiEvent.SetSelectedCity -> {
                 viewModelScope.launch {
                     localRepository.setUseLocation(false)

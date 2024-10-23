@@ -84,19 +84,19 @@ fun ModalDrawer(
                             return@CurrentLocation
                         }
                         uiEvent(
-                            UiEvent.ShowMessageDialog(
+                            UiEvent.ShowDialog(
                                 iconRes = LocationPermissionProvider().getIcon(),
                                 messageRes = LocationPermissionProvider().getDescription(activity.shouldShowRationale()),
                                 dismissTextRes = R.string.not_now,
-                                onDismiss = { uiEvent(UiEvent.CloseMessageDialog) },
+                                onDismiss = { uiEvent(UiEvent.CloseDialog) },
                                 confirmTextRes = if (activity.shouldShowRationale()) R.string.open_settings else R.string.grant,
                                 onConfirm = {
                                     if (activity.shouldShowRationale()) {
                                         activity.openAppSettings()
-                                        uiEvent(UiEvent.CloseMessageDialog)
+                                        uiEvent(UiEvent.CloseDialog)
                                     } else {
                                         requestPermissions()
-                                        uiEvent(UiEvent.CloseMessageDialog)
+                                        uiEvent(UiEvent.CloseDialog)
                                     }
                                 }
                             ))

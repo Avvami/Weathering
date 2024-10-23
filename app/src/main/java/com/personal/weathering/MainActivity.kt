@@ -24,7 +24,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.personal.weathering.core.navigation.RootNavigationGraph
-import com.personal.weathering.core.presentation.components.MessageDialog
+import com.personal.weathering.core.presentation.components.CustomDialog
 import com.personal.weathering.core.util.rememberWindowInfo
 import com.personal.weathering.ui.theme.WeatheringTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -70,12 +70,13 @@ class MainActivity : AppCompatActivity() {
                         mainViewModel = mainViewModel,
                         requestPermissions = { permissionsResultLauncher.launch(permissionsToRequest()) }
                     )
-                    MessageDialog(
+                    CustomDialog(
                         iconRes = mainViewModel.messageDialogState.iconRes,
+                        content = mainViewModel.messageDialogState.content,
                         titleRes = mainViewModel.messageDialogState.titleRes,
                         messageRes = mainViewModel.messageDialogState.messageRes,
                         messageString = mainViewModel.messageDialogState.messageString,
-                        onDismissRequest = { mainViewModel.uiEvent(UiEvent.CloseMessageDialog) },
+                        onDismissRequest = { mainViewModel.uiEvent(UiEvent.CloseDialog) },
                         dismissTextRes = mainViewModel.messageDialogState.dismissTextRes,
                         onDismiss = mainViewModel.messageDialogState.onDismiss,
                         confirmTextRes = mainViewModel.messageDialogState.confirmTextRes,

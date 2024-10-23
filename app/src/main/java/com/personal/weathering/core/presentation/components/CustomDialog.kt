@@ -35,13 +35,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.personal.weathering.ui.theme.onSurfaceLight
-import com.personal.weathering.ui.theme.surfaceLight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MessageDialog(
+fun CustomDialog(
     modifier: Modifier = Modifier,
+    content: @Composable (() -> Unit)? = null,
     @DrawableRes iconRes: Int? = null,
     @StringRes titleRes: Int? = null,
     @StringRes messageRes: Int? = null,
@@ -74,20 +73,20 @@ fun MessageDialog(
                     modifier = modifier
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
-                        .background(surfaceLight)
+                        .background(MaterialTheme.colorScheme.surfaceContainerHigh)
                 ) {
                     iconRes?.let {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(onSurfaceLight)
+                                .background(MaterialTheme.colorScheme.primary)
                                 .padding(24.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(id = iconRes),
                                 contentDescription = "Dialog icon",
-                                tint = surfaceLight,
+                                tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier.size(48.dp)
                             )
                         }
@@ -96,15 +95,18 @@ fun MessageDialog(
                         Text(
                             text = stringResource(id = it),
                             style = MaterialTheme.typography.headlineSmall,
-                            color = onSurfaceLight,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
+                    }
+                    content?.let { content ->
+                        content()
                     }
                     messageRes?.let {
                         Text(
                             text = stringResource(id = it),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = onSurfaceLight,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -112,7 +114,7 @@ fun MessageDialog(
                         Text(
                             text = it,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = onSurfaceLight,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -123,13 +125,14 @@ fun MessageDialog(
                             .fillMaxWidth()
                             .padding(end = 8.dp, bottom = 8.dp)
                     ) {
-                        println(onDismiss)
                         onDismiss?.let { dismiss ->
-                            TextButton(onClick = { dismiss() }, colors = ButtonDefaults.textButtonColors(contentColor = onSurfaceLight)) {
-                                Text(text = stringResource(id = dismissTextRes!!))
+                            TextButton(onClick = { dismiss() }, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
+                                dismissTextRes?.let {
+                                    Text(text = stringResource(id = it))
+                                }
                             }
                         }
-                        TextButton(onClick = { onConfirm() }, colors = ButtonDefaults.textButtonColors(contentColor = onSurfaceLight)) {
+                        TextButton(onClick = { onConfirm() }, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
                             Text(text = stringResource(id = confirmTextRes))
                         }
                     }

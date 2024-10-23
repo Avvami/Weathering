@@ -2,11 +2,13 @@ package com.personal.weathering
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
 
 sealed interface UiEvent {
     data class LoadWeatherInfo(val useLocation: Boolean, val lat: Double, val lon: Double): UiEvent
-    data class ShowMessageDialog(
+    data class ShowDialog(
         @DrawableRes val iconRes: Int? = null,
+        val content: @Composable (() -> Unit)? = null,
         @StringRes val titleRes: Int? = null,
         @StringRes val messageRes: Int? = null,
         val messageString: String? = null,
@@ -15,7 +17,7 @@ sealed interface UiEvent {
         @StringRes val confirmTextRes: Int = R.string.ok,
         val onConfirm: (() -> Unit)? = null
     ): UiEvent
-    data object CloseMessageDialog: UiEvent
+    data object CloseDialog: UiEvent
     data class SetSelectedCity(val cityId: Int, val city: String, val lat: Double, val lon: Double): UiEvent
     data class SetSearchLanguage(val code: String): UiEvent
     data class SetDarkMode(val isDark: Boolean): UiEvent
