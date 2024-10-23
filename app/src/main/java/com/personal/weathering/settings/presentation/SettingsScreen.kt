@@ -1,7 +1,6 @@
 package com.personal.weathering.settings.presentation
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,13 +15,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +35,7 @@ import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.C
 import com.personal.weathering.core.util.WindowInfo
 import com.personal.weathering.core.util.findActivity
+import com.personal.weathering.settings.presentation.components.App
 import com.personal.weathering.settings.presentation.components.Data
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -84,106 +82,11 @@ fun SettingsScreen(
                 )
             }
             item {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(id = R.string.app),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) { uiEvent(UiEvent.SetTimeFormat(use12hour = !preferencesState.value.use12hour)) }
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_chronic_fill0_wght400),
-                                contentDescription = "Time",
-                                tint = MaterialTheme.colorScheme.outline
-                            )
-                            Text(
-                                text = stringResource(id = R.string.use_twelve_hour),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                        Switch(
-                            checked = preferencesState.value.use12hour,
-                            onCheckedChange = { uiEvent(UiEvent.SetTimeFormat(use12hour = !preferencesState.value.use12hour)) }
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /*TODO: Change appearance*/ }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_palette_fill0_wght400),
-                                contentDescription = "Appearance",
-                                tint = MaterialTheme.colorScheme.outline
-                            )
-                            Text(
-                                text = stringResource(id = R.string.appearance),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                        Text(
-                            text = when (preferencesState.value.isDark) {
-                                true -> stringResource(id = R.string.dark)
-                                false -> stringResource(id = R.string.light)
-                                else -> stringResource(id = R.string.system)
-                            },
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { /*TODO: Change language*/ }
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_language_japanese_kana_fill0_wght400),
-                                contentDescription = "Language",
-                                tint = MaterialTheme.colorScheme.outline
-                            )
-                            Text(
-                                text = stringResource(id = R.string.language),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                        }
-                        Text(
-                            text = stringResource(id = R.string.current_language),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    }
-                }
+                App(
+                    modifier = Modifier.fillMaxWidth(),
+                    preferencesState = preferencesState,
+                    uiEvent = uiEvent
+                )
             }
             item {
                 Column(

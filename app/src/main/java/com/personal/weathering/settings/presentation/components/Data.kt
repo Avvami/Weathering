@@ -330,6 +330,9 @@ fun Data(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
+                modifier = Modifier
+                    .weight(1f, false)
+                    .padding(end = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
