@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -126,13 +125,13 @@ fun CustomDialog(
                             .padding(end = 8.dp, bottom = 8.dp)
                     ) {
                         onDismiss?.let { dismiss ->
-                            TextButton(onClick = { dismiss() }, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
+                            TextButton(onClick = { dismiss() }) {
                                 dismissTextRes?.let {
                                     Text(text = stringResource(id = it))
                                 }
                             }
                         }
-                        TextButton(onClick = { onConfirm() }, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface)) {
+                        TextButton(onClick = { onConfirm() }) {
                             Text(text = stringResource(id = confirmTextRes))
                         }
                     }

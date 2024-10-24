@@ -6,20 +6,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
@@ -30,95 +26,68 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.personal.weathering.MainActivity
 import com.personal.weathering.R
+import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.core.util.findActivity
 import com.personal.weathering.core.util.shimmerEffect
-import com.personal.weathering.MainActivity
-import com.personal.weathering.core.presentation.PreferencesState
 import com.personal.weathering.weather.presenation.WeatherState
 
 @Composable
 fun CurrentLocation(
     modifier: Modifier = Modifier,
     preferencesState: State<PreferencesState>,
-    weatherState: () -> WeatherState,
-    setUseLocation: () -> Unit
+    weatherState: () -> WeatherState
 ) {
-    Column(
+    Row(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = stringResource(id = R.string.my_cities),
-            style = MaterialTheme.typography.titleMedium
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.large)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    shape = MaterialTheme.shapes.large
-                )
-                .clickable { setUseLocation() }
-                .padding(start = 16.dp, top = 12.dp, end = 4.dp, bottom = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+        Column(
+            modifier = Modifier.weight(weight = 1f, fill = false)
         ) {
-            Column(
-                modifier = Modifier.weight(weight = 1f, fill = false)
-            ) {
+            Text(
+                text = stringResource(id = R.string.current_location),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            if (weatherState().retrievingLocation) {
                 Text(
-                    text = stringResource(id = R.string.current_location),
-                    style = MaterialTheme.typography.bodySmall
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .shimmerEffect(),
+                    text = "Great London",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Transparent
                 )
-                if (weatherState().retrievingLocation) {
-                    Text(
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.small)
-                            .shimmerEffect(
-                                primaryColor = MaterialTheme.colorScheme.surfaceVariant,
-                                secondaryColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .3f)
-                            ),
-                        text = "Great London",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Transparent
-                    )
-                } else {
-                    Text(
-                        text = preferencesState.value.currentLocationCity,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                }
+            } else {
+                Text(
+                    text = preferencesState.value.currentLocationCity,
+                    style = MaterialTheme.typography.titleMedium,
+                )
             }
-            Spacer(modifier = Modifier.width(12.dp))
-            val activity = LocalContext.current.findActivity() as MainActivity
+        }
+        Spacer(modifier = Modifier.width(4.dp))
+        val activity = LocalContext.current.findActivity() as MainActivity
+        Box(
+            modifier = Modifier.minimumInteractiveComponentSize(),
+            contentAlignment = Alignment.Center
+        ) {
             AnimatedContent(
                 targetState = activity.hasPermissions(),
-                label = "Location granted",
+                label = "Icon animation",
                 transitionSpec = { scaleIn() + fadeIn() togetherWith scaleOut() + fadeOut() }
             ) { targetState ->
                 if (targetState) {
-                    Box(
-                        modifier = Modifier.size(48.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_my_location_fill1_wght400),
-                            contentDescription = "Location granted"
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_my_location_fill1_wght400),
+                        contentDescription = "Location granted"
+                    )
                 } else {
-                    Box(
-                        modifier = Modifier.size(48.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_location_disabled_fill1_wght400),
-                            contentDescription = "Location not granted"
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_location_disabled_fill1_wght400),
+                        contentDescription = "Location not granted"
+                    )
                 }
             }
         }
